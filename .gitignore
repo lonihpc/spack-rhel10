@@ -10,6 +10,11 @@
 /spack-install/
 
 # Spack environment build artifacts that don't belong in git.
-# Note: spack.lock (the concretized lockfile) is intentionally NOT ignored -
-# once we concretize, that's exactly the kind of state step 11 wants in git.
 environments/*/.spack-env/
+
+# The concretized lockfile IS meant to be tracked eventually (step 11 wants
+# reproducible state in git) - but not yet: right now it's been generated
+# against this WSL2 machine's placeholder externals/OS (ubuntu, not rhel10),
+# purely to validate the YAML. Un-ignore it (or `git add -f`) once we do a
+# real concretize against the actual RHEL10 cluster config.
+environments/*/spack.lock

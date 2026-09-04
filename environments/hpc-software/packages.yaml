@@ -60,9 +60,14 @@ packages:
   # is confirmed against real hardware yet:
   #   - intel-oneapi-mpi ships alongside the oneAPI toolkit and is only
   #     usable once we confirm it's actually installed on the cluster.
-  #   - mvapich2 is normally built against the real InfiniBand fabric
-  #     (UCX/OFED version matters a lot), so we leave it buildable by
-  #     Spack for now rather than guessing at an external prefix.
+  #   - mvapich: the old cluster used "mvapich2", but Spack's mvapich2
+  #     package versions are now ALL marked deprecated (confirmed via
+  #     `spack concretize` failing outright), so we use the actively
+  #     maintained successor package `mvapich` (3.x/4.x) instead - this
+  #     matches CLAUDE.md's "用最新的,不锁旧版本" instruction anyway. It's
+  #     normally built against the real InfiniBand fabric (UCX/OFED version
+  #     matters a lot), so we leave it buildable by Spack for now rather
+  #     than guessing at an external prefix.
   #   - mpich has no site external assumed; Spack builds it from source.
   #   - cuda is only relevant if/when we have GPU nodes - TODO confirm.
   # Revisit all of this once CLAUDE.md's "待确认的关键信息" questions
@@ -76,7 +81,7 @@ packages:
       prefix: /opt/intel/oneapi/mpi/2026.0.0
     buildable: false
 
-  mvapich2:
+  mvapich:
     # TODO(cluster): add an `externals:` entry here once we know the IB
     # fabric (OFED/UCX version) - until then let Spack build it.
     buildable: true
@@ -94,4 +99,13 @@ packages:
 
   all:
     providers:
-      mpi: [intel-oneapi-mpi, mvapich2, mpich]
+      # Spack's own default order is [gcc, llvm, intel-oneapi-compilers] -
+      # override it so Intel oneAPI is picked by default (CLAUDE.md: "编译器
+      # 优先用最新的 Intel oneAPI"), confirmed necessary by test-concretizing
+      # this environment: without this override every spec silently picked
+      # gcc@14. Individual specs can still override with e.g. `cp2k %gcc` or
+      # `bwa %nvhpc` per the old cluster's per-package mix.
+      c: [intel-oneapi-compilers, gcc, nvhpc]
+      cxx: [intel-oneapi-compilers, gcc, nvhpc]
+      fortran: [intel-oneapi-compilers, gcc, nvhpc]
+      mpi: [intel-oneapi-mpi, mvapich, mpich]
