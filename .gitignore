@@ -1,0 +1,15 @@
+# Spack itself is not tracked here - it's an upstream tool clone, pinned to a
+# tag/commit. Re-clone with:
+#   git clone --branch <tag> https://github.com/spack/spack.git spack
+# See SPACK_VERSION.md for the tag/commit currently in use.
+/spack/
+
+# Local placeholder install area (compiled software, module files, caches).
+# On the real RHEL10 cluster this becomes a real shared filesystem path and
+# still should not be committed to git (it's build output, not config).
+/spack-install/
+
+# Spack environment build artifacts that don't belong in git.
+# Note: spack.lock (the concretized lockfile) is intentionally NOT ignored -
+# once we concretize, that's exactly the kind of state step 11 wants in git.
+environments/*/.spack-env/
