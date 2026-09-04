@@ -1,0 +1,56 @@
+# Compiler configuration for the "hpc-software" environment.
+#
+# IMPORTANT: Spack v1.2.x removed compilers.yaml. Compilers are now declared
+# as external packages right here in packages.yaml (with a `compiler` tag),
+# see `spack/lib/spack/docs/configuring_compilers.rst` in the cloned repo.
+# An old-style compilers.yaml is still auto-migrated by Spack (with a
+# deprecation warning) into this same format, so there is no separate
+# compilers.yaml file in this repo - this replaces step 1 from the request.
+#
+# None of the paths/versions below exist on this WSL2 machine - they are
+# placeholders mirroring the old linux-rhel8-icelake cluster's compiler mix
+# (see CLAUDE.md): Intel oneAPI as the default/newest, gcc kept for
+# gcc-based software (e.g. cp2k+openmpi), nvhpc kept for CUDA-heavy codes
+# (e.g. bwa). Once we're on the real RHEL10 node, replace these with
+# `spack compiler find <path>` output / real `spack external find` results.
+packages:
+  intel-oneapi-compilers:
+    externals:
+    - spec: intel-oneapi-compilers@2026.0.0
+      # TODO(cluster): confirm actual installed oneAPI version - 2026.0.0 is
+      # CLAUDE.md's stated target, verify against what Intel has shipped by
+      # the time we install on real hardware.
+      prefix: /opt/intel/oneapi
+      extra_attributes:
+        compilers:
+          c: /opt/intel/oneapi/compiler/2026.0.0/bin/icx
+          cxx: /opt/intel/oneapi/compiler/2026.0.0/bin/icpx
+          fortran: /opt/intel/oneapi/compiler/2026.0.0/bin/ifx
+    buildable: false
+
+  gcc:
+    externals:
+    - spec: "gcc@14 languages='c,c++,fortran'"
+      # TODO(cluster): confirm RHEL10's actual base gcc version/path (RHEL10
+      # ships gcc 14.x by default at the time of writing, but verify).
+      prefix: /usr
+      extra_attributes:
+        compilers:
+          c: /usr/bin/gcc
+          cxx: /usr/bin/g++
+          fortran: /usr/bin/gfortran
+    buildable: true # also allow Spack to build other gcc versions if needed
+
+  nvhpc:
+    externals:
+    - spec: nvhpc@24.1
+      # TODO(cluster): confirm exact NVHPC version/path and whether it's
+      # still needed once we know GPU node details - kept only because the
+      # old cluster used nvhpc for bwa (see CLAUDE.md module example).
+      prefix: /opt/nvidia/hpc_sdk/Linux_x86_64/24.1
+      extra_attributes:
+        compilers:
+          c: /opt/nvidia/hpc_sdk/Linux_x86_64/24.1/compilers/bin/nvc
+          cxx: /opt/nvidia/hpc_sdk/Linux_x86_64/24.1/compilers/bin/nvc++
+          fortran: /opt/nvidia/hpc_sdk/Linux_x86_64/24.1/compilers/bin/nvfortran
+    buildable: false
