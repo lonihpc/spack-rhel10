@@ -14,22 +14,29 @@ bwa/0.7.17/nvhpc-24.1
 
 ## 目标软件列表(版本用最新的,不锁旧版本)
 amber, ambertools, boost, bowtie2, bwa, cmake, conda/mamba, cosma, cp2k,
-lammps, matlab(非 spack 包,需单独装+手写 modulefile), metis, mpich,
-mvapich(继任已 deprecated 的 mvapich2), namd 等,后续可以继续加。
+lammps, matlab(非 spack 包,需单独装+手写 modulefile), metis, namd 等,
+后续可以继续加。(mpich/mvapich2 不再是目标软件,见下方编译器决定。)
+
+## 编译器/MPI 决定(已确认,不再是"待确认")
+新 software stack 主流就是 Intel oneAPI 编译器 + Intel MPI
+(intel-oneapi-mpi),不像旧集群那样按软件混用 gcc/nvhpc/intel。GPU 相关
+软件直接用 nvhpc 系列(编译器+其自带工具链)即可,不单独引入
+mvapich/mpich。gcc 只作为极少数编译不过 icx 的软件的 fallback 保留,不是
+default provider。
 
 ## 待确认的关键信息
 - 新 RHEL10 节点的具体 CPU микроarch(还是 Ice Lake,还是更新的?)
 - 是否有 GPU 节点、什么型号
-- 是否所有软件统一切到 Intel oneAPI 编译器,还是像现在一样按软件混用
-  gcc/nvhpc/intel(cp2k 用 gcc+openmpi,bwa 用 nvhpc 等)
 
 ## 部署整体流程(11 步,详见对话历史/项目文档)
 1. 现状盘点与目标确认
 2. 部署最新 Spack(当前最新稳定版 v1.2.2,比之前记的 v1.2.0 新一个 patch 版本)
-3. 配置最新 Intel oneAPI 编译器(当前 2026.0.0)+ 按需保留 gcc/nvhpc
-4. 配置 MPI/CUDA(intel-oneapi-mpi, mvapich, mpich, 匹配 GPU 的 CUDA;
-   注意 mvapich2 在当前 Spack 里所有版本都标了 deprecated,已改用
-   继任的 mvapich 包)
+3. 配置最新 Intel oneAPI 编译器(当前 2026.0.0)作为主流,gcc 仅作为
+   fallback 保留,nvhpc 仅用于 GPU 软件
+4. 配置 MPI/CUDA(主流是 intel-oneapi-mpi,GPU 软件配 nvhpc 系列 + 匹配的
+   CUDA;不再引入 mvapich/mpich。备注:mvapich2 在当前 Spack 里所有版本
+   都标了 deprecated,如果以后真的需要额外 MPI 实现,应该用继任的
+   mvapich 包而不是 mvapich2)
 5. 设计 module 命名规则(modules.yaml projections,可能需要后处理脚本
    来精确匹配上面的命名格式)
 6. 用 spack.yaml environment 组织软件列表
@@ -50,6 +57,7 @@ mvapich(继任已 deprecated 的 mvapich2), namd 等,后续可以继续加。
   访问 git 远端就直接 git pull;如果 air-gapped,就传 git bundle 过去再
   git pull,保留版本历史。
 - 集群上跑出来的编译报错日志,人工抄回本地/贴给 Claude 辅助调试。
+- git commit message 一律用英文(2026-09-04 起)。
 
 ## 当前进度
 - Windows 笔记本(dellpro16)已确认装有 WSL2 + Ubuntu 发行版。
@@ -75,9 +83,18 @@ mvapich(继任已 deprecated 的 mvapich2), namd 等,后续可以继续加。
     (没有旧集群例子里的 22)。
   - modules.yaml 的 projections 已经用真实 concretize 出来的 spec
     验证过命名效果(如 `hdf5/1.14.6/gcc-14-mpich-5.0.1`、
-    `namd/2.14/nvhpc-24.1-cuda-12.6-mpich-5.0.1`),但编译器/MPI 包名
-    及版本号还是没法 100% 对齐旧集群格式(比如 "intel-oneapi-compilers"
+    `namd/2.14/nvhpc-24.1-cuda-12.6-mpich-5.0.1`,这两个例子是简化
+    工具链之前测试留下的,现在环境里已经不装 mpich 了),但编译器/MPI
+    包名及版本号还是没法 100% 对齐旧集群格式(比如 "intel-oneapi-compilers"
     vs "intel"),这部分留到步骤 5/11 讨论是否要后处理脚本。
-  - 待确认的关键信息(CPU 微架构/GPU 型号/编译器是否统一)仍未回答,
-    所以 compilers/packages.yaml 里的路径、版本号全部是占位符,标了
+  - 之后按用户要求把工具链简化成主流 Intel oneAPI + intel-oneapi-mpi,
+    gcc 降级为 fallback(从 default provider 列表里去掉),nvhpc 只留给
+    需要 GPU 的软件按 spec 单独 pin `%nvhpc`,不再作为 provider。
+    mpich/mvapich 已从 packages.yaml 和 spack.yaml 的目标软件列表里删除。
+    重新 concretize 验证过全部 12 个目标软件都默认落在
+    `%oneapi@2026.0.0`;发现两个包级例外(非配置问题):amber 完全不声明
+    编译器依赖,ambertools 固定用 %gcc 编译 c/cxx、只有 fortran 走
+    %oneapi(ifx)。
+  - 待确认的关键信息(CPU 微架构/GPU 型号)仍未回答,所以
+    compilers/packages.yaml 里的路径、版本号全部是占位符,标了
     TODO(cluster),真机确认后要替换。
