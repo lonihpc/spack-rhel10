@@ -1,45 +1,64 @@
-# Module generation config for the "hpc-software" environment.
+# Module generation config for the "hpc-software" environment - step 5
+# draft, LMOD variant (supersedes the earlier Tcl-only draft; see CLAUDE.md
+# for the decision on whether Tcl stays enabled alongside this).
 #
 # Target format (from CLAUDE.md, matching the existing linux-rhel8-icelake
 # cluster):
-#   <software>/<version>/<compiler>-<compiler版本>[-cuda-<版本>][-<mpi>-<mpi版本>]
-# e.g. amber/22/intel-2021.5.1-cuda-11.5.2-intel-mpi-2021.5.1
-#      cp2k/7.1/gcc-8.5.0-openmpi-4.0.1
-#      bwa/0.7.17/nvhpc-24.1
+#   <software>/<版本>/<compiler>-<compiler版本>[-cuda-<版本>][-<mpi>-<mpi版本>]
+# amber is explicitly out of scope for this draft (per request) since it
+# has no compiler dependency to format in the first place.
 #
-# `projections` below gets us most of the way there via Spec.format tokens.
-# Order matters: Spack's projection matcher (spack/lib/spack/spack/
-# projections.py) returns the FIRST non-"all" key whose spec.satisfies()
-# matches, so entries must go from most- to least-specific, with "all" last.
+# IMPORTANT, verified by generating real module paths for concretized specs
+# (spack.modules.lmod.LmodConfiguration/LmodFileLayout), not assumed from
+# docs: unlike Tcl, Lmod ALWAYS nests every module under a "compiler"
+# hierarchy tier (`Core/` for compilers listed in `core_compilers`, or
+# `<compiler>/<version>/` otherwise) - this comes from Lmod's own file
+# layout code, NOT from `projections`, so projections alone can never
+# produce a fully flat namespace under Lmod. The fix that gets us there
+# anyway: listing every compiler we register (intel-oneapi-compilers,
+# nvhpc, gcc) as "core". Verified this makes every case land flat under
+# Core/ with no `module load <compiler>` unlock step required, e.g.:
+#   Core/cp2k/2026.1/intel-oneapi-compilers-2026.0.0-intel-oneapi-mpi-2026.0.0.lua
+#   Core/namd/2.14/nvhpc-24.1-cuda-12.6-intel-oneapi-mpi-2026.0.0.lua      (+cuda %nvhpc)
+#   Core/ambertools/25/gcc-14-intel-oneapi-mpi-2026.0.0.lua               (gcc/oneapi mix)
+# Without this, nvhpc/gcc-built specs sit under nvhpc/24.1/... or
+# gcc/14/... instead, requiring that extra module load first, AND the
+# compiler name/version ends up duplicated (once as the directory, once in
+# the leaf name) - see the report in CLAUDE.md for the full writeup of what
+# projections can and can't do here.
 #
-# --- What this CANNOT do on its own (flagged per the request) ---
-# 1. Compiler *names* don't match the old cluster's labels: Spack's
-#    {compiler.name} will render "intel-oneapi-compilers" (not "intel") and
-#    "nvhpc" (matches already). No projection option does string
-#    substitution/renaming - only a post-processing step (rename the
-#    generated module dirs/symlinks, or a custom Python hook) can fix this.
-# 2. Same problem for MPI: {^mpi.name} renders "intel-oneapi-mpi", but the
-#    old format wants "intel-mpi". mvapich2/mpich happen to already match.
-# 3. Compiler *version* numbers won't match either - the old cluster used
-#    the Intel classic compiler's internal version (e.g. 2021.5.1), while
-#    an oneAPI package install versions itself differently (e.g. 2026.0.0).
-#    There's no projection-level remapping for this; if exact parity with
-#    the old numbering matters, that also needs a post-processing script.
-# 4. Multiple archs/variants can still collide once hash_length: 0 removes
-#    the hash - acceptable to match the old flat style, but worth watching.
-#
-# We'll decide in step 5 (per CLAUDE.md) whether a post-processing script is
-# worth it, or whether "close enough" projections are fine.
+# `projections` controls the LEAF name only (the part after "module load").
+# Order matters: Spack's matcher (spack/lib/spack/spack/projections.py)
+# returns the FIRST non-"all" key whose spec.satisfies() is true, so
+# entries must go from most- to least-specific, with "all" last.
 modules:
   default:
-    enable: [tcl]
+    enable: [lmod]
     roots:
-      # Placeholder - move under the real shared module tree on the cluster.
-      tcl: /project/fchen14/spack-rhel10/spack-install/modules
+      lmod: /project/fchen14/spack-rhel10/spack-install/modules # placeholder
     arch_folder: false
-    tcl:
+    lmod:
       hash_length: 0
       hide_implicits: true
+      # Every registered compiler is "core" so nothing needs a
+      # `module load <compiler>` unlock step first (see the big comment
+      # above) - this makes Lmod behave close to Tcl's flat style for our
+      # naming purposes while keeping Lmod's other features (spider,
+      # families, `ml`, etc.).
+      core_compilers:
+      - intel-oneapi-compilers@2026.0.0
+      - nvhpc@24.1
+      - gcc@14
+      # Spack's own linux default already sets hierarchy: [mpi] - a plain
+      # `hierarchy: []` here would just get MERGED with that default
+      # (list configs merge, not replace) and mpi would still show up, so
+      # this needs Spack's "::" override-key syntax to fully replace it.
+      hierarchy:: []
+      # Deliberately NOT adding "mpi" back in: doing so would put
+      # intel-oneapi-mpi in the hierarchy too, requiring users to
+      # `module load intel-oneapi-mpi/...` before mpi-linked software
+      # becomes visible - the opposite of the old cluster's flat style. MPI
+      # info is folded into the projection string instead (see below).
       all:
         autoload: direct
       projections:
@@ -47,3 +66,23 @@ modules:
         "^cuda": "{name}/{version}/{compiler.name}-{compiler.version}-cuda-{^cuda.version}"
         "^mpi": "{name}/{version}/{compiler.name}-{compiler.version}-{^mpi.name}-{^mpi.version}"
         all: "{name}/{version}/{compiler.name}-{compiler.version}"
+
+# --- What projections still CANNOT fix, even with the core_compilers trick
+# above (see CLAUDE.md for the full two-option writeup) ---
+# 1. Compiler *label* mismatch: {compiler.name} renders Spack's raw package
+#    name "intel-oneapi-compilers", not the old cluster's short "intel".
+#    ("nvhpc" and "gcc" already match, so this only affects the mainstream
+#    case.) Spack has a display-alias table (spack/lib/spack/spack/
+#    aliases.py, "intel-oneapi-compilers" -> "oneapi") but it's used only
+#    for parsing legacy `%oneapi`-style spec strings, not exposed to
+#    Spec.format()/projections, and its alias is "oneapi" anyway, not
+#    "intel" - confirmed by testing, not assumed.
+# 2. Same problem for MPI: {^mpi.name} renders "intel-oneapi-mpi", not the
+#    old format's "intel-mpi".
+# 3. Compiler/MPI *version numbers* won't match either: the old cluster's
+#    numbers (e.g. "intel-2021.5.1") are the classic icc compiler's
+#    internal version; ours is the oneAPI toolkit release version (e.g.
+#    "2026.0.0") - a different numbering scheme entirely, not a formatting
+#    difference, so there's nothing to reformat.
+# None of these have a projection-syntax fix - the format string only ever
+# stringifies real spec attributes, with no rename/lookup-table mechanism.
