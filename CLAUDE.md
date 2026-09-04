@@ -15,7 +15,7 @@ bwa/0.7.17/nvhpc-24.1
 ## 目标软件列表(版本用最新的,不锁旧版本)
 amber, ambertools, boost, bowtie2, bwa, cmake, conda/mamba, cosma, cp2k,
 lammps, matlab(非 spack 包,需单独装+手写 modulefile), metis, mpich,
-mvapich2, namd 等,后续可以继续加。
+mvapich(继任已 deprecated 的 mvapich2), namd 等,后续可以继续加。
 
 ## 待确认的关键信息
 - 新 RHEL10 节点的具体 CPU микроarch(还是 Ice Lake,还是更新的?)
@@ -25,9 +25,11 @@ mvapich2, namd 等,后续可以继续加。
 
 ## 部署整体流程(11 步,详见对话历史/项目文档)
 1. 现状盘点与目标确认
-2. 部署最新 Spack(当前最新稳定版 v1.2.0)
+2. 部署最新 Spack(当前最新稳定版 v1.2.2,比之前记的 v1.2.0 新一个 patch 版本)
 3. 配置最新 Intel oneAPI 编译器(当前 2026.0.0)+ 按需保留 gcc/nvhpc
-4. 配置 MPI/CUDA(intel-oneapi-mpi, mvapich2, mpich, 匹配 GPU 的 CUDA)
+4. 配置 MPI/CUDA(intel-oneapi-mpi, mvapich, mpich, 匹配 GPU 的 CUDA;
+   注意 mvapich2 在当前 Spack 里所有版本都标了 deprecated,已改用
+   继任的 mvapich 包)
 5. 设计 module 命名规则(modules.yaml projections,可能需要后处理脚本
    来精确匹配上面的命名格式)
 6. 用 spack.yaml environment 组织软件列表
@@ -54,3 +56,28 @@ mvapich2, namd 等,后续可以继续加。
 - WSL2 Ubuntu 内已安装 Claude Code CLI(2.1.261),已登录。
 - 工作目录 /project/fchen14/spack-rhel10 已创建,与集群上路径保持一致
   (注意:只是路径名字一致,不是同一份物理存储,数据同步仍需 git/rsync)。
+- 已完成步骤 2-6(草稿阶段,path 全部是本地占位符):
+  - Spack v1.2.2 已 clone 到 spack/(git-ignored,版本记录在
+    SPACK_VERSION.md)。
+  - environments/hpc-software/{config,packages,modules,spack}.yaml 已写好
+    并纳入 git,分别对应 install_tree 占位路径、编译器+MPI/CUDA 声明、
+    module projections、目标软件 environment。
+  - 重要:Spack v1.2.x 已经彻底去掉了 compilers.yaml,编译器改成在
+    packages.yaml 里以 external package 形式声明(带 deprecation 迁移
+    逻辑),所以没有单独的 compilers.yaml 文件。
+  - 用 `spack -C environments/hpc-software ...` 和
+    `spack env activate environments/hpc-software` 在本机(WSL2)做了
+    schema 校验 + 完整 `spack concretize`(全部 14 个目标软件都能
+    concretize 成功,没有真的 install)。发现的问题都已经记在对应
+    yaml 文件的注释里,包括:mvapich2 全版本 deprecated 改用 mvapich、
+    Spack 默认编译器 provider 顺序是 gcc 优先(已在 packages.yaml 里
+    覆盖成 Intel oneAPI 优先)、amber 在 Spack 里只有 18/20 两个版本
+    (没有旧集群例子里的 22)。
+  - modules.yaml 的 projections 已经用真实 concretize 出来的 spec
+    验证过命名效果(如 `hdf5/1.14.6/gcc-14-mpich-5.0.1`、
+    `namd/2.14/nvhpc-24.1-cuda-12.6-mpich-5.0.1`),但编译器/MPI 包名
+    及版本号还是没法 100% 对齐旧集群格式(比如 "intel-oneapi-compilers"
+    vs "intel"),这部分留到步骤 5/11 讨论是否要后处理脚本。
+  - 待确认的关键信息(CPU 微架构/GPU 型号/编译器是否统一)仍未回答,
+    所以 compilers/packages.yaml 里的路径、版本号全部是占位符,标了
+    TODO(cluster),真机确认后要替换。
