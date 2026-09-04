@@ -37,14 +37,80 @@ default provider。
    CUDA;不再引入 mvapich/mpich。备注:mvapich2 在当前 Spack 里所有版本
    都标了 deprecated,如果以后真的需要额外 MPI 实现,应该用继任的
    mvapich 包而不是 mvapich2)
-5. 设计 module 命名规则(modules.yaml projections,可能需要后处理脚本
-   来精确匹配上面的命名格式)
+5. 设计 module 命名规则(modules.yaml projections,Lmod 版本已经验证过,
+   详见下面"Step 5"章节;还剩编译器/MPI 标签和版本号对不齐的问题,要不要
+   写后处理脚本待定)
 6. 用 spack.yaml environment 组织软件列表
 7. concretize + 批量编译
 8. 生成并校验 module 文件
 9. 功能/性能验证(test suite / benchmark,GPU 路径验证)
 10. 灰度上线,与旧 module 并存,收集反馈后再切换
 11. 建立可重复的维护/升级机制,配置全部纳入 git 版本控制
+
+## Step 5: module 命名方案(Lmod)结论
+
+modules.yaml 已经从 Tcl 草稿切到 Lmod(environments/hpc-software/
+modules.yaml),projections 尽量拼目标格式
+`<软件>/<版本>/<编译器>-<编译器版本>[-cuda-<版本>][-<mpi>-<mpi版本>]`。
+amber 跳过(它在 Spack 里不声明编译器依赖,没法拼)。
+
+**用真实 concretize 出来的 spec 生成过真实 module 路径验证**(不是只做
+schema 校验),关键发现:
+
+1. Lmod 和 Tcl 不一样,**projections 只控制"叶子名"**(module load 之后
+   打的那串字符串),不控制目录层级。Lmod 的文件布局代码
+   (spack/lib/spack/spack/modules/lmod.py)会强制把每个 module 挂到一个
+   "compiler" 层级下面:标了 `core_compilers` 的编译器落在 `Core/`,
+   目录里直接可见;没标 core 的编译器会落在 `<编译器>/<版本>/` 目录下,
+   用户必须先 `module load <编译器>/<版本>` 才能看到这个软件——这跟旧
+   集群"不用先 unlock,直接 module load 完整名字"的扁平体验不一样,
+   而且这跟 projections 配置完全无关,改 projection 模板也改不了。
+   - 解决办法(纯配置,不需要脚本):把我们注册的三个编译器
+     (intel-oneapi-compilers, nvhpc, gcc)**全部**标成 `core_compilers`。
+     验证结果:所有情况都落到 `Core/` 下,不再需要先 unlock,比如:
+     - `Core/cp2k/2026.1/intel-oneapi-compilers-2026.0.0-intel-oneapi-mpi-2026.0.0.lua`
+     - `Core/namd/2.14/nvhpc-24.1-cuda-12.6-intel-oneapi-mpi-2026.0.0.lua`(强制
+       `+cuda %nvhpc` 测试出来的)
+     - `Core/ambertools/25/gcc-14-intel-oneapi-mpi-2026.0.0.lua`(gcc/oneapi
+       混合编译的情况)
+   - 副作用:Spack 自带的 linux 默认配置本来就有 `hierarchy: [mpi]`,
+     普通的 `hierarchy: []` 会被"合并"而不是"替换"掉默认值,要用 Spack 的
+     `::` override 语法(`hierarchy:: []`)才能真正清空。
+
+2. 除了上面的目录层级问题,还剩三个 projections 语法本身解决不了的字段
+   (跟用什么编译器无关,是 Spack 数据模型本身的限制,和之前 Tcl 草稿
+   发现的问题一样):
+   - **编译器名字**:`{compiler.name}` 拼出来是 Spack 包名
+     "intel-oneapi-compilers",不是旧集群的 "intel"(nvhpc/gcc 这两个
+     碰巧本来就对得上)。Spack 确实有一张兼容表
+     (spack/lib/spack/spack/aliases.py:
+     `intel-oneapi-compilers -> oneapi`),但那张表只在解析老式
+     `%oneapi` 这种 spec 字符串时用,不会体现在 Spec.format()/
+     projections 里,而且它的别名是 "oneapi" 不是 "intel",对不上旧
+     格式——这是实测确认的,不是猜的。
+   - **MPI 名字**:同理,`{^mpi.name}` 拼出来是 "intel-oneapi-mpi",不是
+     旧格式的 "intel-mpi"。
+   - **版本号**:旧集群的 "intel-2021.5.1" 是经典 icc 编译器自己的内部
+     版本号,新的是 oneAPI 工具包发布版本号(如 "2026.0.0")——这是两套
+     完全不同的版本编号体系,不是格式问题,没有"换算"这一说。
+   以上三点,projections 语法本身没有任何 rename/查表机制,再怎么调
+   模板字符串也做不到——`Spec.format()` 就是照抄 spec 属性的值。
+
+**(a) vs (b) 初步对比,针对上面第 2 点(编译器/MPI 命名、版本号):**
+
+| | (a) `spack module lmod refresh` 之后跑后处理脚本(重命名/建软链接) | (b) 接受 projections 拼出来的结果,不用脚本 |
+|---|---|---|
+| 能不能解决 | 能:脚本可以做任意字符串替换/查表(intel-oneapi-compilers→intel、甚至把 2026.0.0 换算成旧编号),自由度最高 | 不能:命名/版本号维持 Spack 原生的样子,永远对不上旧集群 |
+| 额外维护成本 | 有:多一个脚本要维护,每次 `spack install`/`module refresh` 后都要重跑;要处理 Lmod 的 hash 目录、`.modulerc`、spider cache 等细节 | 没有:零额外脚本,Spack 生成什么就是什么,天然保持同步 |
+| 风险 | 如果脚本直接"重命名"Spack 生成的文件,可能和 Spack 自己的 module 记录(按 DAG hash 记录 path/use_name,`spack module rm`/卸载软件时用)对不上,导致以后卸载/重装留下孤儿文件;如果改用"建软链接"而不是重命名能缓解一部分风险,但软链接本身也要在每次 refresh 后重新同步,并没有根治"多一个同步点"的问题 | 无额外风险,但要接受最终 module 名字跟旧集群不是逐字节一致(内容和结构完全对得上,只是编译器/MPI 那几个词、版本号不同) |
+| 适用场景 | 如果终端用户/文档/脚本强依赖旧集群那几个具体字符串(比如 "intel"、"intel-mpi"、"2021.5.1"),或者有人已经写好依赖这些名字的下游脚本 | 如果用户能接受"语义等价、字符串不同"(即"这是 intel-oneapi-compilers 2026.0.0 编的",而不是必须写成"intel-2021.5.1") |
+
+目前倾向:**先按 (b) 走**,把 Step 5 目录层级那个真正的"硬骨头"问题已经
+用纯配置解决了(所有情况都拼进 `Core/` 下,行为已经跟旧集群很接近);
+剩下的编译器/MPI 命名、版本号差异只是"字符串不同,语义一致",风险上
+看不如为它专门加一个后处理脚本划算。如果确认下游有硬编码依赖旧字符串
+的地方,再切到 (a) 也不迟——决定权留给用户,这里先记录对比,不做最终
+拍板。
 
 ## 工作方式(重要约束)
 - 出于安全原因,集群上不能直接跑 Claude。
@@ -81,12 +147,13 @@ default provider。
     Spack 默认编译器 provider 顺序是 gcc 优先(已在 packages.yaml 里
     覆盖成 Intel oneAPI 优先)、amber 在 Spack 里只有 18/20 两个版本
     (没有旧集群例子里的 22)。
-  - modules.yaml 的 projections 已经用真实 concretize 出来的 spec
-    验证过命名效果(如 `hdf5/1.14.6/gcc-14-mpich-5.0.1`、
-    `namd/2.14/nvhpc-24.1-cuda-12.6-mpich-5.0.1`,这两个例子是简化
-    工具链之前测试留下的,现在环境里已经不装 mpich 了),但编译器/MPI
-    包名及版本号还是没法 100% 对齐旧集群格式(比如 "intel-oneapi-compilers"
-    vs "intel"),这部分留到步骤 5/11 讨论是否要后处理脚本。
+  - modules.yaml 已经从 Tcl 草稿切到 Lmod 并完成 Step 5(详见上面专门的
+    "Step 5" 章节):用真实 concretize+生成的 module 路径验证过,通过把
+    intel-oneapi-compilers/nvhpc/gcc 全部标成 `core_compilers` 解决了
+    Lmod 强制的 compiler 层级问题(所有情况都能扁平落在 `Core/` 下,不用
+    先 `module load <compiler>` 才能看到软件);编译器/MPI 包名和版本号
+    跟旧集群对不上的问题仍然存在(projections 语法本身做不到 rename),
+    已给出后处理脚本 vs 维持现状的对比,倾向先不加脚本,决定权留给用户。
   - 之后按用户要求把工具链简化成主流 Intel oneAPI + intel-oneapi-mpi,
     gcc 降级为 fallback(从 default provider 列表里去掉),nvhpc 只留给
     需要 GPU 的软件按 spec 单独 pin `%nvhpc`,不再作为 provider。
