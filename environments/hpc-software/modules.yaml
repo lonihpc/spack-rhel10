@@ -1,0 +1,49 @@
+# Module generation config for the "hpc-software" environment.
+#
+# Target format (from CLAUDE.md, matching the existing linux-rhel8-icelake
+# cluster):
+#   <software>/<version>/<compiler>-<compiler版本>[-cuda-<版本>][-<mpi>-<mpi版本>]
+# e.g. amber/22/intel-2021.5.1-cuda-11.5.2-intel-mpi-2021.5.1
+#      cp2k/7.1/gcc-8.5.0-openmpi-4.0.1
+#      bwa/0.7.17/nvhpc-24.1
+#
+# `projections` below gets us most of the way there via Spec.format tokens.
+# Order matters: Spack's projection matcher (spack/lib/spack/spack/
+# projections.py) returns the FIRST non-"all" key whose spec.satisfies()
+# matches, so entries must go from most- to least-specific, with "all" last.
+#
+# --- What this CANNOT do on its own (flagged per the request) ---
+# 1. Compiler *names* don't match the old cluster's labels: Spack's
+#    {compiler.name} will render "intel-oneapi-compilers" (not "intel") and
+#    "nvhpc" (matches already). No projection option does string
+#    substitution/renaming - only a post-processing step (rename the
+#    generated module dirs/symlinks, or a custom Python hook) can fix this.
+# 2. Same problem for MPI: {^mpi.name} renders "intel-oneapi-mpi", but the
+#    old format wants "intel-mpi". mvapich2/mpich happen to already match.
+# 3. Compiler *version* numbers won't match either - the old cluster used
+#    the Intel classic compiler's internal version (e.g. 2021.5.1), while
+#    an oneAPI package install versions itself differently (e.g. 2026.0.0).
+#    There's no projection-level remapping for this; if exact parity with
+#    the old numbering matters, that also needs a post-processing script.
+# 4. Multiple archs/variants can still collide once hash_length: 0 removes
+#    the hash - acceptable to match the old flat style, but worth watching.
+#
+# We'll decide in step 5 (per CLAUDE.md) whether a post-processing script is
+# worth it, or whether "close enough" projections are fine.
+modules:
+  default:
+    enable: [tcl]
+    roots:
+      # Placeholder - move under the real shared module tree on the cluster.
+      tcl: /project/fchen14/spack-rhel10/spack-install/modules
+    arch_folder: false
+    tcl:
+      hash_length: 0
+      hide_implicits: true
+      all:
+        autoload: direct
+      projections:
+        "^mpi ^cuda": "{name}/{version}/{compiler.name}-{compiler.version}-cuda-{^cuda.version}-{^mpi.name}-{^mpi.version}"
+        "^cuda": "{name}/{version}/{compiler.name}-{compiler.version}-cuda-{^cuda.version}"
+        "^mpi": "{name}/{version}/{compiler.name}-{compiler.version}-{^mpi.name}-{^mpi.version}"
+        all: "{name}/{version}/{compiler.name}-{compiler.version}"
