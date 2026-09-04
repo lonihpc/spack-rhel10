@@ -8,11 +8,16 @@
 # compilers.yaml file in this repo - this replaces step 1 from the request.
 #
 # None of the paths/versions below exist on this WSL2 machine - they are
-# placeholders mirroring the old linux-rhel8-icelake cluster's compiler mix
-# (see CLAUDE.md): Intel oneAPI as the default/newest, gcc kept for
-# gcc-based software (e.g. cp2k+openmpi), nvhpc kept for CUDA-heavy codes
-# (e.g. bwa). Once we're on the real RHEL10 node, replace these with
-# `spack compiler find <path>` output / real `spack external find` results.
+# placeholders. Decided stack (per user, supersedes the old cluster's
+# gcc/nvhpc/intel mix): Intel oneAPI + Intel MPI is the mainstream toolchain
+# for everything; nvhpc is kept only for packages that need GPU support
+# (pin explicitly with `%nvhpc` per package, not as a default provider);
+# gcc is kept registered purely as a last-resort fallback for the rare
+# package that doesn't build with icx/icpx/ifx - it is NOT a default
+# provider anymore (see `all.providers` below). mvapich/mpich are no longer
+# part of the mainstream stack at all. Once we're on the real RHEL10 node,
+# replace these with `spack compiler find <path>` output / real
+# `spack external find` results.
 packages:
   intel-oneapi-compilers:
     externals:
@@ -28,6 +33,8 @@ packages:
           fortran: /opt/intel/oneapi/compiler/2026.0.0/bin/ifx
     buildable: false
 
+  # Fallback only - not a default provider (see all.providers below). Kept
+  # registered in case some package genuinely refuses to build with icx.
   gcc:
     externals:
     - spec: "gcc@14 languages='c,c++,fortran'"
@@ -41,12 +48,13 @@ packages:
           fortran: /usr/bin/gfortran
     buildable: true # also allow Spack to build other gcc versions if needed
 
+  # GPU compiler - pin explicitly per package (`%nvhpc`) when +cuda is
+  # needed, rather than relying on default provider ordering.
   nvhpc:
     externals:
     - spec: nvhpc@24.1
-      # TODO(cluster): confirm exact NVHPC version/path and whether it's
-      # still needed once we know GPU node details - kept only because the
-      # old cluster used nvhpc for bwa (see CLAUDE.md module example).
+      # TODO(cluster): confirm exact NVHPC version/path once GPU node
+      # details (model, driver) are known.
       prefix: /opt/nvidia/hpc_sdk/Linux_x86_64/24.1
       extra_attributes:
         compilers:
@@ -58,20 +66,12 @@ packages:
   # ------------------------------------------------------------------
   # MPI and CUDA - all placeholders (step 2 of the request). Nothing here
   # is confirmed against real hardware yet:
-  #   - intel-oneapi-mpi ships alongside the oneAPI toolkit and is only
+  #   - intel-oneapi-mpi is the ONLY mainstream MPI now (per user decision -
+  #     mvapich/mpich are no longer part of the standard stack). It's only
   #     usable once we confirm it's actually installed on the cluster.
-  #   - mvapich: the old cluster used "mvapich2", but Spack's mvapich2
-  #     package versions are now ALL marked deprecated (confirmed via
-  #     `spack concretize` failing outright), so we use the actively
-  #     maintained successor package `mvapich` (3.x/4.x) instead - this
-  #     matches CLAUDE.md's "用最新的,不锁旧版本" instruction anyway. It's
-  #     normally built against the real InfiniBand fabric (UCX/OFED version
-  #     matters a lot), so we leave it buildable by Spack for now rather
-  #     than guessing at an external prefix.
-  #   - mpich has no site external assumed; Spack builds it from source.
-  #   - cuda is only relevant if/when we have GPU nodes - TODO confirm.
-  # Revisit all of this once CLAUDE.md's "待确认的关键信息" questions
-  # (CPU微架构/GPU型号/编译器统一与否) are answered.
+  #   - cuda is only relevant for GPU packages - TODO confirm GPU model.
+  # Revisit the placeholder paths/versions once CLAUDE.md's "待确认的关键
+  # 信息" questions (CPU微架构/GPU型号) are answered.
   # ------------------------------------------------------------------
   intel-oneapi-mpi:
     externals:
@@ -80,14 +80,6 @@ packages:
       # get the real prefix (usually alongside intel-oneapi-compilers).
       prefix: /opt/intel/oneapi/mpi/2026.0.0
     buildable: false
-
-  mvapich:
-    # TODO(cluster): add an `externals:` entry here once we know the IB
-    # fabric (OFED/UCX version) - until then let Spack build it.
-    buildable: true
-
-  mpich:
-    buildable: true
 
   cuda:
     externals:
@@ -100,12 +92,15 @@ packages:
   all:
     providers:
       # Spack's own default order is [gcc, llvm, intel-oneapi-compilers] -
-      # override it so Intel oneAPI is picked by default (CLAUDE.md: "编译器
-      # 优先用最新的 Intel oneAPI"), confirmed necessary by test-concretizing
-      # this environment: without this override every spec silently picked
-      # gcc@14. Individual specs can still override with e.g. `cp2k %gcc` or
-      # `bwa %nvhpc` per the old cluster's per-package mix.
-      c: [intel-oneapi-compilers, gcc, nvhpc]
-      cxx: [intel-oneapi-compilers, gcc, nvhpc]
-      fortran: [intel-oneapi-compilers, gcc, nvhpc]
-      mpi: [intel-oneapi-mpi, mvapich, mpich]
+      # override it so Intel oneAPI is the mainstream default (confirmed
+      # necessary by test-concretizing this environment: without this
+      # override every spec silently picked gcc@14). gcc stays registered
+      # as a fallback (see above) but is deliberately last, not a
+      # co-equal default. nvhpc is intentionally NOT in this list - GPU
+      # packages should pin `%nvhpc` explicitly rather than relying on
+      # provider ordering to pick it up.
+      c: [intel-oneapi-compilers, gcc]
+      cxx: [intel-oneapi-compilers, gcc]
+      fortran: [intel-oneapi-compilers, gcc]
+      # intel-oneapi-mpi only - mvapich/mpich are no longer mainstream.
+      mpi: [intel-oneapi-mpi]
