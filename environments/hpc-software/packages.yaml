@@ -54,3 +54,44 @@ packages:
           cxx: /opt/nvidia/hpc_sdk/Linux_x86_64/24.1/compilers/bin/nvc++
           fortran: /opt/nvidia/hpc_sdk/Linux_x86_64/24.1/compilers/bin/nvfortran
     buildable: false
+
+  # ------------------------------------------------------------------
+  # MPI and CUDA - all placeholders (step 2 of the request). Nothing here
+  # is confirmed against real hardware yet:
+  #   - intel-oneapi-mpi ships alongside the oneAPI toolkit and is only
+  #     usable once we confirm it's actually installed on the cluster.
+  #   - mvapich2 is normally built against the real InfiniBand fabric
+  #     (UCX/OFED version matters a lot), so we leave it buildable by
+  #     Spack for now rather than guessing at an external prefix.
+  #   - mpich has no site external assumed; Spack builds it from source.
+  #   - cuda is only relevant if/when we have GPU nodes - TODO confirm.
+  # Revisit all of this once CLAUDE.md's "待确认的关键信息" questions
+  # (CPU微架构/GPU型号/编译器统一与否) are answered.
+  # ------------------------------------------------------------------
+  intel-oneapi-mpi:
+    externals:
+    - spec: intel-oneapi-mpi@2026.0.0
+      # TODO(cluster): confirm this ships with the oneAPI version above and
+      # get the real prefix (usually alongside intel-oneapi-compilers).
+      prefix: /opt/intel/oneapi/mpi/2026.0.0
+    buildable: false
+
+  mvapich2:
+    # TODO(cluster): add an `externals:` entry here once we know the IB
+    # fabric (OFED/UCX version) - until then let Spack build it.
+    buildable: true
+
+  mpich:
+    buildable: true
+
+  cuda:
+    externals:
+    - spec: cuda@12.6
+      # TODO(cluster): confirm whether there are GPU nodes at all, and if
+      # so which CUDA version/driver they run - this is a pure guess.
+      prefix: /usr/local/cuda-12.6
+    buildable: false
+
+  all:
+    providers:
+      mpi: [intel-oneapi-mpi, mvapich2, mpich]
