@@ -37,9 +37,9 @@ default provider。
    CUDA;不再引入 mvapich/mpich。备注:mvapich2 在当前 Spack 里所有版本
    都标了 deprecated,如果以后真的需要额外 MPI 实现,应该用继任的
    mvapich 包而不是 mvapich2)
-5. 设计 module 命名规则(modules.yaml projections,Lmod 版本已经验证过,
-   详见下面"Step 5"章节;还剩编译器/MPI 标签和版本号对不齐的问题,要不要
-   写后处理脚本待定)
+5. 设计 module 命名规则(modules.yaml projections,Lmod 版本已经验证过并
+   拍板,详见下面"Step 5"章节;决定保留 intel-oneapi-compilers/
+   intel-oneapi-mpi 原生包名,不写重命名后处理脚本)
 6. 用 spack.yaml environment 组织软件列表
 7. concretize + 批量编译
 8. 生成并校验 module 文件
@@ -105,12 +105,30 @@ schema 校验),关键发现:
 | 风险 | 如果脚本直接"重命名"Spack 生成的文件,可能和 Spack 自己的 module 记录(按 DAG hash 记录 path/use_name,`spack module rm`/卸载软件时用)对不上,导致以后卸载/重装留下孤儿文件;如果改用"建软链接"而不是重命名能缓解一部分风险,但软链接本身也要在每次 refresh 后重新同步,并没有根治"多一个同步点"的问题 | 无额外风险,但要接受最终 module 名字跟旧集群不是逐字节一致(内容和结构完全对得上,只是编译器/MPI 那几个词、版本号不同) |
 | 适用场景 | 如果终端用户/文档/脚本强依赖旧集群那几个具体字符串(比如 "intel"、"intel-mpi"、"2021.5.1"),或者有人已经写好依赖这些名字的下游脚本 | 如果用户能接受"语义等价、字符串不同"(即"这是 intel-oneapi-compilers 2026.0.0 编的",而不是必须写成"intel-2021.5.1") |
 
-目前倾向:**先按 (b) 走**,把 Step 5 目录层级那个真正的"硬骨头"问题已经
-用纯配置解决了(所有情况都拼进 `Core/` 下,行为已经跟旧集群很接近);
-剩下的编译器/MPI 命名、版本号差异只是"字符串不同,语义一致",风险上
-看不如为它专门加一个后处理脚本划算。如果确认下游有硬编码依赖旧字符串
-的地方,再切到 (a) 也不迟——决定权留给用户,这里先记录对比,不做最终
-拍板。
+**最终决定(已确认,不再是"倾向"):选 (b)。** module key 里的
+`intel-oneapi-compilers`/`intel-oneapi-mpi` 保持 Spack 原生包名,不写
+重命名/建软链接的后处理脚本。理由:Step 5 那个真正的"硬骨头"(Lmod
+目录层级、需要先 unlock 才能看到软件)已经用 `core_compilers` 纯配置
+解决了,行为已经跟旧集群很接近;剩下的只是"编译器/MPI 那几个词、版本号
+字符串不同,语义完全一致",专门为这个再加一个脚本、多背一个"每次
+install/refresh 后都要重跑、还可能和 Spack 自己的 DAG hash 记录对不上
+留下孤儿文件"的维护负担,不划算。如果以后真的发现下游有硬编码依赖旧
+字符串（比如某个脚本 grep "intel-mpi"）,再单独评估要不要加脚本。
+
+用真实 `spack install --fake` + `spack module lmod refresh`(不是模拟,
+是真的跑出来的文件)在 cmake(mainstream CPU)、`bwa %nvhpc`(GPU 编译器)、
+cosma(mainstream + MPI)三个代表性软件上验证过最终效果,文件路径原样
+如下:
+```
+Core/cmake/3.31.11/intel-oneapi-compilers-2026.0.0.lua
+Core/bwa/0.7.19/nvhpc-24.1.lua
+Core/cosma/2.8.4/intel-oneapi-compilers-2026.0.0-intel-oneapi-mpi-2026.0.0.lua
+```
+（这次验证还顺带发现:`spack module lmod refresh` 会尝试给
+`intel-oneapi-compilers`/`intel-oneapi-mpi` 这两个"编译器包"自己也生成
+module,会去 source 一个 `vars.sh` 环境脚本;因为我们的 external prefix
+是占位符,这一步会报错失败——真机上 oneAPI 装好之后要确认这个
+`vars.sh` 路径是对的,不然这两个编译器自己的 module 生不出来。）
 
 ## 工作方式(重要约束)
 - 出于安全原因,集群上不能直接跑 Claude。
@@ -151,9 +169,11 @@ schema 校验),关键发现:
     "Step 5" 章节):用真实 concretize+生成的 module 路径验证过,通过把
     intel-oneapi-compilers/nvhpc/gcc 全部标成 `core_compilers` 解决了
     Lmod 强制的 compiler 层级问题(所有情况都能扁平落在 `Core/` 下,不用
-    先 `module load <compiler>` 才能看到软件);编译器/MPI 包名和版本号
-    跟旧集群对不上的问题仍然存在(projections 语法本身做不到 rename),
-    已给出后处理脚本 vs 维持现状的对比,倾向先不加脚本,决定权留给用户。
+    先 `module load <compiler>` 才能看到软件)。编译器/MPI 包名和版本号
+    跟旧集群对不上的问题**已拍板**:不写重命名后处理脚本,保留 Spack
+    原生包名(intel-oneapi-compilers/intel-oneapi-mpi)。用
+    `spack install --fake` + `spack module lmod refresh` 真跑过 cmake/
+    `bwa %nvhpc`/cosma 三个代表性软件确认最终效果。
   - 之后按用户要求把工具链简化成主流 Intel oneAPI + intel-oneapi-mpi,
     gcc 降级为 fallback(从 default provider 列表里去掉),nvhpc 只留给
     需要 GPU 的软件按 spec 单独 pin `%nvhpc`,不再作为 provider。
