@@ -1,0 +1,126 @@
+# "dev-local" Spack environment - for drafting/validating config on
+# dellpro16 (WSL2) only. Same software list and toolchain as
+# environments/production, just a local install location for safe
+# `spack concretize`/`spack spec` testing (and, per this session, a
+# `spack install --fake` smoke test) that never touches the real cluster.
+#
+# Usage (after sourcing spack/share/spack/setup-env.sh):
+#   spack env activate -p environments/dev-local
+#   spack concretize
+#   spack install --fake ...   # smoke-test module generation etc, never a
+#                               # real build - see CLAUDE.md for why real
+#                               # `spack install` must run on the cluster.
+#
+# Shared compiler/MPI/CUDA/target config lives in ../../config/{packages,
+# modules}.yaml (see those files - single source of truth, not copied
+# here). Only what's genuinely specific to this environment (install
+# location, module root) is inline below.
+spack:
+  include:
+  - ../../config/packages.yaml
+  - ../../config/modules.yaml
+
+  # LOCAL PLACEHOLDER paths for drafting/validating config on dellpro16
+  # (WSL2). Nothing here builds software for real - `spack concretize` and
+  # `spack spec` don't need these paths to exist. This is the dev-local
+  # counterpart of environments/production's config: - same keys, only the
+  # root path differs.
+  config:
+    install_tree:
+      root: /project/fchen14/spack-rhel10/spack-install
+      projections:
+        all: "{architecture.platform}-{architecture.target}/{name}-{version}-{hash}"
+    source_cache: /project/fchen14/spack-rhel10/spack-install/cache/sources
+    misc_cache: /project/fchen14/spack-rhel10/spack-install/cache/misc
+    build_stage:
+    - $tempdir/$user/spack-stage
+    license_dir: /project/fchen14/spack-rhel10/spack-install/licenses
+    build_jobs: 16
+
+  modules:
+    default:
+      roots:
+        lmod: /project/fchen14/spack-rhel10/spack-install/modules
+
+  # Mainstream toolchain is Intel oneAPI + Intel MPI for everything (see
+  # ../../config/packages.yaml); nvhpc is only pinned per-package
+  # (`%nvhpc`) for GPU builds. `unify: false` still lets those GPU packages
+  # diverge from the rest of the environment instead of forcing one
+  # compiler everywhere.
+  concretizer:
+    unify: false
+    # Needed for the packages:all:target: [icelake] preference (see
+    # ../../config/packages.yaml) to actually take effect on this dev
+    # machine: by default Spack restricts targets to ones compatible with
+    # the CURRENT host's detected microarch (this WSL2 box reports
+    # "skylake", not the real cluster's icelake), so without this override
+    # `spack concretize` here silently ignores our icelake preference and
+    # just uses skylake - confirmed by testing. On the real RHEL10/icelake
+    # node this flag is harmless either way since host and target would
+    # already match (kept identical to environments/production for
+    # consistency).
+    targets:
+      host_compatible: false
+
+  # No shared filesystem view for now - module files are the actual
+  # delivery mechanism to end users, not an environment view.
+  view: false
+
+  # Same specs list as environments/production (Spack's env schema has no
+  # way to `include:` a shared `specs:` list - it's not one of the
+  # includable "section" files - so this is intentionally duplicated
+  # between the two spack.yaml files; keep them in sync by hand, or diverge
+  # deliberately if dev-local ever wants a smaller subset for faster local
+  # iteration).
+  #
+  # Versions intentionally left unpinned ("latest wins") per the request -
+  # we're not copying the old cluster's exact versions. Everything defaults
+  # to intel-oneapi-compilers + intel-oneapi-mpi via packages.yaml, so no
+  # per-package %compiler pin is needed except for GPU packages, which pin
+  # `%nvhpc` explicitly and `+cuda cuda_arch=80` (confirmed GPU hardware)
+  # for namd/lammps. cuda_arch=80 is also a site-wide default preference in
+  # packages.yaml, so any other package that later grows a `+cuda` build
+  # only needs `+cuda %nvhpc` here.
+  specs:
+  # amber: Spack's `amber` package only has versions 18/20 (no 22, unlike
+  # the old cluster's amber/22) - it's licensed software, so Spack can only
+  # offer versions someone has registered a checksum/resource for. Also
+  # concretizes with "no compilers" (no explicit c/cxx/fortran dependency
+  # in its package.py), so it won't get a compiler suffix from modules.yaml
+  # projections the way other packages do - both confirmed by test
+  # concretizing this environment, not guesses.
+  #
+  # +cuda NOT enabled here, unlike namd/lammps: Spack's amber package.py
+  # hard-caps `amber@20:+cuda` at `cuda@:11.1` (see depends_on in its
+  # recipe), which is incompatible with our confirmed cuda@13.3.0 - with
+  # cuda:buildable:false there's no way to satisfy both, confirmed by
+  # concretize failing outright ("Cannot build cuda ... no externals
+  # satisfy the request"). Options if GPU amber is actually needed: get a
+  # newer amber recipe/patch that supports modern CUDA, or keep a second,
+  # older external `cuda@11.1` around just for amber (contradicts "one
+  # confirmed CUDA install" though) - left as a decision for later rather
+  # than silently picking one.
+  - amber
+  # ambertools: despite the intel-oneapi-compilers default, this one
+  # concretizes as %gcc for c/cxx and %oneapi (ifx) only for fortran - a
+  # package-level constraint in ambertools' own recipe, not a config
+  # issue. Confirmed by test concretizing, not assumed.
+  - ambertools
+  - boost
+  - bowtie2
+  - bwa
+  - cmake
+  - mamba # conda/mamba - Spack package is `mamba` (micromamba installer)
+  - cosma
+  - cp2k
+  - lammps +cuda cuda_arch=80 %nvhpc
+  - metis
+  # mpich/mvapich2 are no longer part of the mainstream stack (intel-oneapi
+  # + intel-mpi covers it, see packages.yaml) so neither is installed as a
+  # standalone target anymore. For the record: mvapich2 (the old cluster's
+  # package) is also fully deprecated in Spack's current repo - every
+  # version fails concretization outright - so if MPI diversity is ever
+  # needed again, use the `mvapich` successor package, not mvapich2.
+  - namd +cuda cuda_arch=80 %nvhpc
+  # matlab is explicitly NOT here - CLAUDE.md says it's not a Spack package
+  # and needs a manual install + hand-written modulefile instead.

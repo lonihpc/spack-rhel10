@@ -1,6 +1,13 @@
-# Module generation config for the "hpc-software" environment - step 5
-# draft, LMOD variant (supersedes the earlier Tcl-only draft; see CLAUDE.md
-# for the decision on whether Tcl stays enabled alongside this).
+# Shared module-generation config (naming/projections only) for ALL
+# "hpc-software" Spack environments (environments/dev-local and
+# environments/production). Referenced via `include:` from both spack.yaml
+# files - this is the single source of truth, never copy this file.
+#
+# Deliberately does NOT set `roots:` (where module files get written) -
+# that's the one thing that differs between dev-local and production, so
+# each environment's own spack.yaml sets `modules: default: roots: ...`
+# inline; Spack merges that with the `lmod:`/`enable`/etc. from this file
+# under the same `modules: default:` key.
 #
 # Target format (from CLAUDE.md, matching the existing linux-rhel8-icelake
 # cluster):
@@ -34,8 +41,6 @@
 modules:
   default:
     enable: [lmod]
-    roots:
-      lmod: /project/fchen14/spack-rhel10/spack-install/modules # placeholder
     arch_folder: false
     lmod:
       hash_length: 0

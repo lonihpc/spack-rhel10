@@ -1,23 +1,27 @@
-# Compiler configuration for the "hpc-software" environment.
+# Shared compiler/MPI/CUDA/hardware configuration for ALL "hpc-software"
+# Spack environments (environments/dev-local and environments/production).
+# Referenced via `include:` from both spack.yaml files - this is the single
+# source of truth, never copy this file.
 #
 # IMPORTANT: Spack v1.2.x removed compilers.yaml. Compilers are now declared
 # as external packages right here in packages.yaml (with a `compiler` tag),
 # see `spack/lib/spack/docs/configuring_compilers.rst` in the cloned repo.
 # An old-style compilers.yaml is still auto-migrated by Spack (with a
 # deprecation warning) into this same format, so there is no separate
-# compilers.yaml file in this repo - this replaces step 1 from the request.
+# compilers.yaml file in this repo.
 #
-# None of the paths/versions below exist on this WSL2 machine - they are
-# placeholders. Decided stack (per user, supersedes the old cluster's
-# gcc/nvhpc/intel mix): Intel oneAPI + Intel MPI is the mainstream toolchain
-# for everything; nvhpc is kept only for packages that need GPU support
-# (pin explicitly with `%nvhpc` per package, not as a default provider);
-# gcc is kept registered purely as a last-resort fallback for the rare
-# package that doesn't build with icx/icpx/ifx - it is NOT a default
+# None of the paths/versions below exist on the dev-local (WSL2) machine -
+# they are placeholders. Decided stack (per user, supersedes the old
+# cluster's gcc/nvhpc/intel mix): Intel oneAPI + Intel MPI is the mainstream
+# toolchain for everything; nvhpc is kept only for packages that need GPU
+# support (pin explicitly with `%nvhpc` per package, not as a default
+# provider); gcc is kept registered purely as a last-resort fallback for the
+# rare package that doesn't build with icx/icpx/ifx - it is NOT a default
 # provider anymore (see `all.providers` below). mvapich/mpich are no longer
 # part of the mainstream stack at all. Once we're on the real RHEL10 node,
 # replace these with `spack compiler find <path>` output / real
-# `spack external find` results.
+# `spack external find` results - that's a single edit here, shared by both
+# environments.
 packages:
   intel-oneapi-compilers:
     externals:
@@ -82,9 +86,7 @@ packages:
   # declared as an EXTERNAL pointing at the cluster's existing CUDA/driver
   # install, never spack-built (a spack-built CUDA runtime could easily
   # mismatch the real driver on the GPU nodes). buildable:false enforces
-  # that - this was already our design before the version/policy was
-  # confirmed, so nothing structural changes here, just the version number
-  # and the fact that it's no longer a guess.
+  # that.
   # ------------------------------------------------------------------
   cuda:
     externals:
@@ -110,13 +112,15 @@ packages:
       fortran: [intel-oneapi-compilers, gcc]
       # intel-oneapi-mpi only - mvapich/mpich are no longer mainstream.
       mpi: [intel-oneapi-mpi]
-    # Confirmed CPU microarch for the new RHEL10 node. Soft preference:
-    # ignored if the concretizer can reuse an existing install, but
-    # otherwise steers every build toward -march/-mtune=icelake.
+    # Confirmed CPU microarch for the new RHEL10 node - one setting for the
+    # whole environment, no per-node-type profile needed (GPU and CPU-only
+    # nodes are identical here except for the presence of a GPU). Soft
+    # preference: ignored if the concretizer can reuse an existing install,
+    # but otherwise steers every build toward -march/-mtune=icelake.
     target: [icelake]
     # Confirmed GPU: Ampere-class (e.g. A100, compute capability 8.0).
-    # Soft default so any `+cuda` package (amber/namd/lammps today, see
-    # spack.yaml) picks up cuda_arch=80 without repeating it on every spec
-    # line; per-package `cuda_arch=` on the spec still overrides this if a
-    # future GPU package needs a different one.
+    # Soft default so any `+cuda` package (namd/lammps today, see
+    # spack.yaml in each environment) picks up cuda_arch=80 without
+    # repeating it on every spec line; per-package `cuda_arch=` on the spec
+    # still overrides this if a future GPU package needs a different one.
     variants: cuda_arch=80
