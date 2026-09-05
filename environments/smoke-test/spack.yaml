@@ -1,0 +1,69 @@
+# "smoke-test" Spack environment - THROWAWAY, temporary end-to-end
+# validation only. NOT dev-local, NOT production - separate install
+# location entirely, disposable, safe to delete and recreate at any time.
+#
+# Purpose: before committing to a full `spack install` of the real
+# production software list on the actual RHEL10 cluster, do a small, fast
+# real build (not --fake) of 3 representative packages to confirm the
+# whole pipeline actually works on a real compute node: real compilers
+# found and invoked (including nvhpc, which nothing else here has actually
+# built with for real yet), real network/download access, real
+# `spack module lmod refresh` against a real install.
+#
+# Usage (on the actual cluster, from a compute node via sbatch - see
+# scripts/smoke-test-install.sh, NOT on the login node):
+#   spack env activate -p environments/smoke-test
+#   spack concretize
+#   spack install -j <cores>
+#   spack module lmod refresh -y
+#
+# Shares the exact same compiler/MPI/CUDA/target config as dev-local and
+# production (../../config/{packages,modules}.yaml - single source of
+# truth, not copied here) so a successful smoke test is actually
+# representative of what production would do. Only the specs list and the
+# (temporary) install location differ.
+spack:
+  include:
+  - ../../config/packages.yaml
+  - ../../config/modules.yaml
+
+  # Temporary install location on the cluster, under this account, NOT
+  # /usr/local/packages (that's reserved for the real production install -
+  # see environments/production/spack.yaml). Safe to `rm -rf` this whole
+  # tree once the smoke test is done with it.
+  config:
+    install_tree:
+      root: /project/fchen14/spack-rhel10-smoke-test/spack-install
+      projections:
+        all: "{architecture.platform}-{architecture.target}/{name}-{version}-{hash}"
+    source_cache: /project/fchen14/spack-rhel10-smoke-test/spack-install/cache/sources
+    misc_cache: /project/fchen14/spack-rhel10-smoke-test/spack-install/cache/misc
+    build_stage:
+    - $tempdir/$user/spack-stage
+    license_dir: /project/fchen14/spack-rhel10-smoke-test/spack-install/licenses
+    build_jobs: 16
+
+  modules:
+    default:
+      roots:
+        lmod: /project/fchen14/spack-rhel10-smoke-test/modulefiles
+
+  # Same as dev-local/production - see those files' comments for why.
+  concretizer:
+    unify: false
+    targets:
+      host_compatible: false
+
+  view: false
+
+  # Deliberately NOT going through config/specs.yaml/render-specs.py - this
+  # is a throwaway 3-package smoke-test list, not the real target software
+  # list, so it doesn't belong in the shared single-source-of-truth file.
+  specs:
+  - cmake                # plain CPU package, mainstream intel-oneapi-compilers
+  - cosma                # exercises MPI too (intel-oneapi-mpi)
+  # bwa %nvhpc: just needs nvhpc to be findable/invokable for real - bwa
+  # itself has no GPU/cuda_arch variant, and this pin doesn't need to match
+  # whatever compiler production ends up using for bwa (undecided, if any)
+  # - it's only here to prove nvhpc actually works on the compute node.
+  - bwa %nvhpc
