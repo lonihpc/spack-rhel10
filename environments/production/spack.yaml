@@ -70,19 +70,13 @@ spack:
   # delivery mechanism to end users, not an environment view.
   view: false
 
-  # Same specs list as environments/dev-local (Spack's env schema has no
-  # way to `include:` a shared `specs:` list - it's not one of the
-  # includable "section" files - so this is intentionally duplicated
-  # between the two spack.yaml files; keep them in sync by hand).
-  #
-  # Versions intentionally left unpinned ("latest wins") per the request -
-  # we're not copying the old cluster's exact versions. Everything defaults
-  # to intel-oneapi-compilers + intel-oneapi-mpi via packages.yaml, so no
-  # per-package %compiler pin is needed except for GPU packages, which pin
-  # `%nvhpc` explicitly and `+cuda cuda_arch=80` (confirmed GPU hardware)
-  # for namd/lammps. cuda_arch=80 is also a site-wide default preference in
-  # packages.yaml, so any other package that later grows a `+cuda` build
-  # only needs `+cuda %nvhpc` here.
+  # Target software list - single source of truth is config/specs.yaml
+  # (Spack's env schema has no way to `include:` a shared `specs:` list -
+  # it's not one of the includable "section" files - so
+  # scripts/render-specs.py splices it in here as plain text instead).
+  # DO NOT hand-edit between the markers below: edit config/specs.yaml,
+  # then run `python3 scripts/render-specs.py`.
+  # >>> BEGIN GENERATED SPECS (from config/specs.yaml - do not edit by hand)
   specs:
   # amber: Spack's `amber` package only has versions 18/20 (no 22, unlike
   # the old cluster's amber/22) - it's licensed software, so Spack can only
@@ -93,15 +87,18 @@ spack:
   # concretizing this environment, not guesses.
   #
   # +cuda NOT enabled here, unlike namd/lammps: Spack's amber package.py
-  # hard-caps `amber@20:+cuda` at `cuda@:11.1` (see depends_on in its
-  # recipe), which is incompatible with our confirmed cuda@13.3.0 - with
-  # cuda:buildable:false there's no way to satisfy both, confirmed by
-  # concretize failing outright ("Cannot build cuda ... no externals
-  # satisfy the request"). Options if GPU amber is actually needed: get a
-  # newer amber recipe/patch that supports modern CUDA, or keep a second,
-  # older external `cuda@11.1` around just for amber (contradicts "one
-  # confirmed CUDA install" though) - left as a decision for later rather
-  # than silently picking one.
+  # hard-caps `amber@20:+cuda` at `cuda@:11.1`, further narrowed to exactly
+  # `cuda@11.0:11.1` when combined with the `cuda_arch=80`-specific
+  # `depends_on("cuda@11.0:", when="cuda_arch=80")` rule (both `when`
+  # clauses apply simultaneously and intersect) - confirmed via
+  # `spack info amber`. This is incompatible with our confirmed
+  # cuda@13.3.0 - with cuda:buildable:false there's no way to satisfy both,
+  # confirmed by concretize failing outright ("Cannot build cuda ... no
+  # externals satisfy the request"). Options if GPU amber is actually
+  # needed: get a newer amber recipe/patch that supports modern CUDA, or
+  # keep a second, older external `cuda@11.0` or `cuda@11.1` around just for
+  # amber (contradicts "one confirmed CUDA install" though) - left as a
+  # decision for later rather than silently picking one.
   - amber
   # ambertools: despite the intel-oneapi-compilers default, this one
   # concretizes as %gcc for c/cxx and %oneapi (ifx) only for fortran - a
@@ -126,3 +123,4 @@ spack:
   - namd +cuda cuda_arch=80 %nvhpc
   # matlab is explicitly NOT here - CLAUDE.md says it's not a Spack package
   # and needs a manual install + hand-written modulefile instead.
+  # <<< END GENERATED SPECS
