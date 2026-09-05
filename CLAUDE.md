@@ -24,19 +24,37 @@ lammps, matlab(非 spack 包,需单独装+手写 modulefile), metis, namd 等,
 mvapich/mpich。gcc 只作为极少数编译不过 icx 的软件的 fallback 保留,不是
 default provider。
 
-## 待确认的关键信息
-- 新 RHEL10 节点的具体 CPU микроarch(还是 Ice Lake,还是更新的?)
-- 是否有 GPU 节点、什么型号
+## 硬件信息(已确认,不再是"待确认")
+- CPU target:icelake(`packages:all:target: [icelake]`)。
+- GPU:Ampere 级(如 A100),`cuda_arch=80`,作为
+  `packages:all:variants` 的默认值,GPU 软件(namd、lammps 等)在
+  spack.yaml 里再显式加 `+cuda cuda_arch=80 %nvhpc`。
+- CUDA 版本:pin 到 13.3.0。按要求声明成 external(`buildable: false`),
+  绝不让 Spack 自己编译一份 CUDA runtime——必须匹配集群上真实已装的
+  驱动/CUDA。真实安装路径还是占位符(`/usr/local/cuda-13.3`),真机
+  确认后要替换,见 packages.yaml 里的 TODO(cluster)。
+- 已知问题(测出来的,不是猜的):Spack 的 `amber` 包(仅 18/20 两个
+  版本)在 `+cuda` 时把 CUDA 硬编码上限锁在 `cuda@:11.1`
+  (package.py `depends_on("cuda@:11.1", when="@20:+cuda")`),跟我们
+  confirmed 的 cuda@13.3.0 不兼容,`cuda:buildable:false` 又不允许两者
+  并存。目前 amber 先按纯 CPU(`~cuda`)处理,GPU 版 amber 需要以后另外
+  决定(换新的 package.py/patch,或者专门为 amber 再注册一个旧版 CUDA
+  external,牺牲"只有一份 CUDA"的简洁性)。
+- 本地 WSL2 (dellpro16) 自己识别成 `skylake`,不是 icelake,所以要在
+  spack.yaml 里加 `concretizer:targets:host_compatible: false` 才能让
+  `packages:all:target: [icelake]` 真正生效,不然本地 concretize 会默默
+  用 skylake——这条本地专用,真机上跑在 icelake 节点时无影响。
 
 ## 部署整体流程(11 步,详见对话历史/项目文档)
 1. 现状盘点与目标确认
 2. 部署最新 Spack(当前最新稳定版 v1.2.2,比之前记的 v1.2.0 新一个 patch 版本)
 3. 配置最新 Intel oneAPI 编译器(当前 2026.0.0)作为主流,gcc 仅作为
    fallback 保留,nvhpc 仅用于 GPU 软件
-4. 配置 MPI/CUDA(主流是 intel-oneapi-mpi,GPU 软件配 nvhpc 系列 + 匹配的
-   CUDA;不再引入 mvapich/mpich。备注:mvapich2 在当前 Spack 里所有版本
-   都标了 deprecated,如果以后真的需要额外 MPI 实现,应该用继任的
-   mvapich 包而不是 mvapich2)
+4. 配置 MPI/CUDA(主流是 intel-oneapi-mpi,GPU 软件配 nvhpc 系列 + CUDA
+   13.3.0(external,已确认,见下面"硬件信息"章节);不再引入
+   mvapich/mpich。备注:mvapich2 在当前 Spack 里所有版本都标了
+   deprecated,如果以后真的需要额外 MPI 实现,应该用继任的 mvapich 包
+   而不是 mvapich2)
 5. 设计 module 命名规则(modules.yaml projections,Lmod 版本已经验证过并
    拍板,详见下面"Step 5"章节;决定保留 intel-oneapi-compilers/
    intel-oneapi-mpi 原生包名,不写重命名后处理脚本)
@@ -182,6 +200,13 @@ module,会去 source 一个 `vars.sh` 环境脚本;因为我们的 external pref
     `%oneapi@2026.0.0`;发现两个包级例外(非配置问题):amber 完全不声明
     编译器依赖,ambertools 固定用 %gcc 编译 c/cxx、只有 fortran 走
     %oneapi(ifx)。
-  - 待确认的关键信息(CPU 微架构/GPU 型号)仍未回答,所以
-    compilers/packages.yaml 里的路径、版本号全部是占位符,标了
-    TODO(cluster),真机确认后要替换。
+  - CPU/GPU 硬件信息已确认并写入配置(详见上面"硬件信息"章节):
+    `packages:all:target: [icelake]`、`packages:all:variants:
+    cuda_arch=80`、CUDA external 从占位的 12.6 改成确认的 13.3.0。
+    真实安装路径(oneAPI/nvhpc/CUDA 具体 prefix)还是占位符,标了
+    TODO(cluster),真机确认后要替换。测出来一个真实的不兼容:Spack 的
+    `amber` 包 `+cuda` 时硬编码上限 `cuda@:11.1`,跟 cuda@13.3.0 冲突,
+    已让 amber 先保持纯 CPU,GPU 版 amber 怎么处理留待以后决定。本机
+    (WSL2)识别成 skylake 不是 icelake,额外加了
+    `concretizer:targets:host_compatible: false` 才能让 icelake
+    偏好在本地生效(真机上跑在 icelake 节点则无影响)。
