@@ -64,14 +64,10 @@ packages:
     buildable: false
 
   # ------------------------------------------------------------------
-  # MPI and CUDA - all placeholders (step 2 of the request). Nothing here
-  # is confirmed against real hardware yet:
-  #   - intel-oneapi-mpi is the ONLY mainstream MPI now (per user decision -
-  #     mvapich/mpich are no longer part of the standard stack). It's only
-  #     usable once we confirm it's actually installed on the cluster.
-  #   - cuda is only relevant for GPU packages - TODO confirm GPU model.
-  # Revisit the placeholder paths/versions once CLAUDE.md's "待确认的关键
-  # 信息" questions (CPU微架构/GPU型号) are answered.
+  # MPI: intel-oneapi-mpi is the ONLY mainstream MPI now (per user decision
+  # - mvapich/mpich are no longer part of the standard stack). Path/version
+  # still a placeholder - only usable once we confirm it's actually
+  # installed on the cluster.
   # ------------------------------------------------------------------
   intel-oneapi-mpi:
     externals:
@@ -81,12 +77,22 @@ packages:
       prefix: /opt/intel/oneapi/mpi/2026.0.0
     buildable: false
 
+  # ------------------------------------------------------------------
+  # CUDA - confirmed by user: 13.3 is the target version, and it must be
+  # declared as an EXTERNAL pointing at the cluster's existing CUDA/driver
+  # install, never spack-built (a spack-built CUDA runtime could easily
+  # mismatch the real driver on the GPU nodes). buildable:false enforces
+  # that - this was already our design before the version/policy was
+  # confirmed, so nothing structural changes here, just the version number
+  # and the fact that it's no longer a guess.
+  # ------------------------------------------------------------------
   cuda:
     externals:
-    - spec: cuda@12.6
-      # TODO(cluster): confirm whether there are GPU nodes at all, and if
-      # so which CUDA version/driver they run - this is a pure guess.
-      prefix: /usr/local/cuda-12.6
+    - spec: cuda@13.3.0
+      # TODO(cluster): confirm the real install path once we're on the
+      # actual RHEL10 GPU node - /usr/local/cuda-13.3 is a placeholder
+      # guess at the conventional layout, not a confirmed path.
+      prefix: /usr/local/cuda-13.3
     buildable: false
 
   all:
@@ -104,3 +110,13 @@ packages:
       fortran: [intel-oneapi-compilers, gcc]
       # intel-oneapi-mpi only - mvapich/mpich are no longer mainstream.
       mpi: [intel-oneapi-mpi]
+    # Confirmed CPU microarch for the new RHEL10 node. Soft preference:
+    # ignored if the concretizer can reuse an existing install, but
+    # otherwise steers every build toward -march/-mtune=icelake.
+    target: [icelake]
+    # Confirmed GPU: Ampere-class (e.g. A100, compute capability 8.0).
+    # Soft default so any `+cuda` package (amber/namd/lammps today, see
+    # spack.yaml) picks up cuda_arch=80 without repeating it on every spec
+    # line; per-package `cuda_arch=` on the spec still overrides this if a
+    # future GPU package needs a different one.
+    variants: cuda_arch=80
