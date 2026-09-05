@@ -27,17 +27,22 @@
 # TODO(cluster): uncomment and fill in once the real partition/account
 # names are known - left unset so this submits to whatever the cluster's
 # default partition is in the meantime.
-##SBATCH --partition=<TODO>
-##SBATCH --account=<TODO>
+#SBATCH --partition=gpu2
+#SBATCH --account=loni_loniadmin1
+
 
 set -euo pipefail
+
+unset SPACK_PYTHON
+export SPACK_PYTHON=/usr/bin/python3
+source /project/fchen14/spack-tool/share/spack/setup-env.sh
 
 # Resolve the repo root relative to this script's own location, so this
 # works regardless of the directory `sbatch` was invoked from.
 REPO_ROOT="$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)"
 cd "$REPO_ROOT"
 
-source spack/share/spack/setup-env.sh
+#source spack/share/spack/setup-env.sh
 spack env activate environments/smoke-test
 
 JOBS="${SLURM_CPUS_PER_TASK:-4}"
