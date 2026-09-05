@@ -45,6 +45,55 @@ default provider。
   `packages:all:target: [icelake]` 真正生效,不然本地 concretize 会默默
   用 skylake——这条本地专用,真机上跑在 icelake 节点时无影响。
 
+## Environment 目录结构(dev-local / production 拆分,已确认)
+不再是单一的 `environments/hpc-software/`,现在拆成两份 environment,
+GPU 节点和 CPU-only 节点不单独拆 profile(除了有没有 GPU,其余完全
+一样):
+
+```
+config/                    # 共享配置,dev-local/production 都通过
+  packages.yaml            # include: 引用,不复制两份
+  modules.yaml              # (modules.yaml 只放 projections/core_compilers
+                            #  等命名相关的部分,不含 roots)
+environments/
+  dev-local/
+    spack.yaml              # include ../../config/{packages,modules}.yaml
+                            # + 本地专用的 config:/modules:roots/specs
+  production/
+    spack.yaml              # 同上,但 install_tree/module roots 换成
+                            # 集群占位路径
+```
+
+- 共享部分(一份文件,两边 `include:` 引用,不复制):编译器/MPI/CUDA
+  声明、`packages:all:{providers,target,variants}`(包括 icelake/
+  cuda_arch=80/cuda@13.3.0)、modules.yaml 里的 `projections`/
+  `core_compilers`/`hierarchy` 等命名规则。
+- 各自独有、写在各自 spack.yaml 里的内容:
+  - `config:install_tree`(以及 source_cache/misc_cache/license_dir 等
+    跟着 install_tree 走的路径):
+    - dev-local:`/project/fchen14/spack-rhel10/spack-install`(保持不变,
+      本地验证用)。
+    - production:`/usr/local/packages/spack`(占位,具体名字还没定,
+      只需要改这一处)。
+  - `modules:default:roots:lmod`(module 文件生成目录):
+    - dev-local:`/project/fchen14/spack-rhel10/spack-install/modules`。
+    - production:
+      `/usr/local/packages/Modules/default/modulefiles/linux-rhel10-icelake`
+      (占位,匹配旧集群 modulefiles 命名习惯)。
+  - `specs:`(目标软件列表):Spack 的 environment schema 里
+    `include:` 能拉的"section"文件不包括 `specs:`(只有
+    config/packages/modules/concretizer 等,specs 是 environment
+    manifest 自己的字段),所以这个列表目前是**手动保持同步**地复制在
+    两份 spack.yaml 里,不是共享的。以后如果嫌手动同步麻烦,可以再讨论
+    要不要用别的机制(比如一个环境 `include` 另一个环境的 spack.lock)。
+  - `concretizer:targets:host_compatible: false`:dev-local 上是必须的
+    (本机识别成 skylake),production 上其实用不上(真机就是 icelake),
+    但为了两份文件尽量一致还是都保留了,无副作用。
+
+用 dev-local 重新跑过 `spack concretize` + `spack install --fake` +
+`spack module lmod refresh` 全套验证过拆分后配置没坏,细节见下面
+"当前进度"。
+
 ## 部署整体流程(11 步,详见对话历史/项目文档)
 1. 现状盘点与目标确认
 2. 部署最新 Spack(当前最新稳定版 v1.2.2,比之前记的 v1.2.0 新一个 patch 版本)
@@ -67,8 +116,8 @@ default provider。
 
 ## Step 5: module 命名方案(Lmod)结论
 
-modules.yaml 已经从 Tcl 草稿切到 Lmod(environments/hpc-software/
-modules.yaml),projections 尽量拼目标格式
+modules.yaml 已经从 Tcl 草稿切到 Lmod(现在是共享的 config/modules.yaml,
+见上面"Environment 目录结构"章节),projections 尽量拼目标格式
 `<软件>/<版本>/<编译器>-<编译器版本>[-cuda-<版本>][-<mpi>-<mpi版本>]`。
 amber 跳过(它在 Spack 里不声明编译器依赖,没法拼)。
 
@@ -169,16 +218,18 @@ module,会去 source 一个 `vars.sh` 环境脚本;因为我们的 external pref
 - 已完成步骤 2-6(草稿阶段,path 全部是本地占位符):
   - Spack v1.2.2 已 clone 到 spack/(git-ignored,版本记录在
     SPACK_VERSION.md)。
-  - environments/hpc-software/{config,packages,modules,spack}.yaml 已写好
-    并纳入 git,分别对应 install_tree 占位路径、编译器+MPI/CUDA 声明、
-    module projections、目标软件 environment。
+  - 最初写在 environments/hpc-software/{config,packages,modules,spack}.yaml
+    里,后来按用户要求拆成了 environments/{dev-local,production}/
+    spack.yaml + 共享的 config/{packages,modules}.yaml,见上面
+    "Environment 目录结构"章节,hpc-software 目录已删除。
   - 重要:Spack v1.2.x 已经彻底去掉了 compilers.yaml,编译器改成在
     packages.yaml 里以 external package 形式声明(带 deprecation 迁移
     逻辑),所以没有单独的 compilers.yaml 文件。
-  - 用 `spack -C environments/hpc-software ...` 和
-    `spack env activate environments/hpc-software` 在本机(WSL2)做了
-    schema 校验 + 完整 `spack concretize`(全部 14 个目标软件都能
-    concretize 成功,没有真的 install)。发现的问题都已经记在对应
+  - 用 `spack -C environments/hpc-software ...`(当时还没拆分,这个
+    environment 现在已经不存在了,后续验证都在 environments/dev-local
+    下做)和 `spack env activate environments/hpc-software` 在本机
+    (WSL2)做了 schema 校验 + 完整 `spack concretize`(全部 14 个目标
+    软件都能 concretize 成功,没有真的 install)。发现的问题都已经记在对应
     yaml 文件的注释里,包括:mvapich2 全版本 deprecated 改用 mvapich、
     Spack 默认编译器 provider 顺序是 gcc 优先(已在 packages.yaml 里
     覆盖成 Intel oneAPI 优先)、amber 在 Spack 里只有 18/20 两个版本
@@ -210,3 +261,15 @@ module,会去 source 一个 `vars.sh` 环境脚本;因为我们的 external pref
     (WSL2)识别成 skylake 不是 icelake,额外加了
     `concretizer:targets:host_compatible: false` 才能让 icelake
     偏好在本地生效(真机上跑在 icelake 节点则无影响)。
+  - 按用户要求把 environments/hpc-software 拆成 environments/dev-local +
+    environments/production,共享配置提到 config/{packages,modules}.yaml
+    (见上面"Environment 目录结构"章节)。用 dev-local 重新跑过一遍完整
+    验证:`spack concretize` 干净通过(target=icelake、cuda_arch:=80 都
+    生效);`spack install --fake` 装了整个 environment,除了两个
+    `py-pip` 变体因为本机没有真实 python3 二进制而失败(--fake 安装的
+    已知限制,跟这次拆分无关)之外全部成功,包括 cmake/namd/lammps/cosma
+    这几个代表性软件;`spack module lmod refresh` 在新的 module 目录下
+    生成出了正确的文件,比如
+    `Core/namd/2.14/nvhpc-24.1-cuda-13.3.0-intel-oneapi-mpi-2026.0.0.lua`
+    (cuda 版本号已经是新的 13.3.0)。验证完之后卸载了所有 fake 包并清空
+    了 spack-install/,没有留下测试垃圾。
