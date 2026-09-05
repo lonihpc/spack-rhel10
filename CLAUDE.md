@@ -33,13 +33,15 @@ default provider。
   绝不让 Spack 自己编译一份 CUDA runtime——必须匹配集群上真实已装的
   驱动/CUDA。真实安装路径还是占位符(`/usr/local/cuda-13.3`),真机
   确认后要替换,见 packages.yaml 里的 TODO(cluster)。
-- 已知问题(测出来的,不是猜的):Spack 的 `amber` 包(仅 18/20 两个
-  版本)在 `+cuda` 时把 CUDA 硬编码上限锁在 `cuda@:11.1`
-  (package.py `depends_on("cuda@:11.1", when="@20:+cuda")`),跟我们
-  confirmed 的 cuda@13.3.0 不兼容,`cuda:buildable:false` 又不允许两者
-  并存。目前 amber 先按纯 CPU(`~cuda`)处理,GPU 版 amber 需要以后另外
-  决定(换新的 package.py/patch,或者专门为 amber 再注册一个旧版 CUDA
-  external,牺牲"只有一份 CUDA"的简洁性)。
+- 已知问题(测出来的,不是猜的,`spack info amber` 验证过):Spack 的
+  `amber` 包(仅 18/20 两个版本)在 `+cuda cuda_arch=80` 时实际支持的
+  CUDA 范围是 `cuda@11.0:11.1`——不只是"上限 11.1",而是两条
+  `depends_on` 同时生效取交集的结果:`cuda@:11.1 when @20:+cuda`(通用
+  上限)交上 `cuda@11.0: when cuda_arch=80`(cuda_arch=80 专属下限)。
+  跟我们 confirmed 的 cuda@13.3.0 完全不兼容,`cuda:buildable:false` 又
+  不允许两者并存。目前 amber 先按纯 CPU(`~cuda`)处理,GPU 版 amber
+  需要以后另外决定(换新的 package.py/patch,或者专门为 amber 再注册一个
+  cuda@11.0/11.1 的 external,牺牲"只有一份 CUDA"的简洁性)。
 - 本地 WSL2 (dellpro16) 自己识别成 `skylake`,不是 icelake,所以要在
   spack.yaml 里加 `concretizer:targets:host_compatible: false` 才能让
   `packages:all:target: [icelake]` 真正生效,不然本地 concretize 会默默
@@ -83,9 +85,9 @@ environments/
   - `specs:`(目标软件列表):Spack 的 environment schema 里
     `include:` 能拉的"section"文件不包括 `specs:`(只有
     config/packages/modules/concretizer 等,specs 是 environment
-    manifest 自己的字段),所以这个列表目前是**手动保持同步**地复制在
-    两份 spack.yaml 里,不是共享的。以后如果嫌手动同步麻烦,可以再讨论
-    要不要用别的机制(比如一个环境 `include` 另一个环境的 spack.lock)。
+    manifest 自己的字段),所以没法直接 `include:` 共享。已经用
+    **config/specs.yaml + scripts/render-specs.py** 解决了手动同步的
+    问题,见下面"改软件清单流程"。
   - `concretizer:targets:host_compatible: false`:dev-local 上是必须的
     (本机识别成 skylake),production 上其实用不上(真机就是 icelake),
     但为了两份文件尽量一致还是都保留了,无副作用。
@@ -93,6 +95,30 @@ environments/
 用 dev-local 重新跑过 `spack concretize` + `spack install --fake` +
 `spack module lmod refresh` 全套验证过拆分后配置没坏,细节见下面
 "当前进度"。
+
+## 改软件清单流程(已确认)
+目标软件列表(`specs:`)现在唯一来源是 `config/specs.yaml`,不要直接改
+`environments/{dev-local,production}/spack.yaml` 里
+`# >>> BEGIN GENERATED SPECS` 到 `# <<< END GENERATED SPECS` 之间的内容
+——那段是生成出来的,手改了下次跑脚本会被覆盖。
+
+流程:
+1. 编辑 `config/specs.yaml` 里的 `specs:` 列表(加/删软件、改
+   variant/编译器 pin,比如 `+cuda cuda_arch=80 %nvhpc`)。
+2. 跑 `python3 scripts/render-specs.py`,会把改动同步套进两份
+   spack.yaml 的生成区块。
+3. `git diff` 确认两份 spack.yaml 的改动跟预期一致。
+4. 用 dev-local 跑一遍 `spack concretize`(必要时 `spack install
+   --fake` 做 module 生成的 smoke test)确认没有 concretize 失败。
+5. 把 `config/specs.yaml` 和两份 spack.yaml 一起 commit。
+
+`scripts/render-specs.py --check` 可以只检查、不写文件——如果有人手改了
+生成区块导致跟 `config/specs.yaml` 不一致,会打印 `OUT OF DATE` 并以非零
+状态退出,适合接进 CI/pre-commit(目前还没接,先记录这个能力)。
+
+脚本原理:把 `config/specs.yaml` 里从 `specs:` 那一行到文件末尾整段当
+纯文本(不解析/重新序列化成 YAML,避免把注释格式搞乱),缩进两格之后
+原样塞进两份 spack.yaml 的 BEGIN/END 标记之间。
 
 ## 部署整体流程(11 步,详见对话历史/项目文档)
 1. 现状盘点与目标确认
@@ -273,3 +299,13 @@ module,会去 source 一个 `vars.sh` 环境脚本;因为我们的 external pref
     `Core/namd/2.14/nvhpc-24.1-cuda-13.3.0-intel-oneapi-mpi-2026.0.0.lua`
     (cuda 版本号已经是新的 13.3.0)。验证完之后卸载了所有 fake 包并清空
     了 spack-install/,没有留下测试垃圾。
+  - dev-local/production 的 `specs:` 列表核对过是完全一致的(拆分时
+    diff 过,没有分叉),已经提到 `config/specs.yaml` 作为唯一来源,配
+    `scripts/render-specs.py` 生成进两份 spack.yaml(见上面"改软件清单
+    流程"章节)。跑了两遍脚本确认幂等(第二遍全部 unchanged,`--check`
+    退出码 0)。同时把 amber+cuda 不兼容的说明更新成更精确的版本
+    (`cuda@11.0:11.1`,用 `spack info amber` 验证过两条 depends_on 取
+    交集的结果,不只是"上限 11.1")。当前完整软件清单(12 个,matlab
+    照常排除在外):amber, ambertools, boost, bowtie2, bwa, cmake, mamba,
+    cosma, cp2k, lammps(+cuda cuda_arch=80 %nvhpc), metis, namd(+cuda
+    cuda_arch=80 %nvhpc)。
