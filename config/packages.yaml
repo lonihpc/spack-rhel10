@@ -1,7 +1,7 @@
 # Shared compiler/MPI/CUDA/hardware configuration for ALL "hpc-software"
-# Spack environments (environments/dev-local and environments/production).
-# Referenced via `include:` from both spack.yaml files - this is the single
-# source of truth, never copy this file.
+# Spack environments (environments/dev-local, environments/production,
+# environments/smoke-test). Referenced via `include:` from every
+# spack.yaml - this is the single source of truth, never copy this file.
 #
 # IMPORTANT: Spack v1.2.x removed compilers.yaml. Compilers are now declared
 # as external packages right here in packages.yaml (with a `compiler` tag),
@@ -22,6 +22,31 @@
 # replace these with `spack compiler find <path>` output / real
 # `spack external find` results - that's a single edit here, shared by both
 # environments.
+#
+# CUDA is the one exception to "external": it's spack-built (see the `cuda:`
+# entry below), not declared as an external system install. Explored making
+# intel-oneapi-compilers/intel-oneapi-mpi/nvhpc spack-built too (a "fully
+# self-contained" toolchain), but hit two real, reproducible Spack
+# concretizer limitations doing so - documented in CLAUDE.md's "自包含
+# 编译器工具链" section since they're worth knowing about if this gets
+# revisited later:
+#   1. Spack's concretizer refuses to let a package that would need to be
+#      BUILT in the same solve also serve as the %compiler for something
+#      else in that same solve (spack/lib/spack/spack/solver/
+#      concretize.lp:1930, "Only external, or concrete, compilers are
+#      allowed"). Installing each vendor toolchain in its own separate
+#      `spack install` command (not batched together) works around this.
+#   2. Even installed one at a time, "reuse" concretization can override
+#      the packages:all:providers preference order unpredictably once any
+#      compiler-providing package is genuinely built (not external) - e.g.
+#      nvhpc got reused as the compiler for unrelated low-level packages
+#      (bzip2, gdbm, even intel-oneapi-mpi itself) instead of respecting
+#      `c: [intel-oneapi-compilers, gcc]`, and in one case a plain
+#      unconstrained `cuda` build failed outright despite a valid external
+#      gcc fallback being available. No clean fix found for this one.
+# CUDA itself doesn't hit either problem since it isn't a compiler-language
+# provider (doesn't satisfy the c/cxx/fortran virtuals), so it was safe to
+# make self-contained on its own.
 packages:
   intel-oneapi-compilers:
     externals:
@@ -72,30 +97,29 @@ packages:
   # - mvapich/mpich are no longer part of the standard stack). Path/version
   # still a placeholder - only usable once we confirm it's actually
   # installed on the cluster.
+  #
+  # Version corrected while investigating the self-contained-toolchain
+  # question above: Intel MPI has its OWN independent version scheme
+  # (2021.x), separate from the oneAPI umbrella release number - our
+  # previous "2026.0.0" guess doesn't exist as a real Intel MPI version at
+  # all (confirmed via `spack versions intel-oneapi-mpi`). 2021.18.0 is the
+  # real latest as of this Spack v1.2.2 checkout.
   # ------------------------------------------------------------------
   intel-oneapi-mpi:
     externals:
-    - spec: intel-oneapi-mpi@2026.0.0
-      # TODO(cluster): confirm this ships with the oneAPI version above and
-      # get the real prefix (usually alongside intel-oneapi-compilers).
-      prefix: /opt/intel/oneapi/mpi/2026.0.0
+    - spec: intel-oneapi-mpi@2021.18.0
+      # TODO(cluster): confirm this ships alongside the oneAPI version
+      # above and get the real prefix (usually alongside
+      # intel-oneapi-compilers).
+      prefix: /opt/intel/oneapi/mpi/2021.18.0
     buildable: false
 
-  # ------------------------------------------------------------------
-  # CUDA - confirmed by user: 13.3 is the target version, and it must be
-  # declared as an EXTERNAL pointing at the cluster's existing CUDA/driver
-  # install, never spack-built (a spack-built CUDA runtime could easily
-  # mismatch the real driver on the GPU nodes). buildable:false enforces
-  # that.
-  # ------------------------------------------------------------------
+  # CUDA - confirmed by user: 13.3.0 is the target version, matching the
+  # GPU driver's supported userspace CUDA version. Spack-built (not
+  # external) - see the big comment at the top of this file for why this
+  # is safe for cuda specifically but wasn't pursued for the other three.
   cuda:
-    externals:
-    - spec: cuda@13.3.0
-      # TODO(cluster): confirm the real install path once we're on the
-      # actual RHEL10 GPU node - /usr/local/cuda-13.3 is a placeholder
-      # guess at the conventional layout, not a confirmed path.
-      prefix: /usr/local/cuda-13.3
-    buildable: false
+    require: "@13.3.0"
 
   all:
     providers:
@@ -120,7 +144,7 @@ packages:
     target: [icelake]
     # Confirmed GPU: Ampere-class (e.g. A100, compute capability 8.0).
     # Soft default so any `+cuda` package (namd/lammps today, see
-    # spack.yaml in each environment) picks up cuda_arch=80 without
-    # repeating it on every spec line; per-package `cuda_arch=` on the spec
-    # still overrides this if a future GPU package needs a different one.
+    # config/specs.yaml) picks up cuda_arch=80 without repeating it on
+    # every spec line; per-package `cuda_arch=` on the spec still overrides
+    # this if a future GPU package needs a different one.
     variants: cuda_arch=80

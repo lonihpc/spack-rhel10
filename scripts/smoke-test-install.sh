@@ -18,15 +18,22 @@
 # only needs nvhpc as a COMPILER to be present on the node, which doesn't
 # require a --gpus/--gres request.
 #
+# Walltime re-evaluated after making `cuda` spack-built (config/
+# packages.yaml, require:@13.3.0 instead of external) - kept at 2h: none
+# of these 3 packages (cmake, cosma, bwa %nvhpc) actually depend on the
+# standalone `cuda` package (confirmed via `spack concretize` - it doesn't
+# appear anywhere in this environment's dependency graph), and
+# intel-oneapi-compilers/intel-oneapi-mpi/nvhpc all stay external (not
+# spack-built - see config/packages.yaml and CLAUDE.md for why), so this
+# smoke test's actual download/build workload is unchanged from before.
+#
 #SBATCH --job-name=spack-smoke-test
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=4
 #SBATCH --time=02:00:00
 #SBATCH --output=smoke-test-install-%j.log
-# TODO(cluster): uncomment and fill in once the real partition/account
-# names are known - left unset so this submits to whatever the cluster's
-# default partition is in the meantime.
+# Real cluster values (LONI) - filled in from a prior run.
 #SBATCH --partition=gpu2
 #SBATCH --account=loni_loniadmin1
 

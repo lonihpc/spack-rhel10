@@ -29,23 +29,60 @@ default provider。
 - GPU:Ampere 级(如 A100),`cuda_arch=80`,作为
   `packages:all:variants` 的默认值,GPU 软件(namd、lammps 等)在
   spack.yaml 里再显式加 `+cuda cuda_arch=80 %nvhpc`。
-- CUDA 版本:pin 到 13.3.0。按要求声明成 external(`buildable: false`),
-  绝不让 Spack 自己编译一份 CUDA runtime——必须匹配集群上真实已装的
-  驱动/CUDA。真实安装路径还是占位符(`/usr/local/cuda-13.3`),真机
-  确认后要替换,见 packages.yaml 里的 TODO(cluster)。
+- CUDA 版本:pin 到 13.3.0,匹配 GPU 驱动支持的 CUDA 版本。**最新决定
+  (已改过一次):改成 Spack 自装**(`packages:cuda:require: "@13.3.0"`),
+  不再是 external——`require:` 保证版本号还是精确锁定在 13.3.0,只是
+  改成让 Spack 自己下载安装这份用户态 CUDA Toolkit,而不是指向集群已有的
+  安装路径。intel-oneapi-compilers/intel-oneapi-mpi/nvhpc 这三个**仍然是
+  external**,没有跟着一起改——原因见下面"自包含编译器工具链的调查
+  结论"章节,那里有实测出来的、目前绕不过去的 Spack concretizer 限制。
 - 已知问题(测出来的,不是猜的,`spack info amber` 验证过):Spack 的
   `amber` 包(仅 18/20 两个版本)在 `+cuda cuda_arch=80` 时实际支持的
   CUDA 范围是 `cuda@11.0:11.1`——不只是"上限 11.1",而是两条
   `depends_on` 同时生效取交集的结果:`cuda@:11.1 when @20:+cuda`(通用
   上限)交上 `cuda@11.0: when cuda_arch=80`(cuda_arch=80 专属下限)。
-  跟我们 confirmed 的 cuda@13.3.0 完全不兼容,`cuda:buildable:false` 又
-  不允许两者并存。目前 amber 先按纯 CPU(`~cuda`)处理,GPU 版 amber
-  需要以后另外决定(换新的 package.py/patch,或者专门为 amber 再注册一个
-  cuda@11.0/11.1 的 external,牺牲"只有一份 CUDA"的简洁性)。
+  跟我们 confirmed 的 cuda@13.3.0 完全不兼容,`cuda:require: "@13.3.0"`
+  又把版本锁死了,不允许两者并存。目前 amber 先按纯 CPU(`~cuda`)处理,
+  GPU 版 amber 需要以后另外决定(换新的 package.py/patch,或者专门为
+  amber 再注册一个 cuda@11.0/11.1 的额外 external,牺牲"只有一份 CUDA"
+  的简洁性)。
 - 本地 WSL2 (dellpro16) 自己识别成 `skylake`,不是 icelake,所以要在
   spack.yaml 里加 `concretizer:targets:host_compatible: false` 才能让
   `packages:all:target: [icelake]` 真正生效,不然本地 concretize 会默默
   用 skylake——这条本地专用,真机上跑在 icelake 节点时无影响。
+
+## 自包含编译器工具链的调查结论(已确认:只有 cuda 自装,其余仍 external)
+
+用户曾经要求把 intel-oneapi-compilers、intel-oneapi-mpi、nvhpc、cuda
+四个"基础组件"全部改成 Spack 自装(不用 external),理由是"即使系统
+安装验证可用也不用 external,统一由 Spack 管理,可复现"。实测下来:
+
+- **cuda 单独自装:完全没问题。** cuda 不提供 c/cxx/fortran 这几个
+  "编译器虚包"(它不是编译器),所以不会碰到下面这两个坑。已经采用
+  (`packages:cuda:require: "@13.3.0"`,不再 external)。
+- **intel-oneapi-compilers/intel-oneapi-mpi/nvhpc 也一起自装:实测遇到
+  两个真实的、目前没有干净解法的 Spack concretizer 限制**,已经放弃,
+  三个继续保持 external + `buildable: false`:
+  1. **不能批量装。** 同一条 `spack install a b c` 命令里,如果 a/b/c
+     互相之间有一个要被"当场新建"却又被另一个当编译器用,Spack 的
+     concretizer 会直接拒绝求解,报错
+     "Only external, or concrete, compilers are allowed for the {c/cxx}
+     language"(直接来自 Spack 源码
+     `spack/lib/spack/spack/solver/concretize.lp:1930`)。必须一个一个
+     单独 `spack install`,让前一个先真正装完、变成"concrete",后一个才能
+     把它当编译器复用。
+  2. **就算一个一个装,"reuse" 逻辑还是会不听 `packages:all:providers`
+     的偏好顺序。** 实测:一旦 nvhpc 真的被装出来(不再是 external),
+     Spack 会开始把 nvhpc 复用成一堆无关小软件包(bzip2、gdbm、
+     coreutils、甚至 intel-oneapi-mpi 自己)的编译器,完全无视我们配置的
+     `c: [intel-oneapi-compilers, gcc]`(nvhpc 根本不在这个列表里)。
+     更极端的一次:intel-oneapi-compilers 装好之后,一个完全没有任何
+     约束的 `cuda` spec 反而直接 concretize 失败,即使 gcc 仍然是
+     external、理论上应该能兜底。试过
+     `concretizer:duplicates:strategy:full`、强制 `%gcc` 都没解决。
+  这两个限制是实测验证的(不是猜的),但没有再深入去修——如果以后真的
+  想把这三个也改成自装,预期至少要解决这两个问题,可能需要更细致的
+  安装顺序控制、显式 hash pin,或者等 Spack 版本/concretizer 改进。
 
 ## Environment 目录结构(dev-local / production 拆分,已确认)
 不再是单一的 `environments/hpc-software/`,现在拆成两份 environment,
@@ -125,11 +162,11 @@ environments/
 2. 部署最新 Spack(当前最新稳定版 v1.2.2,比之前记的 v1.2.0 新一个 patch 版本)
 3. 配置最新 Intel oneAPI 编译器(当前 2026.0.0)作为主流,gcc 仅作为
    fallback 保留,nvhpc 仅用于 GPU 软件
-4. 配置 MPI/CUDA(主流是 intel-oneapi-mpi,GPU 软件配 nvhpc 系列 + CUDA
-   13.3.0(external,已确认,见下面"硬件信息"章节);不再引入
-   mvapich/mpich。备注:mvapich2 在当前 Spack 里所有版本都标了
-   deprecated,如果以后真的需要额外 MPI 实现,应该用继任的 mvapich 包
-   而不是 mvapich2)
+4. 配置 MPI/CUDA(主流是 intel-oneapi-mpi(external),GPU 软件配 nvhpc
+   系列(external)+ CUDA 13.3.0(Spack 自装,见下面"硬件信息"/"自包含
+   编译器工具链的调查结论"章节);不再引入 mvapich/mpich。备注:
+   mvapich2 在当前 Spack 里所有版本都标了 deprecated,如果以后真的需要
+   额外 MPI 实现,应该用继任的 mvapich 包而不是 mvapich2)
 5. 设计 module 命名规则(modules.yaml projections,Lmod 版本已经验证过并
    拍板,详见下面"Step 5"章节;决定保留 intel-oneapi-compilers/
    intel-oneapi-mpi 原生包名,不写重命名后处理脚本)
@@ -309,3 +346,34 @@ module,会去 source 一个 `vars.sh` 环境脚本;因为我们的 external pref
     照常排除在外):amber, ambertools, boost, bowtie2, bwa, cmake, mamba,
     cosma, cp2k, lammps(+cuda cuda_arch=80 %nvhpc), metis, namd(+cuda
     cuda_arch=80 %nvhpc)。
+  - 新建了 environments/smoke-test/spack.yaml(不动 dev-local/
+    production):3 个代表性软件 cmake/cosma/`bwa %nvhpc`,install_tree
+    和 module roots 都指到集群上一个独立的临时目录
+    (/project/fchen14/spack-rhel10-smoke-test/...),不是
+    /usr/local/packages。配套写了 scripts/smoke-test-install.sh 当
+    sbatch 模板(4 核、2 小时、不要 GPU,因为这几个包本身不需要在 GPU
+    上跑)。这个脚本后来被(在集群上真实跑过一次之后)手动改过:换成了
+    真实的 spack 路径 `/project/fchen14/spack-tool`(不是本仓库自带的
+    `spack/` clone)、加了 `SPACK_PYTHON=/usr/bin/python3`、填了真实的
+    `--partition=gpu2`/`--account=loni_loniadmin1`(LONI 集群)——这些
+    改动原样保留,没有还原。
+  - 用户要求把 cuda 也从 external 改成 Spack 自装,追问后确认其实是想
+    把 intel-oneapi-compilers/intel-oneapi-mpi/nvhpc/cuda 四个都改。
+    实测发现两个真实的 Spack concretizer 限制(细节见上面"自包含编译器
+    工具链的调查结论"章节):(1) 同一条 `spack install` 命令里不能混装
+    "现装的编译器"和"用这个编译器编译的东西",必须一个一个单独装;
+    (2) 就算一个一个装,"reuse" 逻辑也会不听 `packages:all:providers`
+    的偏好顺序,把 nvhpc 这类真正装出来的编译器复用到不相关的小软件包
+    上,甚至导致本来该用 gcc 兜底的 `cuda` 反而 concretize 失败。拿这
+    两个实测结果去问用户,最终决定只把 cuda 改成自装(`require:
+    "@13.3.0"`),intel-oneapi-compilers/intel-oneapi-mpi/nvhpc 三个
+    维持 external + `buildable: false`。顺带发现并修正了一个版本号错误:
+    intel-oneapi-mpi 用的是自己独立的 2021.x 版本号体系,不是 oneAPI
+    主版本号,"2026.0.0" 根本不存在,已改成真实存在的最新版 2021.18.0
+    (`spack versions intel-oneapi-mpi` 验证过)。重新 concretize 过
+    dev-local 全部 12 个软件,确认干净无报错。评估过
+    scripts/smoke-test-install.sh 的 walltime/磁盘:因为最终只有 cuda
+    改自装,而 smoke-test 的 3 个软件(cmake/cosma/`bwa %nvhpc`)都不
+    依赖独立的 cuda 包(concretize 验证过,cuda 没出现在依赖图里),
+    所以这次改动对 smoke-test 的实际下载/编译量没有影响,2 小时 walltime
+    不需要跟着调整。
