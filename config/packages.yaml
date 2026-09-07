@@ -43,6 +43,11 @@ packages:
     externals:
     - spec: intel-oneapi-compilers@2026.1.0
       prefix: /usr/local/packages/compilers/intel-oneapi-2026
+      extra_attributes:
+        compilers:
+          c: /usr/local/packages/compilers/intel-oneapi-2026/compiler/2026.1/bin/icx
+          cxx: /usr/local/packages/compilers/intel-oneapi-2026/compiler/2026.1/bin/icpx
+          fortran: /usr/local/packages/compilers/intel-oneapi-2026/compiler/2026.1/bin/ifx
     buildable: false
 
   # Fallback only - not a default provider (see all.providers below), and
@@ -69,6 +74,11 @@ packages:
     externals:
     - spec: nvhpc@26.5
       prefix: /usr/local/packages/compilers/nvhpc/Linux_x86_64/26.5
+      extra_attributes:
+        compilers:
+          c: /usr/local/packages/compilers/nvhpc/Linux_x86_64/26.5/compilers/bin/nvc
+          cxx: /usr/local/packages/compilers/nvhpc/Linux_x86_64/26.5/compilers/bin/nvc++
+          fortran: /usr/local/packages/compilers/nvhpc/Linux_x86_64/26.5/compilers/bin/nvfortran
     buildable: false
 
   # intel-oneapi-mpi is the ONLY mainstream MPI now (per user decision -
