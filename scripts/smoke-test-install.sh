@@ -41,9 +41,14 @@
 set -euo pipefail
 
 
-# Resolve the repo root relative to this script's own location, so this
-# works regardless of the directory `sbatch` was invoked from.
-REPO_ROOT="$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)"
+# Prefer SLURM_SUBMIT_DIR (always the directory `sbatch` was actually run
+# from, unaffected by the compute node's startup cwd) over resolving the
+# script's own location - the latter can resolve wrong when sbatch is
+# submitted with a relative path and the job's startup cwd differs from the
+# submit dir (this is what caused the "No such environment" failure).
+# Falls back to the old script-location-based resolution only when run
+# manually outside Slurm.
+REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)}"
 cd "$REPO_ROOT"
 
 #source spack/share/spack/setup-env.sh
