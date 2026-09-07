@@ -97,6 +97,15 @@ packages:
       prefix: /usr/local/packages/cuda/13.3
     buildable: false
 
+  # Default BLAS/LAPACK provider - fixes cosma's "Invalid Host BLAS
+  # backend" (cosma needs a real BLAS/LAPACK provider, not just a
+  # compiler). Ships alongside the oneAPI compilers.
+  intel-oneapi-mkl:
+    externals:
+    - spec: intel-oneapi-mkl@2026.1.0
+      prefix: /usr/local/packages/compilers/intel-oneapi-2026
+    buildable: false
+
   all:
     providers:
       # Spack's own default order is [gcc, llvm, intel-oneapi-compilers] -
@@ -110,6 +119,8 @@ packages:
       fortran: [intel-oneapi-compilers, gcc]
       # intel-oneapi-mpi only - mvapich/mpich are no longer mainstream.
       mpi: [intel-oneapi-mpi]
+      blas: [intel-oneapi-mkl]
+      lapack: [intel-oneapi-mkl]
     # Confirmed CPU microarch for the new RHEL10 node - one setting for the
     # whole environment, no per-node-type profile needed (GPU and CPU-only
     # nodes are identical here except for the presence of a GPU). Soft
