@@ -41,7 +41,7 @@
 packages:
   intel-oneapi-compilers:
     externals:
-    - spec: intel-oneapi-compilers@2026.1.0
+    - spec: intel-oneapi-compilers@2026.1.0 languages:='c,c++,fortran'
       prefix: /usr/local/packages/compilers/intel-oneapi-2026
       extra_attributes:
         compilers:
@@ -72,7 +72,7 @@ packages:
   # all.providers below - nvhpc is deliberately not a default provider).
   nvhpc:
     externals:
-    - spec: nvhpc@26.5
+    - spec: nvhpc@26.5 languages:='c,c++,fortran'
       prefix: /usr/local/packages/compilers/nvhpc/Linux_x86_64/26.5
       extra_attributes:
         compilers:
