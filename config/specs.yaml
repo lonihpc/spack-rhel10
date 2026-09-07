@@ -57,6 +57,16 @@ specs:
 - mamba # conda/mamba - Spack package is `mamba` (micromamba installer)
 - cosma
 - cp2k
+# Tier 1: first batch of additional target software added to validate the
+# bulk-build pipeline at closer-to-real list size. These 5 (plus cmake,
+# already above) only need a plain compiler - no MPI/CUDA - so no
+# %compiler pin is needed; they pick up intel-oneapi-compilers from the
+# default all.providers order in packages.yaml, same as cmake/cosma.
+- eigen
+- git
+- gsl
+- hwloc
+- valgrind
 - lammps +cuda cuda_arch=80 %nvhpc
 - metis
 # mpich/mvapich2 are no longer part of the mainstream stack (intel-oneapi
