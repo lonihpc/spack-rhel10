@@ -84,7 +84,7 @@ packages:
   cuda:
     externals:
     - spec: cuda@13.3.0
-      prefix: /usr/local/packages/compilers/cuda/13.3
+      prefix: /usr/local/packages/cuda/13.3
     buildable: false
 
   all:
