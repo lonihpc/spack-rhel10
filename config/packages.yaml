@@ -97,6 +97,17 @@ packages:
       prefix: /usr/local/packages/cuda/13.3
     buildable: false
 
+  # Global variant preference (not an external) - avoids pulling in tar as
+  # a dependency. tar@1.35 fails to build on AlmaLinux 10 (glibc 2.39):
+  # gnulib's ACL *_at function compatibility declarations conflict with
+  # the system headers ("conflicting types for 'acl_get_file_at'" etc).
+  # Turning off gettext's optional tar-based example-archive feature
+  # sidesteps that broken build path entirely - gettext's actual
+  # internationalization functionality (what git depends on it for) is
+  # unaffected.
+  gettext:
+    variants: ~tar
+
   # Default BLAS/LAPACK provider - fixes cosma's "Invalid Host BLAS
   # backend" (cosma needs a real BLAS/LAPACK provider, not just a
   # compiler). Ships alongside the oneAPI compilers.
