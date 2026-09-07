@@ -51,8 +51,8 @@ modules:
       # naming purposes while keeping Lmod's other features (spider,
       # families, `ml`, etc.).
       core_compilers:
-      - intel-oneapi-compilers@2026.0.0
-      - nvhpc@24.1
+      - intel-oneapi-compilers@2026.1.0
+      - nvhpc@26.5
       - gcc@14
       # Spack's own linux default already sets hierarchy: [mpi] - a plain
       # `hierarchy: []` here would just get MERGED with that default
