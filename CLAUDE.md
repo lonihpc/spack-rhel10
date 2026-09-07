@@ -17,6 +17,13 @@ amber, ambertools, boost, bowtie2, bwa, cmake, conda/mamba, cosma, cp2k,
 lammps, matlab(非 spack 包,需单独装+手写 modulefile), metis, namd 等,
 后续可以继续加。(mpich/mvapich2 不再是目标软件,见下方编译器决定。)
 
+**Tier 1 批次(已加入 `config/specs.yaml`,详见下面"当前进度"章节末尾)**:
+eigen, git, gsl, hwloc, valgrind——都只需要普通编译器(不涉及
+MPI/CUDA),沿用 `packages:all:providers` 的默认顺序,不用显式 pin
+编译器。正在用独立的 `environments/tier1-test` + `scripts/
+tier1-test-install.sh` 在个人账号目录下做真实批量编译验证,还没挪到
+production。
+
 ## 编译器/MPI 决定(已确认,不再是"待确认")
 新 software stack 主流就是 Intel oneAPI 编译器 + Intel MPI
 (intel-oneapi-mpi),不像旧集群那样按软件混用 gcc/nvhpc/intel。GPU 相关
@@ -29,13 +36,13 @@ default provider。
 - GPU:Ampere 级(如 A100),`cuda_arch=80`,作为
   `packages:all:variants` 的默认值,GPU 软件(namd、lammps 等)在
   spack.yaml 里再显式加 `+cuda cuda_arch=80 %nvhpc`。
-- CUDA 版本:pin 到 13.3.0,匹配 GPU 驱动支持的 CUDA 版本。**最新决定
-  (已改过一次):改成 Spack 自装**(`packages:cuda:require: "@13.3.0"`),
-  不再是 external——`require:` 保证版本号还是精确锁定在 13.3.0,只是
-  改成让 Spack 自己下载安装这份用户态 CUDA Toolkit,而不是指向集群已有的
-  安装路径。intel-oneapi-compilers/intel-oneapi-mpi/nvhpc 这三个**仍然是
-  external**,没有跟着一起改——原因见下面"自包含编译器工具链的调查
-  结论"章节,那里有实测出来的、目前绕不过去的 Spack concretizer 限制。
+- CUDA 版本:pin 到 13.3.0,匹配 GPU 驱动支持的 CUDA 版本。**最终决定
+  (中间反复过,现在拍板):跟 intel-oneapi-compilers/intel-oneapi-mpi/
+  nvhpc 一样是 external**,指向集群上真实的手动安装路径
+  `/usr/local/packages/cuda/13.3`,不是 Spack 自装。中间一度改成
+  Spack 自装过(`packages:cuda:require: "@13.3.0"`),但后来连同其余
+  三个一起又改回了 external——完整过程和原因见下面"编译器/MPI/CUDA
+  external 路径:最终决定"章节。
 - 已知问题(测出来的,不是猜的,`spack info amber` 验证过):Spack 的
   `amber` 包(仅 18/20 两个版本)在 `+cuda cuda_arch=80` 时实际支持的
   CUDA 范围是 `cuda@11.0:11.1`——不只是"上限 11.1",而是两条
@@ -51,18 +58,75 @@ default provider。
   `packages:all:target: [icelake]` 真正生效,不然本地 concretize 会默默
   用 skylake——这条本地专用,真机上跑在 icelake 节点时无影响。
 
-## 自包含编译器工具链的调查结论(已确认:只有 cuda 自装,其余仍 external)
+## 编译器/MPI/CUDA external 路径:最终决定
 
-用户曾经要求把 intel-oneapi-compilers、intel-oneapi-mpi、nvhpc、cuda
+**当前状态(已拍板):intel-oneapi-compilers、intel-oneapi-mpi、nvhpc、
+cuda 四个全部是 external + `buildable: false`**,指向集群上真实的手动
+安装路径(不是占位符了,已用真实路径替换):
+
+```yaml
+packages:
+  intel-oneapi-compilers:
+    externals:
+    - spec: intel-oneapi-compilers@2026.1.0 languages:='c,c++,fortran'
+      prefix: /usr/local/packages/compilers/intel-oneapi-2026
+      extra_attributes:
+        compilers:
+          c: /usr/local/packages/compilers/intel-oneapi-2026/compiler/2026.1/bin/icx
+          cxx: /usr/local/packages/compilers/intel-oneapi-2026/compiler/2026.1/bin/icpx
+          fortran: /usr/local/packages/compilers/intel-oneapi-2026/compiler/2026.1/bin/ifx
+    buildable: false
+  intel-oneapi-mpi:
+    externals:
+    - spec: intel-oneapi-mpi@2021.18.0
+      prefix: /usr/local/packages/compilers/intel-oneapi-2026
+    buildable: false
+  nvhpc:
+    externals:
+    - spec: nvhpc@26.5 languages:='c,c++,fortran'
+      prefix: /usr/local/packages/compilers/nvhpc/Linux_x86_64/26.5
+      extra_attributes:
+        compilers:
+          c: /usr/local/packages/compilers/nvhpc/Linux_x86_64/26.5/compilers/bin/nvc
+          cxx: /usr/local/packages/compilers/nvhpc/Linux_x86_64/26.5/compilers/bin/nvc++
+          fortran: /usr/local/packages/compilers/nvhpc/Linux_x86_64/26.5/compilers/bin/nvfortran
+    buildable: false
+  cuda:
+    externals:
+    - spec: cuda@13.3.0
+      prefix: /usr/local/packages/cuda/13.3
+    buildable: false
+```
+
+要点:
+- **`extra_attributes.compilers`(c/cxx/fortran 真实可执行文件路径)对
+  intel-oneapi-compilers 和 nvhpc 是必须的**——Spack v1.2 的新编译器
+  模型下,只声明 `prefix:` 不够,集群上真实编译报过
+  `exec: None: not found` / `C compiler cannot create executables`,
+  加上这个字段才能让 Spack 找到真实的 icx/icpx/ifx、nvc/nvc++/nvfortran
+  可执行文件。intel-oneapi-mpi 和 cuda 不是编译器,不需要这个字段。
+- **spec 字符串里的 `languages:='c,c++,fortran'`**(intel-oneapi-compilers
+  和 nvhpc 两个)参考了 Spack 自己探测 gcc 时(`~/.spack/packages.yaml`)
+  的写法,显式声明这个 external 包提供哪些语言。
+- **intel-oneapi-mkl 也已注册为 external**,并设为默认 BLAS/LAPACK
+  provider(`packages:all:providers:{blas,lapack}: [intel-oneapi-mkl]`),
+  跟 intel-oneapi-compilers 共享同一个 prefix——修复了 cosma 编译期间的
+  "Invalid Host BLAS backend" 报错(cosma 需要一个真正的 BLAS/LAPACK
+  provider,不只是编译器)。
+- gcc(RHEL10 系统自带)仍然是唯一的非 external(`buildable: true`)
+  例外,继续只当 fallback,不是 default provider。
+
+### 这个决定是怎么来的(完整过程,供以后回顾)
+
+用户最初要求把 intel-oneapi-compilers、intel-oneapi-mpi、nvhpc、cuda
 四个"基础组件"全部改成 Spack 自装(不用 external),理由是"即使系统
 安装验证可用也不用 external,统一由 Spack 管理,可复现"。实测下来:
 
 - **cuda 单独自装:完全没问题。** cuda 不提供 c/cxx/fortran 这几个
-  "编译器虚包"(它不是编译器),所以不会碰到下面这两个坑。已经采用
-  (`packages:cuda:require: "@13.3.0"`,不再 external)。
+  "编译器虚包"(它不是编译器),所以不会碰到下面这两个坑。**中间一度
+  采用过**(`packages:cuda:require: "@13.3.0"`,不再 external)。
 - **intel-oneapi-compilers/intel-oneapi-mpi/nvhpc 也一起自装:实测遇到
-  两个真实的、目前没有干净解法的 Spack concretizer 限制**,已经放弃,
-  三个继续保持 external + `buildable: false`:
+  两个真实的 Spack concretizer 限制**:
   1. **不能批量装。** 同一条 `spack install a b c` 命令里,如果 a/b/c
      互相之间有一个要被"当场新建"却又被另一个当编译器用,Spack 的
      concretizer 会直接拒绝求解,报错
@@ -80,9 +144,30 @@ default provider。
      约束的 `cuda` spec 反而直接 concretize 失败,即使 gcc 仍然是
      external、理论上应该能兜底。试过
      `concretizer:duplicates:strategy:full`、强制 `%gcc` 都没解决。
-  这两个限制是实测验证的(不是猜的),但没有再深入去修——如果以后真的
-  想把这三个也改成自装,预期至少要解决这两个问题,可能需要更细致的
-  安装顺序控制、显式 hash pin,或者等 Spack 版本/concretizer 改进。
+  拿这两个实测结果去问用户后,**第一轮决定是"只有 cuda 自装,其余三个
+  external"**。
+
+  后来用户又提出了一个"两阶段安装"方案想绕开限制 1(阶段一单独一条
+  命令 `spack install intel-oneapi-compilers intel-oneapi-mpi nvhpc
+  cuda`,阶段二再装其余环境)。实测发现:
+  - 阶段一在真正隔离的情况下(用 `spack -C config -C <env-dir> install`
+    配置作用域方式,而不是 `spack env activate` ——后者哪怕只给
+    `install` 传具体包名,也总会把整个 environment 的其余 root 一起拉进
+    同一次 concretize,起不到隔离作用)确实是干净的,没有触发限制 2 的
+    reuse 渗透。
+  - 但阶段二(工具链装完之后再 concretize 环境剩余部分)**渗透问题仍然
+    存在**:cmake 被渗透成 `%nvhpc` 导致 `+ownlibs` 冲突失败;修了 cmake
+    的 `require: one_of: [%intel-oneapi-compilers, %gcc]` 之后,同样的
+    问题又在 python(被 bowtie2 拉入)上复现——说明这是系统性问题,
+    "两阶段"只解决了限制 1,没有解决限制 2,继续下去大概率要给每个被
+    渗透的包逐个打补丁。
+
+  **最终决定(推翻了"只有 cuda 自装"那一轮,也放弃了"两阶段自装"这个
+  方向):四个全部改回 external**,理由是这样上面两个限制都不会发生
+  (external + `buildable: false` 的包永远不会被"当场新建",自然不会
+  触发限制 1 和限制 2)——比继续跟 reuse 渗透打地鼠简单可靠。之前给
+  cmake 加的那条 `require: one_of: [...]` workaround、以及"两阶段安装"
+  相关的文档/脚本痕迹,都已经在改回 external 的同时清理掉了。
 
 ## Environment 目录结构(dev-local / production 拆分,已确认)
 不再是单一的 `environments/hpc-software/`,现在拆成两份 environment,
@@ -162,9 +247,9 @@ environments/
 2. 部署最新 Spack(当前最新稳定版 v1.2.2,比之前记的 v1.2.0 新一个 patch 版本)
 3. 配置最新 Intel oneAPI 编译器(当前 2026.0.0)作为主流,gcc 仅作为
    fallback 保留,nvhpc 仅用于 GPU 软件
-4. 配置 MPI/CUDA(主流是 intel-oneapi-mpi(external),GPU 软件配 nvhpc
-   系列(external)+ CUDA 13.3.0(Spack 自装,见下面"硬件信息"/"自包含
-   编译器工具链的调查结论"章节);不再引入 mvapich/mpich。备注:
+4. 配置 MPI/CUDA(主流是 intel-oneapi-mpi、GPU 软件配 nvhpc 系列、CUDA
+   13.3.0——四个都是 external + 真实集群路径,见下面"硬件信息"/"编译器
+   /MPI/CUDA external 路径:最终决定"章节;不再引入 mvapich/mpich。备注:
    mvapich2 在当前 Spack 里所有版本都标了 deprecated,如果以后真的需要
    额外 MPI 实现,应该用继任的 mvapich 包而不是 mvapich2)
 5. 设计 module 命名规则(modules.yaml projections,Lmod 版本已经验证过并
@@ -377,3 +462,42 @@ module,会去 source 一个 `vars.sh` 环境脚本;因为我们的 external pref
     依赖独立的 cuda 包(concretize 验证过,cuda 没出现在依赖图里),
     所以这次改动对 smoke-test 的实际下载/编译量没有影响,2 小时 walltime
     不需要跟着调整。
+  - **推翻了上一条"只有 cuda 自装"的决定,还试过"两阶段安装"方案想保留
+    全自装,最终四个全部改回 external**——完整过程见上面"编译器/MPI/
+    CUDA external 路径:最终决定"章节。集群上的真实手动安装路径已经
+    确认并填入(不再是占位符):intel-oneapi-compilers@2026.1.0、
+    intel-oneapi-mpi@2021.18.0、nvhpc@26.5、cuda@13.3.0,前两者
+    prefix 都在 `/usr/local/packages/compilers/intel-oneapi-2026`,
+    nvhpc 在 `/usr/local/packages/compilers/nvhpc/Linux_x86_64/26.5`,
+    cuda 在 `/usr/local/packages/cuda/13.3`。intel-oneapi-compilers/
+    nvhpc 两个额外加了 `extra_attributes.compilers`(真实 icx/icpx/ifx、
+    nvc/nvc++/nvfortran 可执行文件路径)和 spec 里的
+    `languages:='c,c++,fortran'`,不然 Spack v1.2 的新编译器模型下会报
+    `exec: None: not found` 之类的错。另外新增了 intel-oneapi-mkl 这个
+    external,设成默认 BLAS/LAPACK provider,修了 cosma 的 "Invalid Host
+    BLAS backend"。`modules.yaml` 的 `core_compilers` 版本号(之前的
+    2026.0.0/24.1 是笔误,和 packages.yaml 真实版本不匹配导致 Lmod 精确
+    版本匹配失败、退回嵌套目录布局)已同步改成 2026.1.0/26.5。
+  - `scripts/smoke-test-install.sh` 修了一个真实复现过的 bug:`REPO_ROOT`
+    原来靠 `readlink -f "$0"` 解析脚本自身路径,如果 sbatch 用相对路径
+    提交、且计算节点作业启动 cwd 跟提交目录不一致,会解析错(这就是
+    之前 "No such environment" 报错的根因)。改成优先用 Slurm 自己保证
+    设置的 `SLURM_SUBMIT_DIR`,原逻辑降级为只在手动跑(不在 Slurm 下)时
+    的 fallback。
+  - **加入了 Tier 1 批次**(eigen, git, gsl, hwloc, valgrind,加上已经在
+    清单里的 boost/cmake)到 `config/specs.yaml`,目的是在正式清单规模
+    下验证批量编译流程。为了不碰生产路径 `/usr/local/packages`(命名还
+    没最终定),照着 `environments/smoke-test` 的套路新建了
+    `environments/tier1-test/spack.yaml`(只列这 7 个包,不 include 整个
+    `config/specs.yaml`,install_tree 指向独立的
+    `/project/fchen14/spack-rhel10-tier1-test/`,不跟 smoke-test 共用
+    目录)和配套的 `scripts/tier1-test-install.sh`(sbatch 模板,4 小时
+    walltime——比 smoke-test 的 2 小时长,因为 git 拉出一整条 gcc
+    autotools 引导链的小包,加上 boost/curl/perl/openssl 因为两种编译器
+    各建一份而重复编译)。
+  - 修了一个真实的包编译问题:`tar@1.35` 在 AlmaLinux 10(glibc 2.39)
+    上因为 gnulib 的 ACL `*_at` 函数兼容声明跟系统头文件冲突,编译报
+    `conflicting types for 'acl_get_file_at'`。根因是 `gettext` 默认
+    `+tar`(打包 example 归档的可选功能)把 tar 拉了进来;在
+    `packages.yaml` 里加了 `gettext: variants: ~tar` 关掉这个功能绕开了
+    坏的编译路径,gettext 本身给 git 用的国际化功能不受影响。
