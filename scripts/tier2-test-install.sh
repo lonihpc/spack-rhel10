@@ -5,9 +5,12 @@
 # hdf5, netcdf-c, netcdf-cxx4, netcdf-fortran, parallel-netcdf, metis,
 # parmetis, superlu-dist, hypre, petsc) to validate the bulk-build
 # pipeline with MPI-linked dependency chains at something closer to the
-# real production software list. cpus-per-task bumped from Tier 1's 4 to
-# 8, and walltime bumped from Tier 1's 4h to 6h: petsc/hypre/hdf5/netcdf
-# generally compile slower than the Tier 1 batch.
+# real production software list.
+#
+# Resources bumped after a real run (job 29) hit the 8-cpu/6h limits and
+# got killed by SLURM on walltime, not a compile error - `spack install`
+# is resumable, so this is purely a resource-quota increase
+# (cpus-per-task 8->64, walltime 6h->24h), not a sign anything is broken.
 #
 # Usage:
 #   sbatch scripts/tier2-test-install.sh
@@ -15,8 +18,8 @@
 #SBATCH --job-name=spack-tier2-test
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=8
-#SBATCH --time=06:00:00
+#SBATCH --cpus-per-task=64
+#SBATCH --time=24:00:00
 #SBATCH --output=tier2-test-install-%j.log
 # Real cluster values (LONI) - same as smoke-test-install.sh/tier1-test-install.sh.
 #SBATCH --partition=gpu2
