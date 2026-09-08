@@ -69,6 +69,26 @@ specs:
 - valgrind
 - lammps +cuda cuda_arch=80 %nvhpc
 - metis
+# Tier 2: second batch, mid-sized libraries that depend on intel-oneapi-mpi
+# (unlike Tier 1's plain-compiler-only packages), added to validate the
+# bulk-build pipeline with MPI-linked dependency chains at closer-to-real
+# list size. metis is already above (Tier 1 predates this batch, and
+# parmetis depends on it); none of these 10 need an explicit %compiler pin
+# either - they pick up intel-oneapi-compilers/intel-oneapi-mpi from the
+# default all.providers order in packages.yaml.
+- fftw
+- hdf5
+- netcdf-c
+# netcdf-cxx4, not netcdf-cxx: the old cluster's netcdf-cxx/4.2 is the
+# deprecated legacy C++ interface - netcdf-cxx4 is the current, actively
+# maintained one.
+- netcdf-cxx4
+- netcdf-fortran
+- parallel-netcdf
+- parmetis
+- superlu-dist
+- hypre
+- petsc
 # mpich/mvapich2 are no longer part of the mainstream stack (intel-oneapi
 # + intel-mpi covers it, see packages.yaml) so neither is installed as a
 # standalone target anymore. For the record: mvapich2 (the old cluster's
