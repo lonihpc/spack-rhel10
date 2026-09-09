@@ -1,0 +1,77 @@
+# "tier3-test" Spack environment - REAL (not --fake) bulk-build validation
+# of the Tier 3 batch (bowtie2, hisat2, star, spades, vcftools, revbayes -
+# bioinformatics tools) added to the target software list. Same idea as
+# environments/tier1-test/tier2-test (already validated) but now
+# exercising this batch, still under this personal account - NOT
+# environments/production (/usr/local/packages, install_tree naming not
+# finalized yet). Once this is proven out, Tier 3 moves to the real
+# production install.
+#
+# Purpose: confirm the bulk-build pipeline holds up for this batch at a
+# size closer to the real target list - real compilers found and invoked,
+# real network/download access, real `spack module lmod refresh` against
+# a real install - before committing more of config/specs.yaml to a
+# production run.
+#
+# Usage (on the actual cluster, from a compute node via sbatch - see
+# scripts/tier3-test-install.sh, NOT on the login node):
+#   spack env activate -p environments/tier3-test
+#   spack concretize
+#   spack install -j <cores>
+#   spack module lmod refresh -y
+#
+# Shares the exact same compiler/MPI/CUDA/target config as dev-local and
+# production (../../config/{packages,modules}.yaml - single source of
+# truth, not copied here) so this test is actually representative of what
+# production would do. Only the specs list and the (temporary) install
+# location differ.
+spack:
+  include:
+  - ../../config/packages.yaml
+  - ../../config/modules.yaml
+
+  # Temporary install location on the cluster, under this account, NOT
+  # /usr/local/packages (that's reserved for the real production install -
+  # see environments/production/spack.yaml) and NOT environments/
+  # smoke-test's, tier1-test's, or tier2-test's directories either (kept
+  # separate so the tests can't interfere with each other). Safe to
+  # `rm -rf` this whole tree once this test is done with it.
+  config:
+    install_tree:
+      root: /project/fchen14/spack-rhel10-tier3-test/spack-install
+      projections:
+        all: "{architecture.platform}-{architecture.target}/{name}-{version}-{hash}"
+    source_cache: /project/fchen14/spack-rhel10-tier3-test/spack-install/cache/sources
+    misc_cache: /project/fchen14/spack-rhel10-tier3-test/spack-install/cache/misc
+    build_stage:
+    - $tempdir/$user/spack-stage
+    license_dir: /project/fchen14/spack-rhel10-tier3-test/spack-install/licenses
+    build_jobs: 16
+
+  modules:
+    default:
+      roots:
+        lmod: /project/fchen14/spack-rhel10-tier3-test/modulefiles
+
+  # Same as dev-local/production/smoke-test/tier1-test/tier2-test - see
+  # those files' comments for why.
+  concretizer:
+    unify: false
+    targets:
+      host_compatible: false
+
+  view: false
+
+  # Deliberately NOT including config/specs.yaml - that file already has
+  # amber/cp2k/lammps/namd etc. which aren't ready for bulk-build
+  # validation yet. Only the Tier 3 batch (see config/specs.yaml's
+  # "Tier 3" comment) is listed here. None of these need an explicit
+  # %compiler pin - they pick up intel-oneapi-compilers/intel-oneapi-mpi
+  # from the default all.providers order in ../../config/packages.yaml.
+  specs:
+  - bowtie2
+  - hisat2
+  - star
+  - spades
+  - vcftools
+  - revbayes

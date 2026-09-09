@@ -140,6 +140,15 @@ spack:
   - superlu-dist
   - hypre
   - petsc
+  # Tier 3: third batch, bioinformatics tools. bowtie2 is already above
+  # (predates this batch); none of these need an explicit %compiler pin
+  # either - they pick up intel-oneapi-compilers/intel-oneapi-mpi from the
+  # default all.providers order in packages.yaml.
+  - hisat2
+  - star
+  - spades
+  - vcftools
+  - revbayes
   # mpich/mvapich2 are no longer part of the mainstream stack (intel-oneapi
   # + intel-mpi covers it, see packages.yaml) so neither is installed as a
   # standalone target anymore. For the record: mvapich2 (the old cluster's
