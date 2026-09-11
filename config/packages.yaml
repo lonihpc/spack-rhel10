@@ -108,6 +108,11 @@ packages:
   gettext:
     variants: ~tar
 
+  # Global variant preference (not an external) - disable python tkinter
+  # variant to avoid Tcl ABI mismatch build failure.
+  python:
+    variants: ~tkinter
+
   # Default BLAS/LAPACK provider - fixes cosma's "Invalid Host BLAS
   # backend" (cosma needs a real BLAS/LAPACK provider, not just a
   # compiler). Ships alongside the oneAPI compilers.
