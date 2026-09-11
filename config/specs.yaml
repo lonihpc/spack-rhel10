@@ -95,7 +95,15 @@ specs:
 # default all.providers order in packages.yaml.
 - hisat2
 - star
-- spades
+# ~sra: Spack's spades package.py defaults this variant (NCBI VDB/SRA file
+# support) to True, but upstream SPAdes itself ships it disabled by
+# default "due to possible compatibility issues" (see ablab/spades
+# installation docs). With it on, the bundled ncbi-vdb fails ("atomic32.h
+# file not found") and spades' own common/io/binary/graph_pack.cpp fails
+# to compile (no member 'is_minimal_'/'data') - both errors are suspected
+# (not yet confirmed) to come from this same NCBI-SDK-enabled code path.
+# Not a feature we need for pipeline validation anyway.
+- spades ~sra
 - vcftools
 - revbayes
 # mpich/mvapich2 are no longer part of the mainstream stack (intel-oneapi

@@ -73,6 +73,12 @@ spack:
   - bowtie2
   - hisat2
   - star
-  - spades
+  # ~sra: see config/specs.yaml's comment for the same package - upstream
+  # SPAdes ships NCBI SDK/SRA support disabled by default; Spack's
+  # spades package.py defaults it to True, which triggers a bundled
+  # ncbi-vdb build failure ("atomic32.h file not found") plus a spades
+  # core compile error (no member 'is_minimal_'/'data'), both suspected
+  # to come from the same NCBI-SDK-enabled code path.
+  - spades ~sra
   - vcftools
   - revbayes
