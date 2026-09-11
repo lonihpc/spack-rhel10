@@ -18,3 +18,7 @@ environments/*/.spack-env/
 # purely to validate the YAML. Un-ignore it (or `git add -f`) once we do a
 # real concretize against the actual RHEL10 cluster config.
 environments/*/spack.lock
+
+# Python bytecode cache generated when Spack imports package.py files from
+# our custom repos/ package repo.
+__pycache__/

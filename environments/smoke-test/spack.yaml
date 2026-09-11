@@ -26,6 +26,7 @@ spack:
   include:
   - ../../config/packages.yaml
   - ../../config/modules.yaml
+  - ../../config/repos.yaml
 
   # Temporary install location on the cluster, under this account, NOT
   # /usr/local/packages (that's reserved for the real production install -

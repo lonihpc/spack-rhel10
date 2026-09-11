@@ -1,0 +1,28 @@
+# Shared package-repo configuration for ALL "hpc-software" Spack
+# environments. Referenced via `include:` from every spack.yaml - this is
+# the single source of truth, never copy this file.
+#
+# Registers ../repos/spack_repo/rhel10_overrides, a small site package
+# repo that currently overrides just one package: `python` (see
+# ../repos/spack_repo/rhel10_overrides/packages/python/package.py for why
+# - CPython's _tkinter stdlib module fails at runtime against this
+# cluster's Tcl 9.0, and there's no configure-time/packages.yaml-level way
+# to prevent that; the override writes Modules/Setup.local before `make`
+# to make `python`'s own build skip _tkinter entirely).
+#
+# Absolute path (not relative to this file) because Spack environment
+# config scopes take relative repo paths as relative to the CURRENT
+# WORKING DIRECTORY, not the config file that declared them, which would
+# break depending on where `spack` is invoked from - this project's repo
+# checkout is at this same absolute path on both dellpro16 (WSL2, dev) and
+# the real cluster (see CLAUDE.md's "当前进度": intentionally identical
+# paths, just not the same physical storage).
+#
+# Listed under `repos:` here (an environment-scope config) so it
+# automatically outranks the `builtin` repo, which is only registered at
+# Spack's lowest-precedence "defaults" scope
+# (spack/etc/spack/defaults/base/repos.yaml) - environment scope always
+# wins, so `python` unqualified resolves to this repo's override, not
+# builtin's, with no extra priority configuration needed.
+repos:
+  rhel10_overrides: /project/fchen14/spack-rhel10/repos/spack_repo/rhel10_overrides

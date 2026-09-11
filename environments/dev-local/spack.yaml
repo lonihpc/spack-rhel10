@@ -19,6 +19,7 @@ spack:
   include:
   - ../../config/packages.yaml
   - ../../config/modules.yaml
+  - ../../config/repos.yaml
 
   # LOCAL PLACEHOLDER paths for drafting/validating config on dellpro16
   # (WSL2). Nothing here builds software for real - `spack concretize` and
