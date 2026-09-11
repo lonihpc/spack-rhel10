@@ -23,6 +23,8 @@ REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd
 cd "$REPO_ROOT"
 unset SPACK_PYTHON
 export SPACK_PYTHON=/usr/bin/python3
+export TCLTK_CFLAGS="-I/nonexistent"
+export TCLTK_LIBS="-L/nonexistent"
 source /project/fchen14/spack-tool/share/spack/setup-env.sh
 spack env activate environments/tier3-test
 JOBS="${SLURM_CPUS_PER_TASK:-8}"
