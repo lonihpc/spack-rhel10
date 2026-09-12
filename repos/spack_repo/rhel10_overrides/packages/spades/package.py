@@ -131,3 +131,23 @@ class Spades(BuiltinSpades):
             "#include <atomic>",
             mpmc_bounded,
         )
+
+    # ext/include/blaze (bundled blaze linear-algebra library) has a real
+    # macro-consistency bug affecting AVX512 hardware with neither Intel
+    # SVML nor SLEEF available (our case): blaze/math/simd/BasicTypes.h
+    # picks SIMDfloat/SIMDdouble's underlying IntrinsicType purely off
+    # `BLAZE_AVX512F_MODE || BLAZE_MIC_MODE` (giving __m512/__m512d), but
+    # blaze/math/simd/{Floor,Ceil,Round,Trunc}.h's actual function bodies
+    # require SVML or SLEEF *in addition to* AVX512F to use the 512-bit
+    # intrinsic, and silently fall back to the 256-bit AVX one
+    # (_mm256_floor_ps etc.) otherwise - a __m256 doesn't convert to a
+    # type whose only non-default constructor takes __m512. This is a
+    # blaze design bug (most builds never hit it because most machines
+    # don't have AVX512 in the first place), not something worth patching
+    # in 4+ sibling header files. Simpler and lower-risk: disable AVX512
+    # for this package only via a compiler flag, matching what would
+    # happen on most other machines blaze is built on.
+    def flag_handler(self, name, flags):
+        if name in ("cflags", "cxxflags"):
+            flags = flags + ["-mno-avx512f"]
+        return (flags, None, None)
