@@ -1,0 +1,102 @@
+# "gpu-test" Spack environment - REAL (not --fake) bulk-build validation
+# of the GPU/nvhpc family: cp2k, lammps, namd, all built with +cuda
+# cuda_arch=80 %nvhpc. Unlike environments/tierN-test (which validated
+# NEW additions to the target software list), these three are already in
+# config/specs.yaml - lammps and namd already pin +cuda there, cp2k does
+# not yet (still plain/CPU there). This environment exists to validate
+# the GPU-enabled builds for real, in bulk, before deciding whether to
+# flip cp2k's entry in config/specs.yaml to +cuda too and before moving
+# any of this to production (not urgent per user request - production's
+# install_tree naming isn't finalized yet anyway).
+#
+# Building +cuda doesn't require an actual GPU device on the build node -
+# only the external cuda/nvhpc toolchains (already registered in
+# ../../config/packages.yaml) - same rationale as environments/
+# smoke-test's `bwa %nvhpc` pin needing nvhpc findable/invokable but not
+# a GPU to run on.
+#
+# Usage (on the actual cluster, from a compute node via sbatch - see
+# scripts/gpu-test-install.sh, NOT on the login node):
+#   spack env activate -p environments/gpu-test
+#   spack concretize
+#   spack install -j <cores>
+#   spack module lmod refresh -y
+#
+# Shares the exact same compiler/MPI/CUDA/target config as dev-local and
+# production (../../config/{packages,modules}.yaml - single source of
+# truth, not copied here) so this test is actually representative of what
+# production would do. Only the specs list and the (temporary) install
+# location differ.
+spack:
+  include:
+  - ../../config/packages.yaml
+  - ../../config/modules.yaml
+  - ../../config/repos.yaml
+
+  # Temporary install location on the cluster, under this account, NOT
+  # /usr/local/packages (that's reserved for the real production install -
+  # see environments/production/spack.yaml) and NOT any of the other
+  # environments/*-test directories either (kept separate so the tests
+  # can't interfere with each other). Safe to `rm -rf` this whole tree
+  # once this test is done with it.
+  config:
+    # install_tree lives on /project (a shared filesystem) - see
+    # environments/tier3-test/spack.yaml's comment for the full story:
+    # its fcntl advisory locks don't reliably release between processes,
+    # which hung three straight `spack install` runs there regardless of
+    # concurrency. scripts/gpu-test-install.sh already installs serially
+    # (one spec per `spack install` call), so disabling Spack's own
+    # locking here from the start (rather than rediscovering the same
+    # hang) is safe - no real concurrent-write risk it would protect
+    # against.
+    locks: false
+    install_tree:
+      root: /project/fchen14/spack-rhel10-gpu-test/spack-install
+      projections:
+        all: "{architecture.platform}-{architecture.target}/{name}-{version}-{hash}"
+    source_cache: /project/fchen14/spack-rhel10-gpu-test/spack-install/cache/sources
+    misc_cache: /project/fchen14/spack-rhel10-gpu-test/spack-install/cache/misc
+    build_stage:
+    - $tempdir/$user/spack-stage
+    license_dir: /project/fchen14/spack-rhel10-gpu-test/spack-install/licenses
+    build_jobs: 16
+
+  modules:
+    default:
+      roots:
+        lmod: /project/fchen14/spack-rhel10-gpu-test/modulefiles
+
+  # Same as dev-local/production/smoke-test/tier1-test/tier2-test/
+  # tier3-test - see those files' comments for why.
+  concretizer:
+    unify: false
+    targets:
+      host_compatible: false
+
+  view: false
+
+  # Deliberately NOT including config/specs.yaml - that file already has
+  # amber/ambertools/etc. not relevant here, and cp2k there is still
+  # plain/CPU (not yet decided whether to flip it to +cuda). Only the 3
+  # GPU/nvhpc packages being validated are listed here.
+  #
+  # Compiler pin written fully-qualified (%c=nvhpc %cxx=nvhpc
+  # [%fortran=nvhpc]), NOT bare %nvhpc: confirmed by testing that bare
+  # %nvhpc on cp2k gets silently overridden by the concretizer's reuse
+  # optimization to %c,cxx=gcc %fortran=oneapi (cheaper to reuse
+  # already-concrete gcc/oneapi nodes from elsewhere in the DAG than build
+  # fresh nvhpc ones) - no error, no warning, it just quietly picks a
+  # different compiler than requested. The fully-qualified per-language
+  # form is a hard constraint the solver can't reuse its way around.
+  # lammps happened to resolve correctly with bare %nvhpc too (no nearby
+  # reuse candidates to tempt the solver), but that's luck, not a
+  # guarantee - written fully-qualified here too for the same reliability.
+  # namd has NO %fortran pin: it's pure C++ (Charm++-based) and has no
+  # fortran dependency at all - confirmed `spack spec` errors outright
+  # ("namd cannot have a dependency on fortran") if you add one, unlike
+  # cp2k (genuinely Fortran+C++) and lammps (pulls in fortran via its
+  # optional kim-api dependency).
+  specs:
+  - cp2k +cuda cuda_arch=80 %c=nvhpc %cxx=nvhpc %fortran=nvhpc
+  - lammps +cuda cuda_arch=80 %c=nvhpc %cxx=nvhpc %fortran=nvhpc
+  - namd +cuda cuda_arch=80 %c=nvhpc %cxx=nvhpc
