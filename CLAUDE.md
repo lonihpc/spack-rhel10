@@ -17,12 +17,21 @@ amber, ambertools, boost, bowtie2, bwa, cmake, conda/mamba, cosma, cp2k,
 lammps, matlab(非 spack 包,需单独装+手写 modulefile), metis, namd 等,
 后续可以继续加。(mpich/mvapich2 不再是目标软件,见下方编译器决定。)
 
-**Tier 1 批次(已加入 `config/specs.yaml`,详见下面"当前进度"章节末尾)**:
-eigen, git, gsl, hwloc, valgrind——都只需要普通编译器(不涉及
-MPI/CUDA),沿用 `packages:all:providers` 的默认顺序,不用显式 pin
-编译器。正在用独立的 `environments/tier1-test` + `scripts/
-tier1-test-install.sh` 在个人账号目录下做真实批量编译验证,还没挪到
-production。
+**Tier 1/2/3 批次(已加入 `config/specs.yaml`,详见下面"当前进度"章节
+末尾)**:
+- Tier 1:eigen, git, gsl, hwloc, valgrind(加已在清单里的 boost/
+  cmake)——都只需要普通编译器,不涉及 MPI/CUDA。
+- Tier 2:fftw, hdf5, netcdf-c, netcdf-cxx4, netcdf-fortran,
+  parallel-netcdf, parmetis, superlu-dist, hypre, petsc(加已在清单
+  里的 metis)——依赖 intel-oneapi-mpi。
+- Tier 3:bowtie2, hisat2, star, spades(`~sra ~tools`), vcftools,
+  revbayes——生信工具。
+
+三批都各自用独立的 `environments/tierN-test` + `scripts/
+tierN-test-install.sh` 在个人账号目录下做过真实批量编译验证(install_tree
+互相独立,不复用),**Tier 1/2/3 均已真实编译全部通过**,详见下面
+"当前进度"章节末尾的过程记录(尤其是 Tier 3 的 spades 遇到的一系列坑)。
+还没挪到 production。
 
 ## 编译器/MPI 决定(已确认,不再是"待确认")
 新 software stack 主流就是 Intel oneAPI 编译器 + Intel MPI
@@ -501,3 +510,81 @@ module,会去 source 一个 `vars.sh` 环境脚本;因为我们的 external pref
     `+tar`(打包 example 归档的可选功能)把 tar 拉了进来;在
     `packages.yaml` 里加了 `gettext: variants: ~tar` 关掉这个功能绕开了
     坏的编译路径,gettext 本身给 git 用的国际化功能不受影响。
+  - **Tier 1(eigen/git/gsl/hwloc/valgrind + 已在清单里的 boost/cmake)在
+    集群上真实编译全部通过**,已正式纳入 `config/specs.yaml`。同时又
+    加了 Tier 2(fftw/hdf5/netcdf-c/netcdf-cxx4/netcdf-fortran/
+    parallel-netcdf/parmetis/superlu-dist/hypre/petsc,都依赖
+    intel-oneapi-mpi)和 Tier 3(bowtie2/hisat2/star/spades/vcftools/
+    revbayes,生信工具),每一批都照 Tier 1 的套路建了独立的
+    `environments/tierN-test` + `scripts/tierN-test-install.sh`
+    (install_tree 各自独立、不复用),Tier 2 也已真实编译通过。
+  - **新增了 `repos/spack_repo/rhel10_overrides` 这个自定义 Spack package
+    repo**,用来给 builtin 包打site-specific补丁,不用手改/fork整个
+    recipe:通过 `config/repos.yaml`(所有 environment 都 include)注册,
+    优先级天然高于 `builtin`(builtin 只在 Spack 最低优先级的
+    "defaults" scope 注册,environment scope 的配置总是赢)。已验证的
+    正确用法:继承 builtin 的包类(比如
+    `class Python(BuiltinPython)`)、只加一个 `@run_before(...)` 钩子——
+    Spack 的 `DirectiveMeta` 会把父类已注册的 `version()`/`variant()`/
+    `depends_on()` 等指令重新对子类生效,不是"fork整个几百行 recipe"。
+    第一个用例:python@3.13.5 的 `_tkinter` 模块在这个集群的 Tcl 9.0
+    下编译链接都成功、但运行时 `undefined symbol: Tcl_ListObjGetElements`
+    崩溃(CPython/Tcl9 已知上游问题
+    github.com/python/cpython/issues/104363),`packages.yaml` 层面的
+    variant/环境变量都拦不住(configure 阶段对可选 stdlib 扩展模块是
+    "无条件先构建、运行时自检失败才丢弃"的新逻辑),真正管用的办法是在
+    `@run_before("build")` 钩子里把 `Modules/Setup.local` 写成
+    `*disabled*\n_tkinter\n`——这是 CPython 自己
+    `Modules/makesetup` 脚本里"first rule wins"的官方设计机制(专门
+    留给用户在 Setup.local 里禁用模块用的),因为 Setup.local 在文件
+    列表里排在自动生成的 Setup.stdlib 前面处理。**踩过一个坑**:第一次
+    以为改完 repo 优先级后没生效(_tkinter 照样被编译),查了半天才发现
+    是环境的 `spack.lock` 是改动前生成的旧锁文件,`spack install`
+    默认只装锁文件里已经定好的东西,不会因为 `repos.yaml` 变了就自动
+    重新决定用哪个 repo 的 recipe——必须 `spack concretize --fresh -f`
+    重新锁一次,新 lock 里的 python 节点才会指向我们的 override。
+  - **发现并解决了一个共享文件系统(`/project`)上的 Spack 数据库锁死锁
+    问题**:`environments/tierN-test` 的真实 `spack install` 连续三次
+    (job 41/42/43)卡死在完全同一个位置(revbayes 装完之后~7分27秒,
+    跟前面装没装成功、失败没失败无关),`strace` 确认卡在
+    `fcntl(F_SETLK)` 对 `.spack-db/lock` 拿 `EAGAIN`,但 `lslocks`
+    显示没有任何进程真正持有这把锁——是 `/project` 这类共享文件系统
+    fcntl 锁释放语义不可靠导致的死锁,不是并发/某个包失败触发的偶发
+    问题(后来把 `scripts/tier3-test-install.sh` 改成严格串行、一次
+    只跑一个 spec 的 `spack install` 之后照样在两次独立调用之间卡死,
+    证明确实跟并发无关)。最终修法:`environments/tier3-test/spack.yaml`
+    里加 `config: locks: false` 彻底关掉 Spack 自己的文件锁——串行安装
+    下本来就没有真正的并发写风险,关掉锁是安全的。
+  - **spades@4.0.0 真实编译一路挖出 6 个独立问题**,记在
+    `repos/spack_repo/rhel10_overrides/packages/spades/package.py` 里
+    (継承 builtin 的 `Spades`,加钩子/`flag_handler`,不改 Spack 自己
+    的 recipe):(1) 内嵌 mimalloc 快照的 CMakeLists.txt 给
+    `CMAKE_CXX_COMPILER_ID MATCHES "Intel"` 加 `-Kc++`,这个正则连
+    `"IntelLLVM"`(icx/icpx)也匹配上,upstream mimalloc 后来修过这个
+    bug(加了 `AND NOT ... MATCHES "IntelLLVM"`),但 spades 打包的是
+    修复前的快照;(2)(3)(4) spades 自己代码里三处真实的复制粘贴笔误
+    (`key_with_hash.hpp` 引用了别的类才有的 `is_minimal_`成员、
+    `flat_set.hpp`/`flat_map.hpp` 的 `swap()` 都把 `other.data_` 写成
+    `other.data`)和内嵌 `lexy` 库的一处笔误(`_colum_nr` 少个 "n"),
+    这几个 bug 长年没被发现是因为 C++ 模板成员函数只有真被调用时才编译,
+    换了 icpx/新版 libstdc++ 才触发实例化;(5) `mpmc_bounded.hpp` 用
+    `__GNUC__`/`_LIBCPP_VERSION` 判断该 `#include <atomic>` 还是过时的
+    `<cstdatomic>`(C++11 定案前的草案头文件名,早不存在了),icpx 因为
+    伪装低版本 `__GNUC__` 又不定义 `_LIBCPP_VERSION`(我们链接的是
+    libstdc++不是libc++),踩进了这条判断 20 年前就该淘汰的死分支;
+    (6) 内嵌 `blaze` 线性代数库一个真实的宏一致性设计缺陷:
+    `SIMDfloat`/`SIMDdouble` 的底层类型只看有没有 AVX512
+    (`BLAZE_AVX512F_MODE`)就定成 512 位的 `__m512`,但
+    `floor()`/`ceil()`/`round()`/`trunc()` 的具体实现还额外要求有
+    Intel SVML 或 SLEEF 库才会真的生成 512 位版本,没有的话默默退化成
+    256 位的 AVX 实现——多数机器没有 AVX512 所以从没人踩到,我们
+    `target: icelake` 支持 AVX512 又没配 SVML/SLEEF,正好踩中;这个用
+    `flag_handler` 单独给 spades 加 `-mno-avx512f` 绕开,没有去改 blaze
+    源码(它至少还有 3 个姊妹文件是同一个模式)。另外发现 Spack 的
+    `spades` package.py 把 `sra`(NCBI VDB/SRA 支持)和 `tools`(额外
+    子工具,含一个叫 pathracer、代码多年没跟进、用了过时 C++0x 写法的
+    附属程序)这两个 variant 都默认开着,但上游 SPAdes 自己默认是关的
+    (`sra` 官方文档写明"due to possible compatibility issues"),关掉
+    `~sra ~tools` 避免了不必要的额外编译面。**Tier 3 六个包最终全部
+    真实编译通过**(`spack -e environments/tier3-test find` 确认
+    6/6 已装)。
