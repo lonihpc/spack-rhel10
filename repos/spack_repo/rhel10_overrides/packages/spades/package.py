@@ -55,6 +55,12 @@ class Spades(BuiltinSpades):
     #    container member is named `data_` (with the trailing underscore,
     #    used correctly on the left-hand side), so `other.data` is a plain
     #    typo for `other.data_`.
+    # 3. ext/src/lexy/include/lexy/input_location.hpp (bundled lexy
+    #    library, not spades' own code): input_location::operator< does
+    #    `lhs._column_nr < rhs._colum_nr` - every other use of this member
+    #    in the file (including two lines above) spells it `_column_nr`;
+    #    `_colum_nr` (missing the second "n") is a typo for the same
+    #    member, not a different one.
     @run_before("cmake")
     def fix_upstream_source_typos(self):
         key_with_hash = os.path.join(
@@ -76,4 +82,19 @@ class Spades(BuiltinSpades):
             r"data_\.swap\(other\.data\)",
             "data_.swap(other.data_)",
             flat_set,
+        )
+
+        input_location = os.path.join(
+            self.stage.source_path,
+            "ext",
+            "src",
+            "lexy",
+            "include",
+            "lexy",
+            "input_location.hpp",
+        )
+        filter_file(
+            r"rhs\._colum_nr",
+            "rhs._column_nr",
+            input_location,
         )
