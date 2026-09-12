@@ -61,6 +61,10 @@ class Spades(BuiltinSpades):
     #    in the file (including two lines above) spells it `_column_nr`;
     #    `_colum_nr` (missing the second "n") is a typo for the same
     #    member, not a different one.
+    # 4. src/common/adt/flat_map.hpp: same copy-paste bug as flat_set.hpp
+    #    above (flat_map and flat_set are sibling containers in the same
+    #    `adt` namespace) - flat_map::swap() also does
+    #    `data_.swap(other.data)` instead of `other.data_`.
     @run_before("cmake")
     def fix_upstream_source_typos(self):
         key_with_hash = os.path.join(
@@ -97,4 +101,11 @@ class Spades(BuiltinSpades):
             r"rhs\._colum_nr",
             "rhs._column_nr",
             input_location,
+        )
+
+        flat_map = os.path.join(self.stage.source_path, "src", "common", "adt", "flat_map.hpp")
+        filter_file(
+            r"data_\.swap\(other\.data\)",
+            "data_.swap(other.data_)",
+            flat_map,
         )
