@@ -37,3 +37,43 @@ class Spades(BuiltinSpades):
             'AND NOT CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM")',
             cmakelists,
         )
+
+    # Two real spades 4.0.0 upstream source bugs - both plain typos, not
+    # compiler-specific behavior. Neither ever got compiled before because
+    # C++ template member functions are only instantiated when actually
+    # used, and apparently nothing exercised these two particular methods
+    # under whatever toolchain upstream tests with; building with icpx/a
+    # newer libstdc++ here instantiates them, exposing the bugs:
+    #
+    # 1. src/common/kmer_index/ph_map/key_with_hash.hpp:
+    #    SimpleKeyWithHash::operator== references `this->is_minimal_`, but
+    #    `is_minimal_` is a member of a DIFFERENT class in the same file
+    #    (InvertableKeyWithHash, further down) - SimpleKeyWithHash has no
+    #    such member at all. Fix: drop the bogus comparison term.
+    # 2. src/common/adt/flat_set.hpp:
+    #    flat_set::swap() does `data_.swap(other.data)` - the underlying
+    #    container member is named `data_` (with the trailing underscore,
+    #    used correctly on the left-hand side), so `other.data` is a plain
+    #    typo for `other.data_`.
+    @run_before("cmake")
+    def fix_upstream_source_typos(self):
+        key_with_hash = os.path.join(
+            self.stage.source_path,
+            "src",
+            "common",
+            "kmer_index",
+            "ph_map",
+            "key_with_hash.hpp",
+        )
+        filter_file(
+            r"this->idx_ == that.idx_ && this->is_minimal_ == that.is_minimal_",
+            "this->idx_ == that.idx_",
+            key_with_hash,
+        )
+
+        flat_set = os.path.join(self.stage.source_path, "src", "common", "adt", "flat_set.hpp")
+        filter_file(
+            r"data_\.swap\(other\.data\)",
+            "data_.swap(other.data_)",
+            flat_set,
+        )
