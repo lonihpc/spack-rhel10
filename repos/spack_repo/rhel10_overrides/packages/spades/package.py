@@ -65,6 +65,19 @@ class Spades(BuiltinSpades):
     #    above (flat_map and flat_set are sibling containers in the same
     #    `adt` namespace) - flat_map::swap() also does
     #    `data_.swap(other.data)` instead of `other.data_`.
+    # 5. src/common/io/reads/mpmc_bounded.hpp: guards its <atomic> include
+    #    behind `#if __GNUC__ > 4 || (__GNUC__ >= 4 && __GNUC_MINOR__ >= 5)
+    #    || _LIBCPP_VERSION`, falling back to `#include <cstdatomic>`
+    #    otherwise - a pre-C++11 draft header name that was renamed to
+    #    <atomic> before C++11 shipped and has never existed in any real
+    #    toolchain since. icpx commonly reports a spoofed low __GNUC__/
+    #    __GNUC_MINOR__ for compatibility and doesn't define
+    #    _LIBCPP_VERSION (we link libstdc++, not libc++), so all three
+    #    disjuncts are false here and it takes the dead #else branch. Not
+    #    a typo to "fix" so much as a two-decade-stale version check; both
+    #    branches of the #if are made to include <atomic> (safe -
+    #    standard headers have include guards, and the preprocessor only
+    #    ever takes one branch anyway).
     @run_before("cmake")
     def fix_upstream_source_typos(self):
         key_with_hash = os.path.join(
@@ -108,4 +121,13 @@ class Spades(BuiltinSpades):
             r"data_\.swap\(other\.data\)",
             "data_.swap(other.data_)",
             flat_map,
+        )
+
+        mpmc_bounded = os.path.join(
+            self.stage.source_path, "src", "common", "io", "reads", "mpmc_bounded.hpp"
+        )
+        filter_file(
+            r"#include <cstdatomic>",
+            "#include <atomic>",
+            mpmc_bounded,
         )
