@@ -38,6 +38,18 @@ spack:
   # separate so the tests can't interfere with each other). Safe to
   # `rm -rf` this whole tree once this test is done with it.
   config:
+    # install_tree lives on /project (a shared filesystem) whose fcntl
+    # advisory locks don't reliably release between processes - three
+    # serial `spack install` runs each hung waiting on
+    # .spack-db/lock via F_SETLK/EAGAIN right after the PREVIOUS spack
+    # process had already exited cleanly (confirmed via strace + lslocks:
+    # no process was actually holding the lock). scripts/
+    # tier3-test-install.sh already serializes installs (one spec per
+    # `spack install` call, never overlapping), so there's no real
+    # concurrent-write risk this is protecting against here - disabling
+    # it entirely sidesteps the broken lock release instead of continuing
+    # to fight it.
+    locks: false
     install_tree:
       root: /project/fchen14/spack-rhel10-tier3-test/spack-install
       projections:
