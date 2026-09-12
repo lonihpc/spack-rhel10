@@ -155,11 +155,22 @@ spack:
   # support) to True, but upstream SPAdes itself ships it disabled by
   # default "due to possible compatibility issues" (see ablab/spades
   # installation docs). With it on, the bundled ncbi-vdb fails ("atomic32.h
-  # file not found") and spades' own common/io/binary/graph_pack.cpp fails
-  # to compile (no member 'is_minimal_'/'data') - both errors are suspected
-  # (not yet confirmed) to come from this same NCBI-SDK-enabled code path.
-  # Not a feature we need for pipeline validation anyway.
-  - spades ~sra
+  # file not found"). The core-code compile errors seen alongside it (no
+  # member 'is_minimal_'/'data' in key_with_hash.hpp/flat_set.hpp/
+  # flat_map.hpp) turned out to be UNRELATED real upstream source typos,
+  # not caused by +sra - fixed via repos/spack_repo/rhel10_overrides'
+  # spades package.py override, not by this variant.
+  #
+  # ~tools: default True, builds SPADES_ENABLE_PROJECTS:STRING=all
+  # (additional bundled sub-tools beyond the core assembler). One of them,
+  # pathracer (src/projects/pathracer), fails to compile - bare `nullptr_t`
+  # used without `std::` (relies on a non-portable old-compiler leak into
+  # the global namespace) and `#include <cstdatomic>` (a pre-C++11 draft
+  # header name that was renamed to <atomic> before C++11 shipped and never
+  # actually existed in any real toolchain since). This is old, unmaintained
+  # dead code, not something worth patching - not needed for pipeline
+  # validation anyway.
+  - spades ~sra ~tools
   - vcftools
   - revbayes
   # mpich/mvapich2 are no longer part of the mainstream stack (intel-oneapi

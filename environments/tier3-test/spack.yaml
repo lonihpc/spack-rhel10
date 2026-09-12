@@ -85,12 +85,14 @@ spack:
   - bowtie2
   - hisat2
   - star
-  # ~sra: see config/specs.yaml's comment for the same package - upstream
-  # SPAdes ships NCBI SDK/SRA support disabled by default; Spack's
-  # spades package.py defaults it to True, which triggers a bundled
-  # ncbi-vdb build failure ("atomic32.h file not found") plus a spades
-  # core compile error (no member 'is_minimal_'/'data'), both suspected
-  # to come from the same NCBI-SDK-enabled code path.
-  - spades ~sra
+  # ~sra ~tools: see config/specs.yaml's comment for the same package -
+  # ~sra avoids a bundled ncbi-vdb build failure ("atomic32.h file not
+  # found"; upstream SPAdes ships this off by default too). ~tools avoids
+  # a compile failure in the bundled pathracer sub-tool (bare nullptr_t,
+  # #include <cstdatomic> - old unmaintained dead code, not needed here).
+  # A handful of separate real upstream source typos
+  # (key_with_hash.hpp/flat_set.hpp/flat_map.hpp) are fixed via
+  # repos/spack_repo/rhel10_overrides's spades package.py override.
+  - spades ~sra ~tools
   - vcftools
   - revbayes
