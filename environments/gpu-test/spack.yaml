@@ -1,7 +1,7 @@
 # "gpu-test" Spack environment - REAL (not --fake) bulk-build validation
-# of the GPU/nvhpc family: cp2k, lammps, namd, all built with +cuda
-# cuda_arch=80 %nvhpc. Unlike environments/tierN-test (which validated
-# NEW additions to the target software list), these three are already in
+# of the GPU family: cp2k, lammps, namd, all built with +cuda
+# cuda_arch=80. Unlike environments/tierN-test (which validated NEW
+# additions to the target software list), these three are already in
 # config/specs.yaml - lammps and namd already pin +cuda there, cp2k does
 # not yet (still plain/CPU there). This environment exists to validate
 # the GPU-enabled builds for real, in bulk, before deciding whether to
@@ -10,10 +10,31 @@
 # install_tree naming isn't finalized yet anyway).
 #
 # Building +cuda doesn't require an actual GPU device on the build node -
-# only the external cuda/nvhpc toolchains (already registered in
+# only the external cuda toolchain (already registered in
 # ../../config/packages.yaml) - same rationale as environments/
 # smoke-test's `bwa %nvhpc` pin needing nvhpc findable/invokable but not
 # a GPU to run on.
+#
+# IMPORTANT, reversed after a real failed run: none of these 3 packages
+# need %nvhpc as their HOST c/cxx/fortran compiler. All three handle CUDA
+# via a mechanism fully decoupled from host-compiler choice - cp2k and
+# lammps are CMakePackage+CudaPackage (CMake's native CUDA-as-a-language
+# support calls nvcc for .cu files regardless of the C/CXX compiler;
+# confirmed via each package.py), and namd's own build system points
+# CUDADIR at the external `cuda` package directly (confirmed in namd's
+# package.py - it even has dedicated flag handling for
+# intel-oneapi-compilers as the host compiler). Forcing %nvhpc as host
+# compiler anyway (an early project-wide "GPU packages use nvhpc"
+# convention that made sense for CUDA-Fortran/OpenACC code but not for
+# these three) dragged nvhpc into namd's charmpp/zstd dependencies, which
+# have nothing to do with GPU code at all, and hit REAL nvhpc compiler
+# bugs there: an internal compiler crash ("NVC++-F-0000-Internal compiler
+# error") building charmpp, an assembler-incompatible instruction
+# ("invalid instruction mnemonic 'plt'") building zstd, and a genuine
+# stdatomic.h/converse.h `memory_order` redeclaration conflict. Explicit
+# %oneapi below avoids all of it and matches the mainstream default used
+# everywhere else in this project - verified via `spack spec` for all 3
+# with no errors.
 #
 # Usage (on the actual cluster, from a compute node via sbatch - see
 # scripts/gpu-test-install.sh, NOT on the login node):
@@ -78,25 +99,15 @@ spack:
   # Deliberately NOT including config/specs.yaml - that file already has
   # amber/ambertools/etc. not relevant here, and cp2k there is still
   # plain/CPU (not yet decided whether to flip it to +cuda). Only the 3
-  # GPU/nvhpc packages being validated are listed here.
+  # GPU packages being validated are listed here.
   #
-  # Compiler pin written fully-qualified (%c=nvhpc %cxx=nvhpc
-  # [%fortran=nvhpc]), NOT bare %nvhpc: confirmed by testing that bare
-  # %nvhpc on cp2k gets silently overridden by the concretizer's reuse
-  # optimization to %c,cxx=gcc %fortran=oneapi (cheaper to reuse
-  # already-concrete gcc/oneapi nodes from elsewhere in the DAG than build
-  # fresh nvhpc ones) - no error, no warning, it just quietly picks a
-  # different compiler than requested. The fully-qualified per-language
-  # form is a hard constraint the solver can't reuse its way around.
-  # lammps happened to resolve correctly with bare %nvhpc too (no nearby
-  # reuse candidates to tempt the solver), but that's luck, not a
-  # guarantee - written fully-qualified here too for the same reliability.
-  # namd has NO %fortran pin: it's pure C++ (Charm++-based) and has no
-  # fortran dependency at all - confirmed `spack spec` errors outright
-  # ("namd cannot have a dependency on fortran") if you add one, unlike
-  # cp2k (genuinely Fortran+C++) and lammps (pulls in fortran via its
-  # optional kim-api dependency).
+  # %oneapi is an explicit, deliberate pin (not left to the concretizer's
+  # default provider order/reuse optimization to decide on its own) - see
+  # the big comment above for why %nvhpc isn't needed or wanted as the
+  # host compiler for any of these three. cuda_arch=80 alone is what
+  # actually drives GPU code generation (via the external `cuda` package),
+  # completely independent of this pin.
   specs:
-  - cp2k +cuda cuda_arch=80 %c=nvhpc %cxx=nvhpc %fortran=nvhpc
-  - lammps +cuda cuda_arch=80 %c=nvhpc %cxx=nvhpc %fortran=nvhpc
-  - namd +cuda cuda_arch=80 %c=nvhpc %cxx=nvhpc
+  - cp2k +cuda cuda_arch=80 %oneapi
+  - lammps +cuda cuda_arch=80 %oneapi
+  - namd +cuda cuda_arch=80 %oneapi

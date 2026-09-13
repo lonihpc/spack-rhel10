@@ -1,11 +1,21 @@
 #!/bin/bash
 # sbatch template for the environments/gpu-test Spack environment.
 #
-# Purpose: REAL (not --fake) `spack install` of the GPU/nvhpc family -
-# cp2k, lammps, namd, all built +cuda cuda_arch=80 %nvhpc - to validate
-# these compile for real before deciding whether to move any of this
-# toward production (not urgent - production's install_tree naming isn't
+# Purpose: REAL (not --fake) `spack install` of the GPU family - cp2k,
+# lammps, namd, all built +cuda cuda_arch=80 %oneapi - to validate these
+# compile for real before deciding whether to move any of this toward
+# production (not urgent - production's install_tree naming isn't
 # finalized yet anyway).
+#
+# Host compiler is %oneapi, NOT %nvhpc: see environments/gpu-test/
+# spack.yaml's comment for the full story - none of these 3 need nvhpc as
+# their host c/cxx/fortran compiler (CUDA is handled independently of
+# host-compiler choice in all three), and forcing %nvhpc anyway (an
+# earlier attempt) hit real nvhpc compiler bugs building namd's
+# charmpp/zstd dependencies - an internal compiler crash, an
+# assembler-incompatible instruction, and a stdatomic.h/converse.h
+# `memory_order` conflict. None of that is GPU-related; it's nvhpc itself
+# misbehaving on code that never needed to touch it in the first place.
 #
 # Installs SERIALLY (one spec per `spack install` call), same as
 # scripts/tier3-test-install.sh: this install_tree lives on /project (a
@@ -51,14 +61,10 @@ JOBS="${SLURM_CPUS_PER_TASK:-16}"
 spack concretize -f
 
 # Keep this list in sync with environments/gpu-test/spack.yaml's specs:.
-# Compiler pin is fully-qualified (%c=nvhpc %cxx=nvhpc [%fortran=nvhpc]),
-# not bare %nvhpc - see that file's comment for why (bare %nvhpc on cp2k
-# gets silently reuse-optimized away to gcc/oneapi with no error). namd
-# has no %fortran pin - it has no fortran dependency at all (pure C++).
 SPECS=(
-  "cp2k +cuda cuda_arch=80 %c=nvhpc %cxx=nvhpc %fortran=nvhpc"
-  "lammps +cuda cuda_arch=80 %c=nvhpc %cxx=nvhpc %fortran=nvhpc"
-  "namd +cuda cuda_arch=80 %c=nvhpc %cxx=nvhpc"
+  "cp2k +cuda cuda_arch=80 %oneapi"
+  "lammps +cuda cuda_arch=80 %oneapi"
+  "namd +cuda cuda_arch=80 %oneapi"
 )
 
 FAILED=()
