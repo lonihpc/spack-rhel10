@@ -2,20 +2,28 @@
 # sbatch template for the environments/gpu-test Spack environment.
 #
 # Purpose: REAL (not --fake) `spack install` of the GPU family - cp2k,
-# lammps, namd, all built +cuda cuda_arch=80 %oneapi - to validate these
+# lammps, namd, all built +cuda cuda_arch=80 %gcc - to validate these
 # compile for real before deciding whether to move any of this toward
 # production (not urgent - production's install_tree naming isn't
 # finalized yet anyway).
 #
-# Host compiler is %oneapi, NOT %nvhpc: see environments/gpu-test/
-# spack.yaml's comment for the full story - none of these 3 need nvhpc as
-# their host c/cxx/fortran compiler (CUDA is handled independently of
-# host-compiler choice in all three), and forcing %nvhpc anyway (an
-# earlier attempt) hit real nvhpc compiler bugs building namd's
-# charmpp/zstd dependencies - an internal compiler crash, an
-# assembler-incompatible instruction, and a stdatomic.h/converse.h
-# `memory_order` conflict. None of that is GPU-related; it's nvhpc itself
-# misbehaving on code that never needed to touch it in the first place.
+# Host compiler is %gcc, after TWO failed attempts - see
+# environments/gpu-test/spack.yaml's comment for the full story:
+#   - %nvhpc: none of these 3 need nvhpc as host compiler (CUDA is
+#     handled independently of host-compiler choice in all three), and it
+#     hit real nvhpc compiler bugs building namd's charmpp/zstd
+#     dependencies (internal compiler crash, assembler-incompatible
+#     instruction, stdatomic.h/converse.h conflict) - none of that is
+#     GPU-related, it's nvhpc misbehaving on code that never needed it.
+#   - %oneapi: failed for a completely different reason - nvcc itself
+#     rejects icx outright ("option: icx is not supported in this
+#     version!"). Confirmed via NVIDIA's own CUDA 13.4 install guide: gcc
+#     6.x-16.x, clang 7.x-22.x, and nvhpc are official supported host
+#     compilers on x86_64 - icx isn't listed at all. This is a known,
+#     general nvcc limitation (see spack/spack#40374 for the same class
+#     of problem elsewhere), not specific to this project's config.
+#   - %gcc: the one choice that's both nvcc-accepted (within the
+#     supported 6.x-16.x range) and free of nvhpc's compiler bugs.
 #
 # Installs SERIALLY (one spec per `spack install` call), same as
 # scripts/tier3-test-install.sh: this install_tree lives on /project (a
@@ -62,9 +70,9 @@ spack concretize -f
 
 # Keep this list in sync with environments/gpu-test/spack.yaml's specs:.
 SPECS=(
-  "cp2k +cuda cuda_arch=80 %oneapi"
-  "lammps +cuda cuda_arch=80 %oneapi"
-  "namd +cuda cuda_arch=80 %oneapi"
+  "cp2k +cuda cuda_arch=80 %gcc"
+  "lammps +cuda cuda_arch=80 %gcc"
+  "namd +cuda cuda_arch=80 %gcc"
 )
 
 FAILED=()

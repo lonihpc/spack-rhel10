@@ -15,26 +15,41 @@
 # smoke-test's `bwa %nvhpc` pin needing nvhpc findable/invokable but not
 # a GPU to run on.
 #
-# IMPORTANT, reversed after a real failed run: none of these 3 packages
-# need %nvhpc as their HOST c/cxx/fortran compiler. All three handle CUDA
-# via a mechanism fully decoupled from host-compiler choice - cp2k and
-# lammps are CMakePackage+CudaPackage (CMake's native CUDA-as-a-language
-# support calls nvcc for .cu files regardless of the C/CXX compiler;
-# confirmed via each package.py), and namd's own build system points
-# CUDADIR at the external `cuda` package directly (confirmed in namd's
-# package.py - it even has dedicated flag handling for
-# intel-oneapi-compilers as the host compiler). Forcing %nvhpc as host
-# compiler anyway (an early project-wide "GPU packages use nvhpc"
-# convention that made sense for CUDA-Fortran/OpenACC code but not for
-# these three) dragged nvhpc into namd's charmpp/zstd dependencies, which
-# have nothing to do with GPU code at all, and hit REAL nvhpc compiler
-# bugs there: an internal compiler crash ("NVC++-F-0000-Internal compiler
-# error") building charmpp, an assembler-incompatible instruction
-# ("invalid instruction mnemonic 'plt'") building zstd, and a genuine
-# stdatomic.h/converse.h `memory_order` redeclaration conflict. Explicit
-# %oneapi below avoids all of it and matches the mainstream default used
-# everywhere else in this project - verified via `spack spec` for all 3
-# with no errors.
+# IMPORTANT, reversed TWICE after real failed runs:
+#
+# Round 1: none of these 3 packages need %nvhpc as their HOST
+# c/cxx/fortran compiler. All three handle CUDA via a mechanism fully
+# decoupled from host-compiler choice - cp2k and lammps are
+# CMakePackage+CudaPackage (CMake's native CUDA-as-a-language support
+# calls nvcc for .cu files regardless of the C/CXX compiler; confirmed
+# via each package.py), and namd's own build system points CUDADIR at the
+# external `cuda` package directly (confirmed in namd's package.py - it
+# even has dedicated flag handling for intel-oneapi-compilers as the host
+# compiler). Forcing %nvhpc as host compiler anyway (an early
+# project-wide "GPU packages use nvhpc" convention that made sense for
+# CUDA-Fortran/OpenACC code but not for these three) dragged nvhpc into
+# namd's charmpp/zstd dependencies, which have nothing to do with GPU
+# code at all, and hit REAL nvhpc compiler bugs there: an internal
+# compiler crash ("NVC++-F-0000-Internal compiler error") building
+# charmpp, an assembler-incompatible instruction ("invalid instruction
+# mnemonic 'plt'") building zstd, and a genuine stdatomic.h/converse.h
+# `memory_order` redeclaration conflict. Switched to %oneapi.
+#
+# Round 2: %oneapi doesn't work either, for a DIFFERENT reason than
+# nvhpc's compiler bugs: nvcc itself performs a host-compiler version/
+# vendor check and flatly rejects icx - real failure: "Error> option: icx
+# is not supported in this version!". This isn't Spack-specific; it's a
+# known, general nvcc limitation (see e.g. spack/spack#40374 for the same
+# class of problem with other +cuda packages). Confirmed via NVIDIA's own
+# CUDA 13.4 Installation Guide "Supported Compilers" table: gcc 6.x-16.x,
+# clang 7.x-22.x, and nvhpc 26.5 are all officially supported host
+# compilers on x86_64 - icx is not listed at all. gcc 14 (used here) is
+# within the supported range, so %gcc below is the one choice that's
+# both nvcc-accepted AND free of nvhpc's own compiler bugs on
+# charmpp/zstd. cp2k's fortran side still resolves to %oneapi regardless
+# (cp2k's own package-level c/cxx-vs-fortran compiler split, unrelated to
+# any of this - fortran code isn't touched by nvcc at all, so it's not
+# subject to the same host-compiler restriction).
 #
 # Usage (on the actual cluster, from a compute node via sbatch - see
 # scripts/gpu-test-install.sh, NOT on the login node):
@@ -101,13 +116,15 @@ spack:
   # plain/CPU (not yet decided whether to flip it to +cuda). Only the 3
   # GPU packages being validated are listed here.
   #
-  # %oneapi is an explicit, deliberate pin (not left to the concretizer's
+  # %gcc is an explicit, deliberate pin (not left to the concretizer's
   # default provider order/reuse optimization to decide on its own) - see
-  # the big comment above for why %nvhpc isn't needed or wanted as the
-  # host compiler for any of these three. cuda_arch=80 alone is what
-  # actually drives GPU code generation (via the external `cuda` package),
+  # the big comment above for why neither %nvhpc nor %oneapi work as the
+  # host compiler for any of these three, and why %gcc is the one that
+  # actually satisfies nvcc's own host-compiler support list without
+  # hitting nvhpc's compiler bugs. cuda_arch=80 alone is what actually
+  # drives GPU code generation (via the external `cuda` package),
   # completely independent of this pin.
   specs:
-  - cp2k +cuda cuda_arch=80 %oneapi
-  - lammps +cuda cuda_arch=80 %oneapi
-  - namd +cuda cuda_arch=80 %oneapi
+  - cp2k +cuda cuda_arch=80 %gcc
+  - lammps +cuda cuda_arch=80 %gcc
+  - namd +cuda cuda_arch=80 %gcc
