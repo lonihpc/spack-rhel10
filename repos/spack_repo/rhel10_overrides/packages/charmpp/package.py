@@ -33,8 +33,19 @@ class Charmpp(BuiltinCharmpp):
         converse_h = os.path.join(
             self.stage.source_path, "src", "conv-core", "converse.h"
         )
+        # NOTE: Spack's filter_file only special-cases \1-\9 (backreferences,
+        # sed-style) in the replacement string - unlike Python's re.sub, it
+        # does NOT interpret \n as a newline. r"\1\n..." (a raw string)
+        # therefore wrote the two literal characters backslash+n into the
+        # file instead of an actual newline, producing invalid C ("stray
+        # '\'", "stray '#'") - confirmed the hard way on a real build.
+        # r"\1" (kept raw, for filter_file's own backreference syntax) +
+        # "\n..." (a normal string, where Python itself turns \n into a
+        # real newline character before filter_file ever sees it) is the
+        # fix - verified this time against the actual filter_file function,
+        # not a bare re.sub call.
         filter_file(
             r"(\}\s*memory_order;)",
-            r"\1\n#define _STDATOMIC_H",
+            r"\1" + "\n#define _STDATOMIC_H",
             converse_h,
         )
