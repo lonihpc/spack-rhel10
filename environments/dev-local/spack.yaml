@@ -119,7 +119,7 @@ spack:
   - gsl
   - hwloc
   - valgrind
-  - lammps +cuda cuda_arch=80 %nvhpc
+  - lammps +cuda cuda_arch=80 %gcc
   - metis
   # Tier 2: second batch, mid-sized libraries that depend on intel-oneapi-mpi
   # (unlike Tier 1's plain-compiler-only packages), added to validate the
@@ -175,7 +175,7 @@ spack:
   # package) is also fully deprecated in Spack's current repo - every
   # version fails concretization outright - so if MPI diversity is ever
   # needed again, use the `mvapich` successor package, not mvapich2.
-  - namd +cuda cuda_arch=80 %nvhpc
+  - namd +cuda cuda_arch=80 %gcc
   # matlab is explicitly NOT here - CLAUDE.md says it's not a Spack package
   # and needs a manual install + hand-written modulefile instead.
   # <<< END GENERATED SPECS

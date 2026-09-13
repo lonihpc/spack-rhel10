@@ -17,11 +17,34 @@
 # Versions intentionally left unpinned ("latest wins") per the request -
 # we're not copying the old cluster's exact versions. Everything defaults
 # to intel-oneapi-compilers + intel-oneapi-mpi via packages.yaml, so no
-# per-package %compiler pin is needed except for GPU packages, which pin
-# `%nvhpc` explicitly and `+cuda cuda_arch=80` (confirmed GPU hardware)
-# for namd/lammps. cuda_arch=80 is also a site-wide default preference in
-# packages.yaml, so any other package that later grows a `+cuda` build
-# only needs `+cuda %nvhpc` here.
+# per-package %compiler pin is needed except for GPU packages
+# (namd/lammps here), which pin `+cuda cuda_arch=80 %gcc` explicitly.
+# cuda_arch=80 is a site-wide default preference in packages.yaml
+# (confirmed GPU hardware).
+#
+# %gcc, NOT %nvhpc and NOT %oneapi, for the host c/cxx compiler - this
+# was originally %nvhpc (an early "GPU packages use nvhpc" convention)
+# and was real-compile-tested twice more in environments/gpu-test before
+# landing here:
+#   - %nvhpc: neither namd nor lammps actually needs nvhpc as host
+#     compiler (both handle CUDA via a mechanism fully decoupled from
+#     host-compiler choice - CMake's native CUDA-as-a-language support
+#     for lammps, namd's own CUDADIR pointing straight at the external
+#     `cuda` package) - forcing it anyway dragged nvhpc into namd's
+#     charmpp/zstd dependencies (nothing to do with GPU code) and hit
+#     real nvhpc compiler bugs: an internal compiler crash, an
+#     assembler-incompatible instruction, and a stdatomic.h/converse.h
+#     `memory_order` redeclaration conflict.
+#   - %oneapi: fails for a completely different reason - nvcc itself
+#     rejects icx outright ("option: icx is not supported in this
+#     version!"), a known general nvcc limitation (see
+#     spack/spack#40374), not something fixable via our config. Per
+#     NVIDIA's own CUDA 13.4 install guide, gcc 6.x-16.x, clang 7.x-22.x,
+#     and nvhpc are the only officially supported host compilers on
+#     x86_64 - icx isn't listed.
+#   - %gcc: the one choice both nvcc-accepted and free of nvhpc's
+#     compiler bugs. Any other package that later grows a `+cuda` build
+#     should follow the same `+cuda %gcc` pattern here, not `%nvhpc`.
 specs:
 # amber: Spack's `amber` package only has versions 18/20 (no 22, unlike
 # the old cluster's amber/22) - it's licensed software, so Spack can only
@@ -67,7 +90,7 @@ specs:
 - gsl
 - hwloc
 - valgrind
-- lammps +cuda cuda_arch=80 %nvhpc
+- lammps +cuda cuda_arch=80 %gcc
 - metis
 # Tier 2: second batch, mid-sized libraries that depend on intel-oneapi-mpi
 # (unlike Tier 1's plain-compiler-only packages), added to validate the
@@ -123,6 +146,6 @@ specs:
 # package) is also fully deprecated in Spack's current repo - every
 # version fails concretization outright - so if MPI diversity is ever
 # needed again, use the `mvapich` successor package, not mvapich2.
-- namd +cuda cuda_arch=80 %nvhpc
+- namd +cuda cuda_arch=80 %gcc
 # matlab is explicitly NOT here - CLAUDE.md says it's not a Spack package
 # and needs a manual install + hand-written modulefile instead.
