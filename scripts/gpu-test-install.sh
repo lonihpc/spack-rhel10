@@ -59,8 +59,15 @@ REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd
 cd "$REPO_ROOT"
 unset SPACK_PYTHON
 export SPACK_PYTHON=/usr/bin/python3
-export PKG_CONFIG_LIBDIR=/nonexistent
-export PKG_CONFIG_PATH=
+# Deliberately NOT setting PKG_CONFIG_LIBDIR/PKG_CONFIG_PATH here (unlike
+# tier3-test-install.sh): those were a since-abandoned attempt at working
+# around python's _tkinter/Tcl9 issue (the real fix ended up being the
+# repos/spack_repo/rhel10_overrides python override, not these env vars).
+# gpu-test doesn't build python at all, and a real run here proved these
+# job-wide env vars actively break OTHER packages instead - lammps
+# couldn't find fftw3 via pkg-config with PKG_CONFIG_LIBDIR blanked out,
+# even though Spack's own build environment would have provided the
+# right PKG_CONFIG_PATH for it.
 source /project/fchen14/spack-tool/share/spack/setup-env.sh
 spack env activate environments/gpu-test
 
