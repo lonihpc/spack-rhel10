@@ -134,6 +134,17 @@ spack:
   # with "Package 'fftw3' ... not found" even though MKL is genuinely
   # present. Forcing a real, Spack-built `fftw` dependency sidesteps this
   # entirely (it correctly generates its own fftw3.pc).
+  # cp2k's `^fftw`: same class of problem as lammps above, hit on job 62
+  # after the CUDA-arch-probe fix let cp2k's cmake phase get much further
+  # - "CMake Error ... Could NOT find Fftw (missing:
+  # CP2K_FFTW3_LINK_LIBRARIES)" from cp2k's own cmake/modules/
+  # FindFftw.cmake, even with intel-oneapi-mkl genuinely present and
+  # -DCP2K_USE_FFTW3_WITH_MKL=ON passed - cp2k's FindFftw.cmake does its
+  # own library detection and doesn't get told where to find MKL's
+  # FFTW-compatible layer either. `^fftw` forces a real, Spack-built fftw
+  # for cp2k's fftw-api dependency only (BLAS/LAPACK/ScaLAPACK stay on
+  # MKL via CP2K_BLAS_VENDOR=MKL, unaffected by this pin) - confirmed via
+  # `spack spec` that this resolves fftw@3.3.11 instead of MKL.
   # namd's `^charmpp build-target=charm++`: charmpp's default
   # build-target is LIBS, which (per its own package.py comment) "also
   # builds AMPI and charm++" - AMPI being Charm++'s Adaptive MPI layer,
@@ -150,6 +161,6 @@ spack:
   # ROMIO entirely and sidestepping the failure rather than debugging a
   # ROMIO/MPI configure issue for functionality namd never uses.
   specs:
-  - cp2k +cuda cuda_arch=80 %gcc
+  - cp2k +cuda cuda_arch=80 %gcc ^fftw
   - lammps +cuda cuda_arch=80 %gcc ^fftw
   - namd +cuda cuda_arch=80 %gcc ^charmpp build-target=charm++

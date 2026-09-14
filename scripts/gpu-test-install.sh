@@ -92,8 +92,13 @@ spack concretize -f
 # without it, charmpp's default build-target=LIBS also builds the AMPI/
 # ROMIO sub-library that namd never uses, and ROMIO's own MPI-configure
 # self-test fails outright under the netlrts backend.
+# cp2k's `^fftw`: same class of problem as lammps' - see that file's
+# comment. cp2k's own FindFftw.cmake can't locate MKL's FFTW-compatible
+# layer even with -DCP2K_USE_FFTW3_WITH_MKL=ON, so force a real,
+# Spack-built fftw for cp2k's fftw-api dependency (BLAS/LAPACK/ScaLAPACK
+# stay on MKL, unaffected).
 SPECS=(
-  "cp2k +cuda cuda_arch=80 %gcc"
+  "cp2k +cuda cuda_arch=80 %gcc ^fftw"
   "lammps +cuda cuda_arch=80 %gcc ^fftw"
   "namd +cuda cuda_arch=80 %gcc ^charmpp build-target=charm++"
 )
