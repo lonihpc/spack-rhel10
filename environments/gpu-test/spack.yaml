@@ -145,6 +145,22 @@ spack:
   # for cp2k's fftw-api dependency only (BLAS/LAPACK/ScaLAPACK stay on
   # MKL via CP2K_BLAS_VENDOR=MKL, unaffected by this pin) - confirmed via
   # `spack spec` that this resolves fftw@3.3.11 instead of MKL.
+  # namd's `@3.0.2` pin: namd@2.14's CUDA kernels (e.g.
+  # ComputeNonbondedCUDAKernelBase.h) use the legacy CUDA "texture
+  # reference" API (`texture<...> force_table;` + `tex1D(force_table,
+  # ...)`), which CUDA 13.3 has removed outright - not deprecated,
+  # gone: `force_table`/`lj_table`/`energy_table`'s own declarations no
+  # longer compile ("<error-type>" in the real build error), so every
+  # tex1D/tex1Dfetch call site fails overload resolution. This is a
+  # deep, invasive incompatibility spanning kernel declarations, host-
+  # side binding code, and every call site - not a small patch like the
+  # cufftResult/computeMode fixes above. namd@3.0.2's GPU backend was
+  # rewritten (texture-object based throughout, confirmed via a clean
+  # `spack concretize` - no texture-reference-era code path is even
+  # reachable), so we build 3.0.2 instead of patching 2.14's legacy GPU
+  # kernels by hand. Also manual-download (namd@3.0.2 needs its own
+  # separate NAMD_3.0.2_Source.tar.gz placed in the source cache, same
+  # procedure as 2.14).
   # namd's `^charmpp build-target=charm++`: charmpp's default
   # build-target is LIBS, which (per its own package.py comment) "also
   # builds AMPI and charm++" - AMPI being Charm++'s Adaptive MPI layer,
@@ -163,4 +179,4 @@ spack:
   specs:
   - cp2k +cuda cuda_arch=80 %gcc ^fftw
   - lammps +cuda cuda_arch=80 %gcc ^fftw
-  - namd +cuda cuda_arch=80 %gcc ^charmpp build-target=charm++
+  - namd@3.0.2 +cuda cuda_arch=80 %gcc ^charmpp build-target=charm++

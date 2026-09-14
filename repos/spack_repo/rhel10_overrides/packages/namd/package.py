@@ -48,20 +48,36 @@ from spack.package import *
 class Namd(BuiltinNamd):
     @run_before("build")
     def fix_removed_cuda_device_compute_mode(self):
+        # Written and verified against namd@2.14's src/DeviceCUDA.C (see
+        # module docstring above). We now build namd@3.0.2 instead (its
+        # GPU backend was rewritten to use texture objects instead of
+        # the legacy texture-reference API that made 2.14 uncompilable
+        # under CUDA 13.3 - see environments/gpu-test/spack.yaml's
+        # comment), so it's unknown/unverified whether 3.0.2's
+        # DeviceCUDA.C (if it still exists under this path at all) still
+        # has these exact `.computeMode` lines. ignore_absent=True makes
+        # a missing file a harmless no-op rather than a hard error, and
+        # filter_file itself already no-ops on any pattern that doesn't
+        # match - so this hook is safe to leave in place for whichever
+        # namd version is actually being built, active only where it's
+        # still needed.
         if self.spec.satisfies("+cuda"):
             device_cuda_c = os.path.join(self.stage.source_path, "src", "DeviceCUDA.C")
             filter_file(
                 r"^(\s*)if \( deviceProp\.computeMode != cudaComputeModeProhibited$",
                 r"\1if ( 1",
                 device_cuda_c,
+                ignore_absent=True,
             )
             filter_file(
                 r"^(\s*)if \( deviceProp\.computeMode == cudaComputeModeExclusive \) \{$",
                 r"\1if ( 0 ) {",
                 device_cuda_c,
+                ignore_absent=True,
             )
             filter_file(
                 r"^(\s*)if \( deviceProp\.computeMode == cudaComputeModeProhibited \)$",
                 r"\1if ( 0 )",
                 device_cuda_c,
+                ignore_absent=True,
             )
