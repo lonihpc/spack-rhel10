@@ -48,6 +48,27 @@
 # override), adding one more version() here is a normal, additive
 # extension - not a fork of the whole recipe. sha256 confirmed by the
 # user directly from the file they downloaded from NAMD's own site.
+#
+# SECOND, unrelated real bug found once namd@3.0.3's build got past
+# fetch/charmpp/edit and into actual CUDA kernel compilation: CUDA
+# 13.3 merged CUB/Thrust/libcu++ into one "CCCL" (CUDA Core Compute
+# Libraries) project, and along with that merge, renamed the macro
+# used to suppress its "C++17 required" version check from the old,
+# separate `CUB_IGNORE_DEPRECATED_CPP_DIALECT`/
+# `THRUST_IGNORE_DEPRECATED_CPP_DIALECT` to a single, unified
+# `CCCL_IGNORE_DEPRECATED_CPP_DIALECT`. namd@3.0.3's own
+# arch/Linux-x86_64.cuda already defines the two old macros (upstream
+# clearly hit this exact class of problem before and worked around it
+# for older CUDA) but hasn't caught up with CUDA 13.3's rename, so the
+# new macro is never defined and the #error still fires:
+#   error: #error CUB requires at least C++17. Define
+#   CCCL_IGNORE_DEPRECATED_CPP_DIALECT to suppress this message.
+# (repeated for Thrust's and libcu++'s own copies of the same check).
+# Confirmed by pulling arch/Linux-x86_64.cuda directly off the cluster
+# (from the same manually-downloaded, license-gated source tarball as
+# the DeviceCUDA.C fix above) - it's a simple Makefile variable
+# assignment, not kernel code, so the fix just adds the one missing
+# `-D` flag right after the two existing ones, in the exact same style.
 import os
 
 from spack_repo.builtin.packages.namd.package import Namd as BuiltinNamd
@@ -94,5 +115,20 @@ class Namd(BuiltinNamd):
                 r"^(\s*)if \( deviceProp\.computeMode == cudaComputeModeProhibited \)$",
                 r"\1if ( 0 )",
                 device_cuda_c,
+                ignore_absent=True,
+            )
+
+    @run_before("build")
+    def fix_cccl_cpp_dialect_macro_rename(self):
+        if self.spec.satisfies("+cuda"):
+            arch_cuda_file = os.path.join(
+                self.stage.source_path, "arch", self.arch + ".cuda"
+            )
+            filter_file(
+                r"^(\s*)CUDA_COMPILER_FLAGS \+= -DTHRUST_IGNORE_DEPRECATED_CPP_DIALECT$",
+                r"\1CUDA_COMPILER_FLAGS += -DTHRUST_IGNORE_DEPRECATED_CPP_DIALECT"
+                + "\n"
+                + r"\1CUDA_COMPILER_FLAGS += -DCCCL_IGNORE_DEPRECATED_CPP_DIALECT",
+                arch_cuda_file,
                 ignore_absent=True,
             )
