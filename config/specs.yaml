@@ -18,7 +18,7 @@
 # we're not copying the old cluster's exact versions. Everything defaults
 # to intel-oneapi-compilers + intel-oneapi-mpi via packages.yaml, so no
 # per-package %compiler pin is needed except for GPU packages
-# (namd/lammps here), which pin `+cuda cuda_arch=80 %gcc` explicitly.
+# (namd/lammps/cp2k here), which pin `+cuda cuda_arch=80 %gcc` explicitly.
 # cuda_arch=80 is a site-wide default preference in packages.yaml
 # (confirmed GPU hardware).
 #
@@ -45,6 +45,38 @@
 #   - %gcc: the one choice both nvcc-accepted and free of nvhpc's
 #     compiler bugs. Any other package that later grows a `+cuda` build
 #     should follow the same `+cuda %gcc` pattern here, not `%nvhpc`.
+#
+# cp2k's `^fftw`: real-compile-validated in environments/gpu-test (job
+# 62) before landing here. Without it, the concretizer picks the
+# external intel-oneapi-mkl (registered as the default fftw-api
+# provider) to satisfy cp2k's fftw-api dependency, but cp2k's own
+# cmake/modules/FindFftw.cmake can't locate MKL's FFTW-compatible layer
+# even with -DCP2K_USE_FFTW3_WITH_MKL=ON - "CMake Error ... Could NOT
+# find Fftw (missing: CP2K_FFTW3_LINK_LIBRARIES)". Forcing a real,
+# Spack-built fftw for cp2k's fftw-api dependency only sidesteps this
+# (BLAS/LAPACK/ScaLAPACK stay on MKL via CP2K_BLAS_VENDOR=MKL,
+# unaffected) - the same fix already used for lammps' fftw-api
+# dependency above, and namd's cudaDeviceProp/CCCL/CUB fixes (see
+# repos/spack_repo/rhel10_overrides/packages/cp2k/package.py for that
+# package's other real-compile-found CUDA-13.3 fixes: a hardcoded
+# CMAKE_CUDA_ARCHITECTURES placeholder using a since-removed
+# compute_60, and 3 cufftResult error codes CUDA 13.3 has removed from
+# cufft.h).
+#
+# namd's `+cuda` is currently ASPIRATIONAL, not confirmed working on
+# this cluster: real-compile-tested in environments/gpu-test through 5
+# escalating rounds of CUDA-13.3 incompatibilities (see that
+# environment's spack.yaml and repos/spack_repo/rhel10_overrides/
+# packages/namd/package.py for the full chain), the last of which -
+# namd@3.0.3's own kernel code calling cub::LaneMaskLt/Min/Max, which
+# CUDA 13.3's CCCL has removed outright - the user decided not to
+# hand-patch (real, numerically-active kernel code, license-gated
+# source, no way to verify correctness on a GPU). namd was REMOVED from
+# environments/gpu-test's specs as a result, but this line here is left
+# as-is (not reverted to ~cuda) since it predates that investigation -
+# TODO: decide whether to revert this to CPU-only or leave it broken
+# until namd upstream catches up with CUDA 13.x / an older CUDA gets
+# used for this package specifically.
 specs:
 # amber: Spack's `amber` package only has versions 18/20 (no 22, unlike
 # the old cluster's amber/22) - it's licensed software, so Spack can only
@@ -79,7 +111,7 @@ specs:
 - cmake
 - mamba # conda/mamba - Spack package is `mamba` (micromamba installer)
 - cosma
-- cp2k
+- cp2k +cuda cuda_arch=80 %gcc ^fftw
 # Tier 1: first batch of additional target software added to validate the
 # bulk-build pipeline at closer-to-real list size. These 5 (plus cmake,
 # already above) only need a plain compiler - no MPI/CUDA - so no

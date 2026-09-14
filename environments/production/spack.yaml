@@ -112,7 +112,7 @@ spack:
   - cmake
   - mamba # conda/mamba - Spack package is `mamba` (micromamba installer)
   - cosma
-  - cp2k
+  - cp2k +cuda cuda_arch=80 %gcc ^fftw
   # Tier 1: first batch of additional target software added to validate the
   # bulk-build pipeline at closer-to-real list size. These 5 (plus cmake,
   # already above) only need a plain compiler - no MPI/CUDA - so no
