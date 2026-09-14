@@ -134,7 +134,22 @@ spack:
   # with "Package 'fftw3' ... not found" even though MKL is genuinely
   # present. Forcing a real, Spack-built `fftw` dependency sidesteps this
   # entirely (it correctly generates its own fftw3.pc).
+  # namd's `^charmpp build-target=charm++`: charmpp's default
+  # build-target is LIBS, which (per its own package.py comment) "also
+  # builds AMPI and charm++" - AMPI being Charm++'s Adaptive MPI layer,
+  # completely unused by namd (confirmed: namd's package.py never
+  # references AMPI, only charmarch/prefix). Building it anyway hit a
+  # real failure in job 61: AMPI's bundled ROMIO sub-library runs its own
+  # autoconf "checking if a simple MPI program compiles and links" test
+  # using charmpp's ampicc/ampif90 wrappers, which fails outright under
+  # the netlrts backend we use (no real MPI present - that's the whole
+  # point of netlrts) - "configure: error: Unable to compile a simple MPI
+  # program." This has nothing to do with namd, cuda, or the host
+  # compiler; it's an entire subsystem we don't need. `build-target=charm++`
+  # (verified via `spack spec`) builds only charm++ itself, skipping AMPI/
+  # ROMIO entirely and sidestepping the failure rather than debugging a
+  # ROMIO/MPI configure issue for functionality namd never uses.
   specs:
   - cp2k +cuda cuda_arch=80 %gcc
   - lammps +cuda cuda_arch=80 %gcc ^fftw
-  - namd +cuda cuda_arch=80 %gcc
+  - namd +cuda cuda_arch=80 %gcc ^charmpp build-target=charm++

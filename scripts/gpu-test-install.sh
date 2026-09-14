@@ -88,10 +88,14 @@ spack concretize -f
 # picks the external intel-oneapi-mkl for lammps' fftw-api dependency,
 # which doesn't register a pkg-config "fftw3" module, so lammps' CMake
 # configure fails to find it even though MKL is genuinely present.
+# namd's `^charmpp build-target=charm++`: see that file's comment -
+# without it, charmpp's default build-target=LIBS also builds the AMPI/
+# ROMIO sub-library that namd never uses, and ROMIO's own MPI-configure
+# self-test fails outright under the netlrts backend.
 SPECS=(
   "cp2k +cuda cuda_arch=80 %gcc"
   "lammps +cuda cuda_arch=80 %gcc ^fftw"
-  "namd +cuda cuda_arch=80 %gcc"
+  "namd +cuda cuda_arch=80 %gcc ^charmpp build-target=charm++"
 )
 
 FAILED=()
