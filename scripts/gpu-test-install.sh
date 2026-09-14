@@ -84,9 +84,13 @@ JOBS="${SLURM_CPUS_PER_TASK:-16}"
 spack concretize -f
 
 # Keep this list in sync with environments/gpu-test/spack.yaml's specs:.
+# lammps' `^fftw`: see that file's comment - without it, the concretizer
+# picks the external intel-oneapi-mkl for lammps' fftw-api dependency,
+# which doesn't register a pkg-config "fftw3" module, so lammps' CMake
+# configure fails to find it even though MKL is genuinely present.
 SPECS=(
   "cp2k +cuda cuda_arch=80 %gcc"
-  "lammps +cuda cuda_arch=80 %gcc"
+  "lammps +cuda cuda_arch=80 %gcc ^fftw"
   "namd +cuda cuda_arch=80 %gcc"
 )
 

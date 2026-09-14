@@ -124,7 +124,17 @@ spack:
   # hitting nvhpc's compiler bugs. cuda_arch=80 alone is what actually
   # drives GPU code generation (via the external `cuda` package),
   # completely independent of this pin.
+  # lammps' `^fftw`: without it, the concretizer picks the external
+  # intel-oneapi-mkl (already registered as the default fftw-api
+  # provider in ../../config/packages.yaml) to satisfy lammps' fftw-api
+  # dependency instead of building a real fftw. Spack doesn't manage
+  # pkgconfig metadata for external packages, and MKL's FFTW-compatible
+  # layer doesn't register itself under the standard "fftw3" pkg-config
+  # name lammps' CMakeLists.txt looks for anyway - so configure fails
+  # with "Package 'fftw3' ... not found" even though MKL is genuinely
+  # present. Forcing a real, Spack-built `fftw` dependency sidesteps this
+  # entirely (it correctly generates its own fftw3.pc).
   specs:
   - cp2k +cuda cuda_arch=80 %gcc
-  - lammps +cuda cuda_arch=80 %gcc
+  - lammps +cuda cuda_arch=80 %gcc ^fftw
   - namd +cuda cuda_arch=80 %gcc
