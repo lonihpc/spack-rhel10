@@ -65,6 +65,32 @@
 # MUST be defined directly on the Builder class, not the Package class,
 # or they're simply never invoked. Hence this hook lives on CMakeBuilder
 # below, not on Cp2k.
+#
+# SECOND, UNRELATED real bug found once the above got the build past the
+# cmake-configure stage entirely: cp2k@2025.1's
+# src/offload/offload_fft.h has a switch statement converting cufftResult
+# error codes to human-readable strings, including three enum values -
+# CUFFT_INCOMPLETE_PARAMETER_LIST, CUFFT_PARSE_ERROR,
+# CUFFT_LICENSE_ERROR - that NVIDIA has since removed from cufft.h
+# (deprecated, then dropped entirely by CUDA 13.3, confirmed by the real
+# build error: "'CUFFT_INCOMPLETE_PARAMETER_LIST' undeclared" etc., and
+# by fetching cp2k's real v2025.1 source from GitHub to confirm the
+# other ~15 cufftResult cases in the same switch - including
+# CUFFT_INVALID_DEVICE, CUFFT_NO_WORKSPACE, CUFFT_NOT_IMPLEMENTED, which
+# are NOT in the error list - still exist in CUDA 13.3's cufft.h, so
+# only these 3 specific enum values were actually removed upstream).
+# This is purely cosmetic code (converts an error code to its own name
+# as a string for logging): the function has no `default:` case, but
+# ends with an unconditional `return "<unknown>";` right after the
+# switch, so any value that doesn't match a case (including these 3 now
+# that they're gone) safely falls through to that instead of undefined
+# behavior. Commenting the 3 cases out (rather than deleting) mirrors
+# upstream's OWN established precedent for this exact situation - the
+# HIP side of the very same function already has
+# `// case HIPFFT_LICENSE_ERROR:` / `//   return ...;` commented out for
+# the equivalent already-removed HIP enum value, confirmed in the
+# fetched source - so this fix is applying upstream's own fix pattern to
+# the CUDA side, just not yet done there for newer CUDA toolkits.
 import os
 
 from spack_repo.builtin.packages.cp2k.package import Cp2k as BuiltinCp2k
@@ -88,6 +114,28 @@ class CMakeBuilder(BuiltinCMakeBuilder):
                 f"set(CMAKE_CUDA_ARCHITECTURES {cuda_arch})",
                 cmakelists,
             )
+
+    @run_before("cmake")
+    def fix_removed_cufft_error_codes(self):
+        if self.spec.satisfies("+cuda"):
+            offload_fft_h = os.path.join(
+                self.stage.source_path, "src", "offload", "offload_fft.h"
+            )
+            for enum_name in (
+                "CUFFT_INCOMPLETE_PARAMETER_LIST",
+                "CUFFT_PARSE_ERROR",
+                "CUFFT_LICENSE_ERROR",
+            ):
+                filter_file(
+                    rf"^(\s*)case {enum_name}:[ \t]*$",
+                    rf"\1// case {enum_name}:",
+                    offload_fft_h,
+                )
+                filter_file(
+                    rf'^(\s*)return "{enum_name}";[ \t]*$',
+                    rf'\1//   return "{enum_name}";',
+                    offload_fft_h,
+                )
 
     def cmake_args(self):
         args = super().cmake_args()
