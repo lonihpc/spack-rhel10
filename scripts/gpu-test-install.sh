@@ -57,6 +57,14 @@
 set -euo pipefail
 REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)}"
 cd "$REPO_ROOT"
+
+# Auto-push this job's log to the `cluster-results` branch on exit - see
+# scripts/lib/push-results.sh for the full design and
+# scripts/push-latest-results.sh for the manual SIGKILL fallback.
+LOG_FILE="$REPO_ROOT/gpu-test-install-${SLURM_JOB_ID:-manual}.log"
+source "$REPO_ROOT/scripts/lib/push-results.sh"
+trap push_results EXIT
+
 unset SPACK_PYTHON
 export SPACK_PYTHON=/usr/bin/python3
 # Deliberately NOT setting PKG_CONFIG_LIBDIR/PKG_CONFIG_PATH here (unlike
