@@ -53,6 +53,18 @@
 # "CMakeBuilder") - so defining both Cp2k and CMakeBuilder here, in the
 # same module, is what makes this override's CMakeBuilder take effect
 # instead of builtin's.
+#
+# IMPORTANT, learned the hard way (@run_before("cmake") on Cp2k silently
+# never fired on a real build - confirmed by the probe still using
+# compute_60 despite this hook supposedly patching it away first):
+# Spack's phase_callbacks.py only auto-merges @run_before/@run_after
+# hooks between a *Package and its *Builder for OLD-STYLE packages (the
+# "Adapter" case, e.g. this repo's python/spades/charmpp overrides, which
+# have no separate Builder class of their own). cp2k already has an
+# explicit, separate CMakeBuilder - for packages like this, phase hooks
+# MUST be defined directly on the Builder class, not the Package class,
+# or they're simply never invoked. Hence this hook lives on CMakeBuilder
+# below, not on Cp2k.
 import os
 
 from spack_repo.builtin.packages.cp2k.package import Cp2k as BuiltinCp2k
@@ -62,6 +74,10 @@ from spack.package import *
 
 
 class Cp2k(BuiltinCp2k):
+    pass
+
+
+class CMakeBuilder(BuiltinCMakeBuilder):
     @run_before("cmake")
     def fix_cuda_arch_probe_placeholder(self):
         if self.spec.satisfies("+cuda"):
@@ -73,8 +89,6 @@ class Cp2k(BuiltinCp2k):
                 cmakelists,
             )
 
-
-class CMakeBuilder(BuiltinCMakeBuilder):
     def cmake_args(self):
         args = super().cmake_args()
         if self.spec.satisfies("+cuda"):
