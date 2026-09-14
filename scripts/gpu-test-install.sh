@@ -97,17 +97,17 @@ spack concretize -f
 # layer even with -DCP2K_USE_FFTW3_WITH_MKL=ON, so force a real,
 # Spack-built fftw for cp2k's fftw-api dependency (BLAS/LAPACK/ScaLAPACK
 # stay on MKL, unaffected).
-# namd's `@3.0.3`: see that file's comment - namd@2.14's CUDA kernels
-# use the legacy CUDA texture-reference API, which CUDA 13.3 removed
-# outright. namd@3.0.3's GPU backend was rewritten to use texture
-# objects instead, so we build that version rather than patching
-# 2.14's kernels by hand. Needs its own separate manually-downloaded
-# NAMD_3.0.3_Source.tar.gz in the source cache (same procedure as the
-# 2.14 tarball already there, different sha256/filename).
+#
+# namd PAUSED (2026-09-14, job 68) - see environments/gpu-test/
+# spack.yaml's comment for the full 5-round fix chain and why the user
+# decided to stop before hand-patching namd@3.0.3's own numerically-
+# active kernel code (cub::LaneMaskLt/Min/Max, removed in CUDA 13.3's
+# CCCL) sight-unseen with no way to verify correctness on a real GPU.
+# cp2k and lammps both build successfully; namd removed from this list
+# until revisited.
 SPECS=(
   "cp2k +cuda cuda_arch=80 %gcc ^fftw"
   "lammps +cuda cuda_arch=80 %gcc ^fftw"
-  "namd@3.0.3 +cuda cuda_arch=80 %gcc ^charmpp build-target=charm++"
 )
 
 FAILED=()

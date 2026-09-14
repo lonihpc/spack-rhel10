@@ -176,7 +176,26 @@ spack:
   # (verified via `spack spec`) builds only charm++ itself, skipping AMPI/
   # ROMIO entirely and sidestepping the failure rather than debugging a
   # ROMIO/MPI configure issue for functionality namd never uses.
+  #
+  # namd PAUSED (2026-09-14, job 68), NOT in specs: below - after
+  # 5 rounds of real, escalating CUDA-13.3-vs-namd incompatibilities
+  # (texture-reference removal -> switched to namd@3.0.3; cudaDeviceProp
+  # .computeMode removal; CUB/Thrust/libcu++ merged into CCCL with a
+  # renamed dialect-check macro; CCCL itself now genuinely requiring
+  # C++17, not just claiming to; and finally namd@3.0.3's own kernel
+  # code - ComputeBondedCUDAKernel.cu, CudaTileListKernel.cu - directly
+  # calling cub::LaneMaskLt/cub::Min/cub::Max, which CUDA 13.3's CCCL
+  # has removed outright), the user decided to stop here rather than
+  # continue: unlike every fix above (Makefile flags, cosmetic string
+  # tables, dead diagnostic checks), this next round would mean hand-
+  # patching real, numerically-active kernel code (warp-level thread
+  # cooperation, min/max comparisons) sight-unseen (namd's source is
+  # license-gated - no way to inspect ahead of time) with no way to
+  # actually run it on a GPU to verify correctness. cp2k and lammps
+  # both build and install successfully +cuda on this cluster (see
+  # commit history for the full fix chain) - namd needs either a
+  # version namd upstream has itself validated against CUDA 13.x, or
+  # building against an older CUDA toolkit, before revisiting.
   specs:
   - cp2k +cuda cuda_arch=80 %gcc ^fftw
   - lammps +cuda cuda_arch=80 %gcc ^fftw
-  - namd@3.0.3 +cuda cuda_arch=80 %gcc ^charmpp build-target=charm++
