@@ -1,0 +1,1067 @@
+==> Starting concretization pool with 3 processes
+==> Concretized 3 specs:
+ -   ilvb2dx  cp2k@2025.1~cosma+cuda~cuda_arch_35_k20x~cuda_fft~deepmd~dftd4~dlaf~elpa~enable_regtests~ipo+libint~libvori+libxc+mpi~mpi_f08+openmp~pexsi~plumed~pytorch~quip~rocm~sirius~spglib~spla build_system=cmake build_type=Release cuda_arch:=80 generator=ninja lmax=5 smm=libxsmm platform=linux os=almalinux10 target=icelake %c,cxx,fortran=gcc@14
+[+]  okjgb27      ^cmake@3.31.8~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  e3yrr5n          ^curl@8.11.1~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs:=shared,static tls:=openssl platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  6q2szbj              ^nghttp2@1.65.0 build_system=autotools platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[e]  4etaskp          ^intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64
+[+]  vmccqrv          ^intel-oneapi-runtime@2026.1.0 build_system=generic platform=linux os=almalinux10 target=icelake
+[+]  yzi6sdy          ^ncurses@6.5~symlinks+termlib abi=none build_system=autotools patches:=7a351bc platform=linux os=almalinux10 target=icelake %c,cxx=nvhpc@26.5
+[+]  fh7o6zp          ^zlib-ng@2.2.4+compat+new_strategies+opt+pic+shared build_system=autotools platform=linux os=almalinux10 target=icelake %c,cxx=nvhpc@26.5
+[+]  qylsjfu      ^compiler-wrapper@1.0 build_system=generic platform=linux os=almalinux10 target=icelake
+[e]  cdlcx5c      ^cuda@13.3.0~allow-unsupported-compilers~dev build_system=generic platform=linux os=almalinux10 target=x86_64
+[+]  aztt2mr      ^dbcsr@2.8.0+cuda~cuda_arch_35_k20x~examples~g2g~ipo+mpi~mpi_f08~opencl+openmp~rocm+shared~tests build_system=cmake build_type=Release cuda_arch:=80 generator=ninja smm=libxsmm platform=linux os=almalinux10 target=icelake %c,cxx,fortran=gcc@14
+[+]  tnapvke      ^fftw@3.3.10+mpi+openmp~pfft_patches+shared build_system=autotools patches:=872cff9 precision:=double,float platform=linux os=almalinux10 target=icelake %c,fortran=gcc@14
+[e]  hm7ozvb      ^gcc@14~binutils+bootstrap~graphite~mold~nvptx~piclibs~profiled~strip build_system=autotools build_type=RelWithDebInfo languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64
+[+]  udjtres      ^gcc-runtime@14 build_system=generic platform=linux os=almalinux10 target=icelake
+[e]  ufp3xj3      ^glibc@2.39 build_system=autotools platform=linux os=almalinux10 target=x86_64
+[e]  iwz35ql      ^intel-oneapi-mkl@2026.1.0~cluster+envmods~gfortran~ilp64+shared build_system=generic mpi_family=none threads=none platform=linux os=almalinux10 target=x86_64
+[e]  a7ddspo      ^intel-oneapi-mpi@2021.18.0~classic-names+envmods~external-libfabric~generic-names~ilp64 build_system=generic platform=linux os=almalinux10 target=x86_64
+[+]  mnqgkbj      ^libint@2.9.0~debug~fma+fortran build_system=autotools tune=cp2k-lmax-5 platform=linux os=almalinux10 target=icelake %c,cxx,fortran=gcc@14
+[+]  7zdmxrw          ^autoconf@2.72 build_system=autotools platform=linux os=almalinux10 target=icelake
+[+]  g5vmqvp              ^m4@1.4.20+sigsegv build_system=autotools platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  sqknax7                  ^libsigsegv@2.14 build_system=autotools platform=linux os=almalinux10 target=icelake %c=nvhpc@26.5
+[+]  jlgzwgd          ^automake@1.16.5 build_system=autotools platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  3i5iyjb          ^boost@1.88.0+atomic~charconv+chrono~clanglibcpp~cobalt~container~context~contract~coroutine+date_time~debug+exception~fiber+filesystem+graph~graph_parallel+icu+iostreams~json+locale+log+math~mpi~mqtt5+multithreaded~nowide~numpy~pic+program_options~python+random+regex+serialization+shared~signals2~singlethreaded~stacktrace+system~taggedlayout+test+thread+timer~type_erasure~url~versionedlayout+wave build_system=generic cxxstd=11 patches:=8e3faa2,a440f96 visibility=hidden platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  jdyw7xn              ^icu4c@74.2 build_system=autotools cxxstd=11 platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  7wgjhrw              ^zstd@1.5.7~programs build_system=makefile libs:=shared,static platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  2oripjt          ^eigen@3.4.0~ipo~nightly~rocm build_system=cmake build_type=RelWithDebInfo generator=make platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  ijhihcw          ^gmp@6.3.0+cxx build_system=autotools libs:=shared,static platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  su7owxg          ^libtool@2.4.7 build_system=autotools platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  acgtlmj              ^findutils@4.10.0 build_system=autotools patches:=440b954 platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  tslu24q      ^libxc@7.0.0~cuda+fortran~ipo~kxc~lxc+shared build_system=cmake build_type=Release generator=ninja platform=linux os=almalinux10 target=icelake %c,fortran=gcc@14
+[+]  busnbzp          ^perl@5.40.0+cpanm+opcode+open+shared+threads build_system=generic platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  ijf24to              ^berkeley-db@18.1.40+cxx~docs+stl build_system=autotools patches:=26090f4,b231fcc platform=linux os=almalinux10 target=icelake %c,cxx=nvhpc@26.5
+[+]  xuhy2lr      ^libxsmm@1.17~debug~generator~header-only~large_jit_buffer~shared blas=default build_system=makefile platform=linux os=almalinux10 target=icelake %c,cxx,fortran=gcc@14
+[+]  lu3pupo          ^binutils@2.44~debuginfod+gas~gold~gprofng~headers~interwork+ld~libiberty~lto~nls~pgo+plugins build_system=autotools compress_debug_sections=zlib libs:=shared,static platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  6m76lfz              ^diffutils@3.10 build_system=autotools platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  j5lgwb3      ^netlib-scalapack@2.2.2~ipo~pic+shared build_system=cmake build_type=Release generator=make platform=linux os=almalinux10 target=icelake %c,fortran=gcc@14
+[+]  ljexdij      ^ninja@1.12.1+re2c build_system=generic patches:=93f4bb3 platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  niuqqbv          ^re2c@3.1 build_system=autotools platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  ucb3fyu      ^pkgconf@2.3.0 build_system=autotools platform=linux os=almalinux10 target=icelake %c=nvhpc@26.5
+[e]  eebo5n6          ^nvhpc@26.5+blas+lapack~mpi build_system=generic default_cuda=default install_type=single languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64
+[+]  njly4cy      ^py-fypp@3.1 build_system=python_pip platform=linux os=almalinux10 target=icelake
+[+]  nbxudti          ^py-pip@25.1.1 build_system=generic platform=linux os=almalinux10 target=icelake
+[+]  7ktqiof          ^py-setuptools@80.9.0 build_system=generic platform=linux os=almalinux10 target=icelake
+[+]  p4batky          ^py-wheel@0.45.1 build_system=generic platform=linux os=almalinux10 target=icelake
+[+]  ra66j4f          ^python-venv@1.0 build_system=generic platform=linux os=almalinux10 target=icelake
+[+]  mz2ql44      ^py-numpy@2.3.1 build_system=python_pip patches:=873745d platform=linux os=almalinux10 target=icelake %c,cxx=gcc@14
+[+]  iqwv45h          ^py-cython@3.0.12 build_system=python_pip platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  6ueku6a          ^py-meson-python@0.16.0 build_system=python_pip platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  257ywsr              ^meson@1.7.0 build_system=python_pip patches:=0f0b1bd platform=linux os=almalinux10 target=icelake
+[+]  5otxw73              ^py-packaging@25.0 build_system=python_pip platform=linux os=almalinux10 target=icelake
+[+]  crs6jju                  ^py-flit-core@3.12.0 build_system=python_pip platform=linux os=almalinux10 target=icelake
+[+]  j4qzowz              ^py-pyproject-metadata@0.9.1 build_system=python_pip platform=linux os=almalinux10 target=icelake
+[+]  ilonq7c      ^python@3.13.5+bz2+ctypes+dbm~debug+libxml2+lzma~optimizations+pic+pyexpat+pythoncmd+readline+shared+sqlite3+ssl~tkinter+uuid+zlib build_system=generic platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  c6krap7          ^bzip2@1.0.8~debug~pic+shared build_system=generic platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  j3ih4oa          ^expat@2.7.1+libbsd build_system=autotools platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  bbpk42q              ^libbsd@0.12.2 build_system=autotools platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  yiokm7w                  ^libmd@1.1.0 build_system=autotools platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  ttrc6xn          ^gdbm@1.23 build_system=autotools platform=linux os=almalinux10 target=icelake %c=nvhpc@26.5
+[+]  6qhp5dx          ^gettext@0.23.1+bzip2+curses+git~libunistring+libxml2+pic+shared~tar+xz build_system=autotools platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  p6pegcl              ^libiconv@1.18 build_system=autotools libs:=shared,static platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  gz5m4tr              ^libxml2@2.13.5~http+pic~python+shared build_system=autotools platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  cm2ipgf          ^libffi@3.4.8 build_system=autotools platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  qtfxh2c          ^openssl@3.4.1~docs+shared build_system=generic certs=mozilla platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  m5gffrb              ^ca-certificates-mozilla@2025-05-20 build_system=generic platform=linux os=almalinux10 target=icelake
+[+]  ejz2b4x          ^readline@8.2 build_system=autotools patches:=1ea4349,24f587b,3d9885e,5911a5b,622ba38,6c8adf8,758e2ec,79572ee,a177edc,bbf97f1,c7b45ff,e0013d9,e065038 platform=linux os=almalinux10 target=icelake %c=nvhpc@26.5
+[+]  d4yaol6          ^sqlite@3.46.0+column_metadata+dynamic_extensions+fts~functions+rtree build_system=autotools platform=linux os=almalinux10 target=icelake %c=nvhpc@26.5
+[+]  7zhqgtx          ^util-linux-uuid@2.41 build_system=autotools platform=linux os=almalinux10 target=icelake %c=nvhpc@26.5
+[+]  qefwn7m          ^xz@5.6.3~pic build_system=autotools libs:=shared,static patches:=3222863 platform=linux os=almalinux10 target=icelake %c=nvhpc@26.5
+[+]  nhf5cbc  lammps@20240829.3~adios~amoeba~asphere~atc~awpmd~bocs~body~bpm~brownian~cg-dna~cg-spica~class2~colloid~colvars~compress~coreshell+cuda~cuda_mps~curl~dielectric~diffraction~dipole~dpd-basic~dpd-meso~dpd-react~dpd-smooth~drude~eff~electrode~extra-command~extra-compute~extra-dump~extra-fix~extra-molecule~extra-pair~fep~ffmpeg~granular~h5md~heffte~intel~interlayer~ipo~jpeg~kim~kokkos+kspace~latboltz~lepton+lib~machdyn~manifold+manybody~mc~mdi~meam~mesont~mgpt~misc~ml-hdnnp~ml-iap~ml-pace~ml-pod~ml-rann~ml-snap~ml-uf3~mofff+molecule~molfile+mpi~netcdf~opencl+openmp~openmp-package~opt~orient~peri~phonon~plugin~plumed~png~poems~ptm~python~qeq~qtb~reaction~reaxff~replica~rheo+rigid~rocm~scafacos~shock~smtbq~sph~spin~srd~tally~tools~uef~voronoi~vtk~yaff build_system=cmake build_type=Release cuda_arch:=80 fft=fftw3 fftw_precision=double generator=make gpu_precision=mixed lammps_sizes=smallbig platform=linux os=almalinux10 target=icelake %c,cxx=gcc@14
+[+]  lauilgx      ^cmake@3.31.8~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  xarhthm          ^curl@8.11.1~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs:=shared,static tls:=openssl platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  6xiludk              ^nghttp2@1.65.0 build_system=autotools platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  lqv4aqp                  ^diffutils@3.10 build_system=autotools platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  ytaxwge                      ^libiconv@1.18 build_system=autotools libs:=shared,static platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  t43m74q              ^openssl@3.4.1~docs+shared build_system=generic certs=mozilla platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  lg4ltmi                  ^perl@5.40.0+cpanm+opcode+open+shared+threads build_system=generic platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  safaags                      ^berkeley-db@18.1.40+cxx~docs+stl build_system=autotools patches:=26090f4,b231fcc platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  rdqzzbg                      ^bzip2@1.0.8~debug~pic+shared build_system=generic platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  uwiwhvu                      ^gdbm@1.23 build_system=autotools platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  qlzbmd5                          ^readline@8.2 build_system=autotools patches:=1ea4349,24f587b,3d9885e,5911a5b,622ba38,6c8adf8,758e2ec,79572ee,a177edc,bbf97f1,c7b45ff,e0013d9,e065038 platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  bqysmfd              ^pkgconf@2.3.0 build_system=autotools platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  hgagzak          ^ncurses@6.5~symlinks+termlib abi=none build_system=autotools patches:=7a351bc platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  3lxknbb          ^zlib-ng@2.2.4+compat+new_strategies+opt+pic+shared build_system=autotools platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  47pxw2h      ^fftw@3.3.10+mpi~openmp~pfft_patches+shared build_system=autotools patches:=872cff9 precision:=double,float platform=linux os=almalinux10 target=icelake %c,fortran=nvhpc@26.5
+[+]  an52kh6      ^gmake@4.4.1~guile build_system=generic platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+ -   ex3xjwe  namd@2.14+cuda~memopt~rocm~single_node_gpu build_system=makefile cuda_arch:=80 fftw=3 interface=tcl patches:=cdcbc38 platform=linux os=almalinux10 target=icelake %c,cxx=gcc@14
+[+]  bu42nwp      ^charmpp@6.10.2~cuda+fortran~omp~papi+production~pthreads+shared+smp~syncft~tcp~tracing backend=netlrts build-target='charm++' build_system=generic pmi=none platform=linux os=almalinux10 target=icelake %c,cxx,fortran=gcc@14
+[+]  6issxzh      ^gmake@4.4.1~guile build_system=generic platform=linux os=almalinux10 target=icelake %c=nvhpc@26.5
+[+]  qbo24qa      ^tcl@8.6.12 build_system=autotools platform=linux os=almalinux10 target=icelake %c,cxx=nvhpc@26.5
+
+=== spack install -j 16 cp2k +cuda cuda_arch=80 %gcc ^fftw ===
+[ ] ilvb2dx cp2k@2025.1 staging (4s)
+[ ] ilvb2dx cp2k@2025.1 cmake (13s)
+[ ] ilvb2dx cp2k@2025.1 build (27s)
+[ ] ilvb2dx cp2k@2025.1 install (5m53s)
+[+] ilvb2dx cp2k@2025.1 /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/cp2k-2025.1-ilvb2dxupnh2p4hcbsveutpt6w5zevos (6m04s)
+=== spack install -j 16 lammps +cuda cuda_arch=80 %gcc ^fftw ===
+=== spack install -j 16 namd +cuda cuda_arch=80 %gcc ^charmpp build-target=charm++ ===
+[ ] ex3xjwe namd@2.14 staging (1s)
+[ ] ex3xjwe namd@2.14 edit (2s)
+[ ] ex3xjwe namd@2.14 build (2s)
+[x] ex3xjwe namd@2.14 failed: /tmp/fchen14/spack-stage/spack-stage-namd-2.14-ex3xjwevyxpazq66m3ypo7yc53eikpwt-pnwoyfqd.log (37s)
+-- lines 1 to 7 --
+> ==> Warning: /home/fchen14/.spack/package_repos/fncqgg4/repos/spack_repo/builtin/packages/tcl/package.py:164: spack.package.is_system_path is deprecated
+  ==> Using cached archive: /project/fchen14/spack-rhel10-gpu-test/spack-install/cache/sources/_source-cache/archive/34/34044d85d9b4ae61650ccdba5cda4794088c3a9075932392dd0752ef8c049235.tar.gz
+  ==> Applied patch /home/fchen14/.spack/package_repos/fncqgg4/repos/spack_repo/builtin/packages/namd/inherited-member-2.14.patch
+  ==> namd: Executing phase: 'edit'
+  ==> [2026-09-14-13:00:52.921126] Copying arch/Linux-x86_64.base to arch/linux-x86_64.base
+  ==> [2026-09-14-13:00:52.921398] Copying arch/Linux-x86_64.fftw3 to arch/linux-x86_64.fftw3
+  ==> [2026-09-14-13:00:52.921593] Copying arch/Linux-x86_64.tcl to arch/linux-x86_64.tcl
+-- lines 19 to 33 --
+  CC = /usr/bin/gcc
+  COPTS =  -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client
+  EXTRALINKLIBS =
+  Creating directory: linux-x86_64-spack
+  Creating link: .. to .rootdir
+  Writing build options to linux-x86_64-spack/Make.config
+> Warning: No such directory /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/netlrts-linux-x86_64-smp
+  CUDA detected: version 13.3
+> Warning: No CUDA build found for version 13.3
+  Linking Makefile
+  Linking Make.depends
+  Linking src directory
+  Linking plugins directory
+  Linking psfgen directory
+  Linking colvars directory
+-- lines 84 to 128 --
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/ComputeFmmSerialMgr.ci > inc/ComputeFmmSerialMgr.ci
+  /usr/bin/gcc -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/msm.o -c src/msm.c
+  /usr/bin/gcc -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/msm_longrng.o -c src/msm_longrng.c
+  /usr/bin/gcc -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/msm_longrng_sprec.o -c src/msm_longrng_sprec.c
+  /usr/bin/gcc -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/msm_setup.o -c src/msm_setup.c
+  src/flipdcd.c: In function 'main':
+> src/flipdcd.c:48:9: error: implicit declaration of function 'strncmp' [-Wimplicit-function-declaration]
+     48 |    if ((strncmp(argv[argcount],"-S",2) == 0) || (strncmp(argv[argcount],"-s",2) == 0)){
+        |         ^~~~~~~
+> src/flipdcd.c:19:1: note: include '<string.h>' or provide a declaration of 'strncmp'
+     18 | #include <stdlib.h>
+    +++ |+#include <string.h>
+     19 |
+> src/flipdcd.c:48:37: warning: 'strncmp' argument 3 type is 'int' where 'long unsigned int' is expected in a call to built-in function declared without prototype [-Wbuiltin-declaration-mismatch]
+     48 |    if ((strncmp(argv[argcount],"-S",2) == 0) || (strncmp(argv[argcount],"-s",2) == 0)){
+        |                                     ^
+  <built-in>: note: built-in 'strncmp' declared here
+> src/flipdcd.c:48:78: warning: 'strncmp' argument 3 type is 'int' where 'long unsigned int' is expected in a call to built-in function declared without prototype [-Wbuiltin-declaration-mismatch]
+     48 |    if ((strncmp(argv[argcount],"-S",2) == 0) || (strncmp(argv[argcount],"-s",2) == 0)){
+        |                                                                              ^
+  <built-in>: note: built-in 'strncmp' declared here
+  /usr/bin/gcc -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/msm_shortrng.o -c src/msm_shortrng.c
+> src/flipdcd.c:51:42: warning: 'strncmp' argument 3 type is 'int' where 'long unsigned int' is expected in a call to built-in function declared without prototype [-Wbuiltin-declaration-mismatch]
+     51 |    else if ((strncmp(argv[argcount],"-B",2) == 0) || (strncmp(argv[argcount],"-b",2) == 0)){
+        |                                          ^
+  <built-in>: note: built-in 'strncmp' declared here
+> src/flipdcd.c:51:83: warning: 'strncmp' argument 3 type is 'int' where 'long unsigned int' is expected in a call to built-in function declared without prototype [-Wbuiltin-declaration-mismatch]
+     51 |    else if ((strncmp(argv[argcount],"-B",2) == 0) || (strncmp(argv[argcount],"-b",2) == 0)){
+        |                                                                                   ^
+  <built-in>: note: built-in 'strncmp' declared here
+> src/flipdcd.c:54:42: warning: 'strncmp' argument 3 type is 'int' where 'long unsigned int' is expected in a call to built-in function declared without prototype [-Wbuiltin-declaration-mismatch]
+     54 |    else if ((strncmp(argv[argcount],"-L",2) == 0) || (strncmp(argv[argcount],"-l",2) == 0)){
+        |                                          ^
+  <built-in>: note: built-in 'strncmp' declared here
+> src/flipdcd.c:54:83: warning: 'strncmp' argument 3 type is 'int' where 'long unsigned int' is expected in a call to built-in function declared without prototype [-Wbuiltin-declaration-mismatch]
+     54 |    else if ((strncmp(argv[argcount],"-L",2) == 0) || (strncmp(argv[argcount],"-l",2) == 0)){
+        |                                                                                   ^
+  <built-in>: note: built-in 'strncmp' declared here
+> src/flipdcd.c:57:40: warning: 'strncmp' argument 3 type is 'int' where 'long unsigned int' is expected in a call to built-in function declared without prototype [-Wbuiltin-declaration-mismatch]
+     57 |    else if (strncmp(argv[argcount],"-",1) == 0){
+        |                                        ^
+  <built-in>: note: built-in 'strncmp' declared here
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/PatchMgr.ci
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/Node.ci
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/ComputeMoaMgr.ci
+-- lines 129 to 148 --
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/ComputeMgr.ci
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/WorkDistrib.ci
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/ComputeMsmMgr.ci
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/ComputeMsmSerialMgr.ci
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/ComputeFmmSerialMgr.ci
+  /usr/bin/gcc -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/msm_shortrng_sprec.o -c src/msm_shortrng_sprec.c
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+-- lines 153 to 171 --
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+-- lines 174 to 232 --
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> dirname: /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  /usr/bin/gcc -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/wkfutils.o -c src/wkfutils.c
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/common.o -c src/common.C
+-- lines 264 to 309 --
+  mv ComputeMgr.decl.h inc
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/ReductionMgr.ci > inc/ReductionMgr.ci
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/ProxyMgr.ci > inc/ProxyMgr.ci
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/main.ci
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/ReductionMgr.ci
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/ProxyMgr.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  rm -f inc/main.ci
+  mv main.def.h inc
+  mv main.decl.h inc
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/LdbCoordinator.ci > inc/LdbCoordinator.ci
+-- lines 310 to 614 --
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/LdbCoordinator.ci
+  rm -f inc/ReductionMgr.ci
+  mv ReductionMgr.def.h inc
+  mv ReductionMgr.decl.h inc
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/NamdCentLB.ci > inc/NamdCentLB.ci
+  rm -f inc/ProxyMgr.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  mv ProxyMgr.def.h inc
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  mv ProxyMgr.decl.h inc
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/NamdHybridLB.ci > inc/NamdHybridLB.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/NamdCentLB.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/NamdHybridLB.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/NamdDummyLB.ci > inc/NamdDummyLB.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  rm -f inc/LdbCoordinator.ci
+  mv LdbCoordinator.def.h inc
+  mv LdbCoordinator.decl.h inc
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/ComputePmeMgr.ci > inc/ComputePmeMgr.ci
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/NamdDummyLB.ci
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/ComputePmeMgr.ci
+  rm -f inc/NamdCentLB.ci
+  mv NamdCentLB.def.h inc
+  mv NamdCentLB.decl.h inc
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/ComputePmeCUDAMgr.ci > inc/ComputePmeCUDAMgr.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  rm -f inc/NamdHybridLB.ci
+  mv NamdHybridLB.def.h inc
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/ComputePmeCUDAMgr.ci
+  mv NamdHybridLB.decl.h inc
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/CudaPmeSolver.ci > inc/CudaPmeSolver.ci
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/CudaPmeSolver.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  rm -f inc/NamdDummyLB.ci
+  mv NamdDummyLB.def.h inc
+  mv NamdDummyLB.decl.h inc
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/PmeSolver.ci > inc/PmeSolver.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/PmeSolver.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/ComputeCUDAMgr.ci > inc/ComputeCUDAMgr.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/ComputeCUDAMgr.ci
+  rm -f inc/ComputePmeCUDAMgr.ci
+  mv ComputePmeCUDAMgr.def.h inc
+  mv ComputePmeCUDAMgr.decl.h inc
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/ComputeExtMgr.ci > inc/ComputeExtMgr.ci
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/ComputeExtMgr.ci
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/ComputeQMMgr.ci > inc/ComputeQMMgr.ci
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/ComputeGBISserMgr.ci > inc/ComputeGBISserMgr.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/ComputeQMMgr.ci
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/ComputeGBISserMgr.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  rm -f inc/ComputePmeMgr.ci
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  mv ComputePmeMgr.def.h inc
+  mv ComputePmeMgr.decl.h inc
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/CollectionMgr.ci > inc/CollectionMgr.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  rm -f inc/CudaPmeSolver.ci
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  mv CudaPmeSolver.def.h inc
+  mv CudaPmeSolver.decl.h inc
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/CollectionMaster.ci > inc/CollectionMaster.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/CollectionMgr.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  rm -f inc/PmeSolver.ci
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  rm -f inc/ComputeCUDAMgr.ci
+  mv PmeSolver.def.h inc
+  mv ComputeCUDAMgr.def.h inc
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  mv PmeSolver.decl.h inc
+  mv ComputeCUDAMgr.decl.h inc
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/BroadcastMgr.ci > inc/BroadcastMgr.ci
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/Sync.ci > inc/Sync.ci
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/CollectionMaster.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/BroadcastMgr.ci
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/Sync.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  rm -f inc/ComputeExtMgr.ci
+  mv ComputeExtMgr.def.h inc
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  mv ComputeExtMgr.decl.h inc
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/ParallelIOMgr.ci > inc/ParallelIOMgr.ci
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/DataExchanger.ci > inc/DataExchanger.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> dirname: /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/ParallelIOMgr.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/DataExchanger.ci
+  rm -f inc/ComputeQMMgr.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  mv ComputeQMMgr.def.h inc
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  rm -f inc/ComputeGBISserMgr.ci
+  mv ComputeQMMgr.decl.h inc
+  mv ComputeGBISserMgr.def.h inc
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  mv ComputeGBISserMgr.decl.h inc
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/memusage.o -c src/memusage.C
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/strlib.o -c src/strlib.C
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> dirname: /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/AlgSeven.o -c src/AlgSeven.C
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  rm -f inc/CollectionMgr.ci
+  mv CollectionMgr.def.h inc
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  mv CollectionMgr.decl.h inc
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/AlgRecBisection.o -c src/AlgRecBisection.C
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/AlgNbor.o -c src/AlgNbor.C
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  rm -f inc/CollectionMaster.ci
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  mv CollectionMaster.def.h inc
+  mv CollectionMaster.decl.h inc
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/AtomMap.o -c src/AtomMap.C
+-- lines 619 to 635 --
+  rm -f inc/BroadcastMgr.ci
+  mv BroadcastMgr.def.h inc
+  mv BroadcastMgr.decl.h inc
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/Compute.o -c src/Compute.C
+  rm -f inc/ParallelIOMgr.ci
+  src/memusage.C: In function 'long unsigned int memusage_mallinfo()':
+> src/memusage.C:69:32: warning: 'mallinfo mallinfo()' is deprecated [-Wdeprecated-declarations]
+     69 |   struct mallinfo mi = mallinfo();
+        |                        ~~~~~~~~^~
+  In file included from src/memusage.C:66:
+> /usr/include/malloc.h:114:24: note: declared here
+    114 | extern struct mallinfo mallinfo (void) __THROW __MALLOC_DEPRECATED;
+        |                        ^~~~~~~~
+  mv ParallelIOMgr.def.h inc
+  mv ParallelIOMgr.decl.h inc
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/ComputeAngles.o -c src/ComputeAngles.C
+  rm -f inc/DataExchanger.ci
+-- lines 697 to 727 --
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/CudaUtils.o -c src/CudaUtils.C
+  In file included from src/CudaNonbondedTables.C:5:
+  src/CudaNonbondedTables.C: In instantiation of 'void bindTextureObject(int, int, T*, cudaArray*&, cudaTextureObject_t&) [with T = float; cudaArray_t = cudaArray*; cudaTextureObject_t = long long unsigned int]':
+  src/CudaNonbondedTables.C:232:29:   required from here
+    232 |     bindTextureObject<float>(tableSize, 4, (float *)t, forceArray, forceTableTex);
+        |     ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> src/CudaNonbondedTables.C:186:30: warning: 'cudaError_t cudaMemcpyToArray(cudaArray_t, size_t, size_t, const void*, size_t, cudaMemcpyKind)' is deprecated [-Wdeprecated-declarations]
+    186 |   cudaCheck(cudaMemcpyToArray(array, 0, 0, h_table, tableSize*sizeof(T)*tableWidth, cudaMemcpyHostToDevice));
+        |             ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> src/CudaUtils.h:80:27: note: in definition of macro 'cudaCheck'
+     80 |         cudaError_t err = stmt;                            \
+        |                           ^~~~
+  In file included from /usr/local/packages/cuda/13.3/include/channel_descriptor.h:61,
+                   from /usr/local/packages/cuda/13.3/include/cuda_runtime.h:94,
+                   from src/CudaUtils.h:7:
+> /usr/local/packages/cuda/13.3/include/cuda_runtime_api.h:7732:57: note: declared here
+   7732 | extern __CUDA_DEPRECATED __host__ cudaError_t CUDARTAPI cudaMemcpyToArray(cudaArray_t dst, size_t wOffset, size_t hOffset, const void *src, size_t count, enum cudaMemcpyKind kind);
+        |                                                         ^~~~~~~~~~~~~~~~~
+> src/CudaNonbondedTables.C:186:30: warning: 'cudaError_t cudaMemcpyToArray(cudaArray_t, size_t, size_t, const void*, size_t, cudaMemcpyKind)' is deprecated [-Wdeprecated-declarations]
+    186 |   cudaCheck(cudaMemcpyToArray(array, 0, 0, h_table, tableSize*sizeof(T)*tableWidth, cudaMemcpyHostToDevice));
+        |             ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> src/CudaUtils.h:80:27: note: in definition of macro 'cudaCheck'
+     80 |         cudaError_t err = stmt;                            \
+        |                           ^~~~
+> /usr/local/packages/cuda/13.3/include/cuda_runtime_api.h:7732:57: note: declared here
+   7732 | extern __CUDA_DEPRECATED __host__ cudaError_t CUDARTAPI cudaMemcpyToArray(cudaArray_t dst, size_t wOffset, size_t hOffset, const void *src, size_t count, enum cudaMemcpyKind kind);
+        |                                                         ^~~~~~~~~~~~~~~~~
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/ccsinterface.o -c src/ccsinterface.C
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/DataStream.o -c src/DataStream.C
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/DeviceCUDA.o -c src/DeviceCUDA.C
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/DumpBench.o -c src/DumpBench.C
+-- lines 767 to 788 --
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/NamdHybridLB.o -c src/NamdHybridLB.C
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/NamdDummyLB.o -c src/NamdDummyLB.C
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/NamdState.o -c src/NamdState.C
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/NamdOneTools.o -c src/NamdOneTools.C
+  cpp -E -P -DNAMD_CUDA -DBONDED_CUDA src/ComputeGridForceMgr.ci > inc/ComputeGridForceMgr.ci
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/bin/charmc inc/ComputeGridForceMgr.ci
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz/libexec/spack/gcc/gfortran: line 401: SPACK_FC_LINKER_ARG: ERROR: LINKER ARG WAS NOT SET, MAYBE THE PACKAGE DOES NOT DEPEND ON FC?
+  dirname: missing operand
+  Try 'dirname --help' for more information.
+  rm -f inc/ComputeGridForceMgr.ci
+  mv ComputeGridForceMgr.def.h inc
+  mv ComputeGridForceMgr.decl.h inc
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/Output.o -c src/Output.C
+-- lines 805 to 820 --
+                   from src/MoleculeQM.C:15:
+  In member function 'void ResizeArrayRaw<Elem>::resizeRaw(int) [with Elem = qmSolvData]',
+      inlined from 'void ResizeArrayRaw<Elem>::ins(const Elem&, int) [with Elem = qmSolvData]' at src/ResizeArrayRaw.h:195:18,
+      inlined from 'int ResizeArray<Type>::insert(const Elem&, int) [with Elem = qmSolvData]' at src/ResizeArray.h:110:14,
+      inlined from 'int SortedArray<Type>::insert(const Elem&) [with Elem = qmSolvData]' at src/SortedArray.h:84:38,
+      inlined from 'void Molecule::prepare_qm(const char*, Parameters*, ConfigList*)' at src/MoleculeQM.C:386:41:
+> /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include/converse.h:461:42: warning: 'void* memcpy(void*, const void*, size_t)' specified bound between 18446743953450467328 and 18446744073709551560 exceeds maximum object size 9223372036854775807 [-Wstringop-overflow=]
+    461 | #define CmiMemcpy(dest, src, size) memcpy((dest), (src), (size))
+        |                                    ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+> src/ResizeArrayRaw.h:82:22: note: in expansion of macro 'CmiMemcpy'
+     82 |       if (arraySize) CmiMemcpy((void *)tmpa, (void *)array, sizeof(Elem)*arraySize);
+        |                      ^~~~~~~~~
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/Rebalancer.o -c src/Rebalancer.C
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/RecBisection.o -c src/RecBisection.C
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client    -o obj/ReductionMgr.o -c src/ReductionMgr.C
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/RefineOnly.o -c src/RefineOnly.C
+-- lines 837 to 1099 --
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/PluginIOMgr.o -c src/PluginIOMgr.C
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/DataExchanger.o -c src/DataExchanger.C
+  /usr/bin/g++ -std=c++11 -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-bu42nwp65gkbuck2rckhsytppltahvvm/include -DCMK_OPTIMIZE=1 -Isrc -Iinc    -Iplugins/include -Icolvars/src -DSTATIC_PLUGIN -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/tcl-8.6.12-qbo24qae3urzps7y27xxwvb22zzya2wx/include -DNAMD_TCL  -I/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/fftw-3.3.10-47pxw2hdrnz46ccekhwsishbaasrzil3/include -DNAMD_FFTW -DNAMD_FFTW_3 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include     -DNAMD_VERSION=\"2.14\" -DNAMD_PLATFORM=\"linux-x86_64-netlrts-smp-CUDA\"  -DREMOVE_PROXYRESULTMSG_EXTRACOPY -DNODEAWARE_PROXY_SPANNINGTREE -DUSE_NODEPATCHMGR -DBONDED_CUDA -DUSE_HOMETUPLES    -DUSE_CKLOOP=1 -m64 -O3 -fexpensive-optimizations -ffast-math -lpthread -march=icelake-client -mtune=icelake-client   -o obj/ParallelIOMgr.o -c src/ParallelIOMgr.C
+  /usr/local/packages/cuda/13.3/bin/nvcc -Xcompiler "-m64" -O3 --maxrregcount 48 -gencode arch=compute_80,code=sm_80 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include  -use_fast_math -Xptxas -v -o obj/ComputeBondedCUDAKernel.o -c `echo src/`ComputeBondedCUDAKernel.cu
+  /usr/local/packages/cuda/13.3/bin/nvcc -Xcompiler "-m64" -O3 --maxrregcount 48 -gencode arch=compute_80,code=sm_80 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include  -use_fast_math -Xptxas -v -o obj/ComputeNonbondedCUDAKernel.o -c `echo src/`ComputeNonbondedCUDAKernel.cu
+  /usr/local/packages/cuda/13.3/bin/nvcc -Xcompiler "-m64" -O3 --maxrregcount 48 -gencode arch=compute_80,code=sm_80 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include  -use_fast_math -Xptxas -v -o obj/ComputePmeCUDAKernel.o -c `echo src/`ComputePmeCUDAKernel.cu
+> src/ComputeNonbondedCUDAKernel.cu(12): error: texture is not a template
+    texture<unsigned int, 1, cudaReadModeElementType> tex_exclusions;
+    ^
+  
+> src/ComputeNonbondedCUDAKernel.cu(44): error: identifier "cudaBindTexture" is undefined
+      cudaBindTexture(
+      ^
+  
+> src/ComputeNonbondedCUDAKernel.cu(56): error: texture is not a template
+    texture<float2, 1, cudaReadModeElementType> lj_table;
+    ^
+  
+> src/ComputeNonbondedCUDAKernel.cu(81): error: identifier "cudaBindTexture" is undefined
+        cudaBindTexture((size_t*)0, lj_table, ct,
+        ^
+  
+> src/ComputeNonbondedCUDAKernel.cu(87): error: texture is not a template
+    texture<float4, 1, cudaReadModeElementType> force_table;
+    ^
+  
+> src/ComputeNonbondedCUDAKernel.cu(88): error: texture is not a template
+    texture<float4, 1, cudaReadModeElementType> energy_table;
+    ^
+  
+> src/ComputeNonbondedCUDAKernel.cu(117): error: identifier "cudaBindTextureToArray" is undefined
+        cudaBindTextureToArray(force_table, ct);
+        ^
+  
+> src/ComputeNonbondedCUDAKernelBase.h(461): error: no instance of overloaded function "tex1D" matches the argument list
+              argument types are: (<error-type>, float)
+         float4 fi = tex1D(force_table, rsqrtfr2 = rsqrtf(r2));
+                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(134): note #3327-D: candidate function template "tex1D<T>(cudaTextureObject_t, float)" failed deduction
+    static __attribute__((device)) T tex1D(cudaTextureObject_t texObject, float x)
+                                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(127): note #3322-D: number of parameters of function template "tex1D(T *, cudaTextureObject_t, float)" does not match the call
+    static __attribute__((device)) typename __nv_itex_trait<T>::type tex1D(T *ptr, cudaTextureObject_t obj, float x)
+                                                                     ^
+  
+> src/ComputeNonbondedCUDAKernelBase.h(462): error: no instance of overloaded function "tex1D" matches the argument list
+              argument types are: (<error-type>, float)
+         float4 ei = tex1D(energy_table, rsqrtfr2);;
+                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(134): note #3327-D: candidate function template "tex1D<T>(cudaTextureObject_t, float)" failed deduction
+    static __attribute__((device)) T tex1D(cudaTextureObject_t texObject, float x)
+                                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(127): note #3322-D: number of parameters of function template "tex1D(T *, cudaTextureObject_t, float)" does not match the call
+    static __attribute__((device)) typename __nv_itex_trait<T>::type tex1D(T *ptr, cudaTextureObject_t obj, float x)
+                                                                     ^
+  
+> src/ComputeNonbondedCUDAKernelBase.h(463): error: no instance of overloaded function "tex1Dfetch" matches the argument list
+              argument types are: (<error-type>, int)
+         float2 ljab = tex1Dfetch(lj_table, j_vdw_type + iap.vdw_type);;
+                       ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(119): note #3327-D: candidate function template "tex1Dfetch<T>(cudaTextureObject_t, int)" failed deduction
+    static __attribute__((device)) T tex1Dfetch(cudaTextureObject_t texObject, int x)
+                                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(113): note #3322-D: number of parameters of function template "tex1Dfetch(T *, cudaTextureObject_t, int)" does not match the call
+    static __attribute__((device)) typename __nv_itex_trait<T>::type tex1Dfetch(T *ptr, cudaTextureObject_t obj, int x)
+                                                                     ^
+  
+> src/ComputeNonbondedCUDAKernelBase.h(461): error: no instance of overloaded function "tex1D" matches the argument list
+              argument types are: (<error-type>, float)
+         float4 fi = tex1D(force_table, rsqrtf(r2));
+                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(134): note #3327-D: candidate function template "tex1D<T>(cudaTextureObject_t, float)" failed deduction
+    static __attribute__((device)) T tex1D(cudaTextureObject_t texObject, float x)
+                                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(127): note #3322-D: number of parameters of function template "tex1D(T *, cudaTextureObject_t, float)" does not match the call
+    static __attribute__((device)) typename __nv_itex_trait<T>::type tex1D(T *ptr, cudaTextureObject_t obj, float x)
+                                                                     ^
+  
+> src/ComputeNonbondedCUDAKernelBase.h(463): error: no instance of overloaded function "tex1Dfetch" matches the argument list
+              argument types are: (<error-type>, int)
+         float2 ljab = tex1Dfetch(lj_table, j_vdw_type + iap.vdw_type);;
+                       ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(119): note #3327-D: candidate function template "tex1Dfetch<T>(cudaTextureObject_t, int)" failed deduction
+    static __attribute__((device)) T tex1Dfetch(cudaTextureObject_t texObject, int x)
+                                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(113): note #3322-D: number of parameters of function template "tex1Dfetch(T *, cudaTextureObject_t, int)" does not match the call
+    static __attribute__((device)) typename __nv_itex_trait<T>::type tex1Dfetch(T *ptr, cudaTextureObject_t obj, int x)
+                                                                     ^
+  
+> src/ComputeNonbondedCUDAKernelBase.h(461): error: no instance of overloaded function "tex1D" matches the argument list
+              argument types are: (<error-type>, float)
+         float4 fi = tex1D(force_table, rsqrtfr2 = rsqrtf(r2));
+                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(134): note #3327-D: candidate function template "tex1D<T>(cudaTextureObject_t, float)" failed deduction
+    static __attribute__((device)) T tex1D(cudaTextureObject_t texObject, float x)
+                                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(127): note #3322-D: number of parameters of function template "tex1D(T *, cudaTextureObject_t, float)" does not match the call
+    static __attribute__((device)) typename __nv_itex_trait<T>::type tex1D(T *ptr, cudaTextureObject_t obj, float x)
+                                                                     ^
+  
+> src/ComputeNonbondedCUDAKernelBase.h(462): error: no instance of overloaded function "tex1D" matches the argument list
+              argument types are: (<error-type>, float)
+         float4 ei = tex1D(energy_table, rsqrtfr2);;
+                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(134): note #3327-D: candidate function template "tex1D<T>(cudaTextureObject_t, float)" failed deduction
+    static __attribute__((device)) T tex1D(cudaTextureObject_t texObject, float x)
+                                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(127): note #3322-D: number of parameters of function template "tex1D(T *, cudaTextureObject_t, float)" does not match the call
+    static __attribute__((device)) typename __nv_itex_trait<T>::type tex1D(T *ptr, cudaTextureObject_t obj, float x)
+                                                                     ^
+  
+> src/ComputeNonbondedCUDAKernelBase.h(463): error: no instance of overloaded function "tex1Dfetch" matches the argument list
+              argument types are: (<error-type>, int)
+         float2 ljab = tex1Dfetch(lj_table, j_vdw_type + iap.vdw_type);;
+                       ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(119): note #3327-D: candidate function template "tex1Dfetch<T>(cudaTextureObject_t, int)" failed deduction
+    static __attribute__((device)) T tex1Dfetch(cudaTextureObject_t texObject, int x)
+                                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(113): note #3322-D: number of parameters of function template "tex1Dfetch(T *, cudaTextureObject_t, int)" does not match the call
+    static __attribute__((device)) typename __nv_itex_trait<T>::type tex1Dfetch(T *ptr, cudaTextureObject_t obj, int x)
+                                                                     ^
+  
+> src/ComputeNonbondedCUDAKernelBase.h(461): error: no instance of overloaded function "tex1D" matches the argument list
+              argument types are: (<error-type>, float)
+         float4 fi = tex1D(force_table, rsqrtf(r2));
+                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(134): note #3327-D: candidate function template "tex1D<T>(cudaTextureObject_t, float)" failed deduction
+    static __attribute__((device)) T tex1D(cudaTextureObject_t texObject, float x)
+                                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(127): note #3322-D: number of parameters of function template "tex1D(T *, cudaTextureObject_t, float)" does not match the call
+    static __attribute__((device)) typename __nv_itex_trait<T>::type tex1D(T *ptr, cudaTextureObject_t obj, float x)
+                                                                     ^
+  
+> src/ComputeNonbondedCUDAKernelBase.h(463): error: no instance of overloaded function "tex1Dfetch" matches the argument list
+              argument types are: (<error-type>, int)
+         float2 ljab = tex1Dfetch(lj_table, j_vdw_type + iap.vdw_type);;
+                       ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(119): note #3327-D: candidate function template "tex1Dfetch<T>(cudaTextureObject_t, int)" failed deduction
+    static __attribute__((device)) T tex1Dfetch(cudaTextureObject_t texObject, int x)
+                                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(113): note #3322-D: number of parameters of function template "tex1Dfetch(T *, cudaTextureObject_t, int)" does not match the call
+    static __attribute__((device)) typename __nv_itex_trait<T>::type tex1Dfetch(T *ptr, cudaTextureObject_t obj, int x)
+                                                                     ^
+  
+> src/ComputeNonbondedCUDAKernelBase.h(461): error: no instance of overloaded function "tex1D" matches the argument list
+              argument types are: (<error-type>, float)
+         float4 fi = tex1D(force_table, rsqrtfr2 = rsqrtf(r2));
+                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(134): note #3327-D: candidate function template "tex1D<T>(cudaTextureObject_t, float)" failed deduction
+    static __attribute__((device)) T tex1D(cudaTextureObject_t texObject, float x)
+                                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(127): note #3322-D: number of parameters of function template "tex1D(T *, cudaTextureObject_t, float)" does not match the call
+    static __attribute__((device)) typename __nv_itex_trait<T>::type tex1D(T *ptr, cudaTextureObject_t obj, float x)
+                                                                     ^
+  
+> src/ComputeNonbondedCUDAKernelBase.h(462): error: no instance of overloaded function "tex1D" matches the argument list
+              argument types are: (<error-type>, float)
+         float4 ei = tex1D(energy_table, rsqrtfr2);;
+                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(134): note #3327-D: candidate function template "tex1D<T>(cudaTextureObject_t, float)" failed deduction
+    static __attribute__((device)) T tex1D(cudaTextureObject_t texObject, float x)
+                                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(127): note #3322-D: number of parameters of function template "tex1D(T *, cudaTextureObject_t, float)" does not match the call
+    static __attribute__((device)) typename __nv_itex_trait<T>::type tex1D(T *ptr, cudaTextureObject_t obj, float x)
+                                                                     ^
+  
+> src/ComputeNonbondedCUDAKernelBase.h(464): error: no instance of overloaded function "tex1Dfetch" matches the argument list
+              argument types are: (<error-type>, int)
+         float2 ljab = tex1Dfetch(lj_table, j_vdw_type + iap_vdw_type);;
+                       ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(119): note #3327-D: candidate function template "tex1Dfetch<T>(cudaTextureObject_t, int)" failed deduction
+    static __attribute__((device)) T tex1Dfetch(cudaTextureObject_t texObject, int x)
+                                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(113): note #3322-D: number of parameters of function template "tex1Dfetch(T *, cudaTextureObject_t, int)" does not match the call
+    static __attribute__((device)) typename __nv_itex_trait<T>::type tex1Dfetch(T *ptr, cudaTextureObject_t obj, int x)
+                                                                     ^
+  
+> src/ComputeNonbondedCUDAKernelBase.h(461): error: no instance of overloaded function "tex1D" matches the argument list
+              argument types are: (<error-type>, float)
+         float4 fi = tex1D(force_table, rsqrtf(r2));
+                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(134): note #3327-D: candidate function template "tex1D<T>(cudaTextureObject_t, float)" failed deduction
+    static __attribute__((device)) T tex1D(cudaTextureObject_t texObject, float x)
+                                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(127): note #3322-D: number of parameters of function template "tex1D(T *, cudaTextureObject_t, float)" does not match the call
+    static __attribute__((device)) typename __nv_itex_trait<T>::type tex1D(T *ptr, cudaTextureObject_t obj, float x)
+                                                                     ^
+  
+> src/ComputeNonbondedCUDAKernelBase.h(464): error: no instance of overloaded function "tex1Dfetch" matches the argument list
+              argument types are: (<error-type>, int)
+         float2 ljab = tex1Dfetch(lj_table, j_vdw_type + iap_vdw_type);;
+                       ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(119): note #3327-D: candidate function template "tex1Dfetch<T>(cudaTextureObject_t, int)" failed deduction
+    static __attribute__((device)) T tex1Dfetch(cudaTextureObject_t texObject, int x)
+                                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(113): note #3322-D: number of parameters of function template "tex1Dfetch(T *, cudaTextureObject_t, int)" does not match the call
+    static __attribute__((device)) typename __nv_itex_trait<T>::type tex1Dfetch(T *ptr, cudaTextureObject_t obj, int x)
+                                                                     ^
+  
+> src/ComputeNonbondedCUDAKernelBase.h(461): error: no instance of overloaded function "tex1D" matches the argument list
+              argument types are: (<error-type>, float)
+         float4 fi = tex1D(force_table, rsqrtfr2 = rsqrtf(r2));
+                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(134): note #3327-D: candidate function template "tex1D<T>(cudaTextureObject_t, float)" failed deduction
+    static __attribute__((device)) T tex1D(cudaTextureObject_t texObject, float x)
+                                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(127): note #3322-D: number of parameters of function template "tex1D(T *, cudaTextureObject_t, float)" does not match the call
+    static __attribute__((device)) typename __nv_itex_trait<T>::type tex1D(T *ptr, cudaTextureObject_t obj, float x)
+                                                                     ^
+  
+> src/ComputeNonbondedCUDAKernelBase.h(462): error: no instance of overloaded function "tex1D" matches the argument list
+              argument types are: (<error-type>, float)
+         float4 ei = tex1D(energy_table, rsqrtfr2);;
+                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(134): note #3327-D: candidate function template "tex1D<T>(cudaTextureObject_t, float)" failed deduction
+    static __attribute__((device)) T tex1D(cudaTextureObject_t texObject, float x)
+                                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(127): note #3322-D: number of parameters of function template "tex1D(T *, cudaTextureObject_t, float)" does not match the call
+    static __attribute__((device)) typename __nv_itex_trait<T>::type tex1D(T *ptr, cudaTextureObject_t obj, float x)
+                                                                     ^
+  
+> src/ComputeNonbondedCUDAKernelBase.h(464): error: no instance of overloaded function "tex1Dfetch" matches the argument list
+              argument types are: (<error-type>, int)
+         float2 ljab = tex1Dfetch(lj_table, j_vdw_type + iap_vdw_type);;
+                       ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(119): note #3327-D: candidate function template "tex1Dfetch<T>(cudaTextureObject_t, int)" failed deduction
+    static __attribute__((device)) T tex1Dfetch(cudaTextureObject_t texObject, int x)
+                                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(113): note #3322-D: number of parameters of function template "tex1Dfetch(T *, cudaTextureObject_t, int)" does not match the call
+    static __attribute__((device)) typename __nv_itex_trait<T>::type tex1Dfetch(T *ptr, cudaTextureObject_t obj, int x)
+                                                                     ^
+  
+  /usr/local/packages/cuda/13.3/bin/nvcc -Xcompiler "-m64" -O3 --maxrregcount 48 -gencode arch=compute_80,code=sm_80 -DNAMD_CUDA -I. -I.rootdir/cub -I/usr/local/packages/cuda/13.3/include  -use_fast_math -Xptxas -v -o obj/CudaComputeGBISKernel.o -c `echo src/`CudaComputeGBISKernel.cu
+> src/ComputeNonbondedCUDAKernelBase.h(461): error: no instance of overloaded function "tex1D" matches the argument list
+              argument types are: (<error-type>, float)
+         float4 fi = tex1D(force_table, rsqrtf(r2));
+                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(134): note #3327-D: candidate function template "tex1D<T>(cudaTextureObject_t, float)" failed deduction
+    static __attribute__((device)) T tex1D(cudaTextureObject_t texObject, float x)
+                                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(127): note #3322-D: number of parameters of function template "tex1D(T *, cudaTextureObject_t, float)" does not match the call
+    static __attribute__((device)) typename __nv_itex_trait<T>::type tex1D(T *ptr, cudaTextureObject_t obj, float x)
+                                                                     ^
+  
+> src/ComputeNonbondedCUDAKernelBase.h(464): error: no instance of overloaded function "tex1Dfetch" matches the argument list
+              argument types are: (<error-type>, int)
+         float2 ljab = tex1Dfetch(lj_table, j_vdw_type + iap_vdw_type);;
+                       ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(119): note #3327-D: candidate function template "tex1Dfetch<T>(cudaTextureObject_t, int)" failed deduction
+    static __attribute__((device)) T tex1Dfetch(cudaTextureObject_t texObject, int x)
+                                     ^
+  /usr/local/packages/cuda/13.3/include/texture_indirect_functions.h(113): note #3322-D: number of parameters of function template "tex1Dfetch(T *, cudaTextureObject_t, int)" does not match the call
+    static __attribute__((device)) typename __nv_itex_trait<T>::type tex1Dfetch(T *ptr, cudaTextureObject_t obj, int x)
+                                                                     ^
+  
+  27 errors detected in the compilation of "src/ComputeNonbondedCUDAKernel.cu".
+> make: *** [Make.depends:7259: obj/ComputeNonbondedCUDAKernel.o] Error 2
+  make: *** Waiting for unfinished jobs....
+  ptxas info    : Overriding maximum register limit 256 for '_Z19cuda_pme_forces_devILi8EEvPKfPKPfS4_iii' with  48 of maxrregcount option
+  ptxas info    : Overriding maximum register limit 256 for '_Z19cuda_pme_forces_devILi6EEvPKfPKPfS4_iii' with  48 of maxrregcount option
+  ptxas info    : Overriding maximum register limit 256 for '_Z19cuda_pme_forces_devILi4EEvPKfPKPfS4_iii' with  48 of maxrregcount option
+  ptxas info    : Overriding maximum register limit 256 for '_Z28cuda_pme_charges_batched_devILi8EEvPKfPKPfPiS5_PS2_S5_S5_S5_S5_' with  48 of maxrregcount option
+  ptxas info    : Overriding maximum register limit 256 for '_Z28cuda_pme_charges_batched_devILi6EEvPKfPKPfPiS5_PS2_S5_S5_S5_S5_' with  48 of maxrregcount option
+-- lines 1145 to 1172 --
+  ptxas info    : Compiling entry function '_Z20cuda_pme_charges_devILi4EEvPKfPKPfPiS5_S2_iiii' for 'sm_80'
+  ptxas info    : Function properties for _Z20cuda_pme_charges_devILi4EEvPKfPKPfPiS5_S2_iiii
+      0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+  ptxas info    : Used 43 registers, used 1 barriers, 1344 bytes smem, 408 bytes cmem[0]
+  ptxas info    : Compile time = 7.427 ms
+  src/ComputePmeCUDAKernel.cu: In function 'void cuda_pme_forces(const float*, float* const*, float* const*, int, int, int, int, int, int, cudaStream_t)':
+> src/ComputePmeCUDAKernel.cu:455:45: warning: 'cudaError_t cudaFuncSetSharedMemConfig(T*, cudaSharedMemConfig) [with T = void(const float*, float* const*, float* const*, int, int, int); cudaError_t = cudaError]' is deprecated [-Wdeprecated-declarations]
+    455 |   CALL(4);
+        |                                             ^
+> /usr/local/packages/cuda/13.3/include/cuda_runtime.h:1758:1: note: declared here
+   1758 | __host__ cudaError_t cudaFuncSetSharedMemConfig(
+        | ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> src/ComputePmeCUDAKernel.cu:456:45: warning: 'cudaError_t cudaFuncSetSharedMemConfig(T*, cudaSharedMemConfig) [with T = void(const float*, float* const*, float* const*, int, int, int); cudaError_t = cudaError]' is deprecated [-Wdeprecated-declarations]
+    456 |   else CALL(6);
+        |                                             ^
+> /usr/local/packages/cuda/13.3/include/cuda_runtime.h:1758:1: note: declared here
+   1758 | __host__ cudaError_t cudaFuncSetSharedMemConfig(
+        | ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> src/ComputePmeCUDAKernel.cu:457:45: warning: 'cudaError_t cudaFuncSetSharedMemConfig(T*, cudaSharedMemConfig) [with T = void(const float*, float* const*, float* const*, int, int, int); cudaError_t = cudaError]' is deprecated [-Wdeprecated-declarations]
+    457 |   else CALL(8);
+        |                                             ^
+> /usr/local/packages/cuda/13.3/include/cuda_runtime.h:1758:1: note: declared here
+   1758 | __host__ cudaError_t cudaFuncSetSharedMemConfig(
+        | ^~~~~~~~~~~~~~~~~~~~~~~~~~
+  ptxas info    : Overriding maximum register limit 256 for '_ZN3cub16_V_300304_SM_8006detail11EmptyKernelIvEEvv' with  48 of maxrregcount option
+  ptxas info    : Overriding global maxrregcount 48 with entry-specific value 80 computed using thread count
+  ptxas info    : Overriding global maxrregcount 48 with entry-specific value 80 computed using thread count
+  ptxas info    : Overriding global maxrregcount 48 with entry-specific value 80 computed using thread count
+-- lines 1273 to 1292 --
+      72 bytes stack frame, 72 bytes spill stores, 104 bytes spill loads
+  ptxas info    : Used 48 registers, used 1 barriers, 72 bytes cumulative stack size, 320 bytes smem, 608 bytes cmem[0]
+  ptxas info    : Compile time = 186.764 ms
+  ptxas info    : Compiling entry function '_Z18bondedForcesKernelIxLb1ELb0EEviiPK8CudaBondPK13CudaBondValueiPK9CudaAnglePK14CudaAngleValueiPK12CudaDihedralPK17CudaDihedralValueiSE_SH_iPK13CudaExclusioniPK13CudaCrosstermPK18CudaCrosstermValueffiPKfPK6float4yySV_i6float3SW_SW_PT_SY_Pd' for 'sm_80'
+  ptxas info    : Function properties for _Z18bondedForcesKernelIxLb1ELb0EEviiPK8CudaBondPK13CudaBondValueiPK9CudaAnglePK14CudaAngleValueiPK12CudaDihedralPK17CudaDihedralValueiSE_SH_iPK13CudaExclusioniPK13CudaCrosstermPK18CudaCrosstermValueffiPKfPK6float4yySV_i6float3SW_SW_PT_SY_Pd
+      64 bytes stack frame, 68 bytes spill stores, 100 bytes spill loads
+  ptxas info    : Used 48 registers, used 1 barriers, 64 bytes cumulative stack size, 32 bytes smem, 608 bytes cmem[0]
+  ptxas info    : Compile time = 79.889 ms
+  ptxas info    : Compiling entry function '_Z18bondedForcesKernelIxLb0ELb1EEviiPK8CudaBondPK13CudaBondValueiPK9CudaAnglePK14CudaAngleValueiPK12CudaDihedralPK17CudaDihedralValueiSE_SH_iPK13CudaExclusioniPK13CudaCrosstermPK18CudaCrosstermValueffiPKfPK6float4yySV_i6float3SW_SW_PT_SY_Pd' for 'sm_80'
+  ptxas info    : Function properties for _Z18bondedForcesKernelIxLb0ELb1EEviiPK8CudaBondPK13CudaBondValueiPK9CudaAnglePK14CudaAngleValueiPK12CudaDihedralPK17CudaDihedralValueiSE_SH_iPK13CudaExclusioniPK13CudaCrosstermPK18CudaCrosstermValueffiPKfPK6float4yySV_i6float3SW_SW_PT_SY_Pd
+      88 bytes stack frame, 92 bytes spill stores, 120 bytes spill loads
+  ptxas info    : Used 48 registers, used 1 barriers, 88 bytes cumulative stack size, 288 bytes smem, 608 bytes cmem[0]
+  ptxas info    : Compile time = 173.128 ms
+  ptxas info    : Compiling entry function '_Z18bondedForcesKernelIxLb0ELb0EEviiPK8CudaBondPK13CudaBondValueiPK9CudaAnglePK14CudaAngleValueiPK12CudaDihedralPK17CudaDihedralValueiSE_SH_iPK13CudaExclusioniPK13CudaCrosstermPK18CudaCrosstermValueffiPKfPK6float4yySV_i6float3SW_SW_PT_SY_Pd' for 'sm_80'
+  ptxas info    : Function properties for _Z18bondedForcesKernelIxLb0ELb0EEviiPK8CudaBondPK13CudaBondValueiPK9CudaAnglePK14CudaAngleValueiPK12CudaDihedralPK17CudaDihedralValueiSE_SH_iPK13CudaExclusioniPK13CudaCrosstermPK18CudaCrosstermValueffiPKfPK6float4yySV_i6float3SW_SW_PT_SY_Pd
+      72 bytes stack frame, 76 bytes spill stores, 92 bytes spill loads
+  ptxas info    : Used 48 registers, used 0 barriers, 72 bytes cumulative stack size, 608 bytes cmem[0]
+  ptxas info    : Compile time = 66.078 ms
+  Command exited with status 2:
+      /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/gmake-4.4.1-6issxzhqz2q5oly2bpb2gokwqftyzuo3/bin/make
+==> Error: The following packages failed to install:
+namd@2.14/ex3xjwevyxpazq66m3ypo7yc53eikpwt: /tmp/fchen14/spack-stage/spack-stage-namd-2.14-ex3xjwevyxpazq66m3ypo7yc53eikpwt-pnwoyfqd.log
+!!! FAILED: namd +cuda cuda_arch=80 %gcc ^charmpp build-target=charm++
+==> Warning: autoconf@2.72 build_system=autotools platform=linux os=almalinux10 target=icelake/7zdmxrw uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: automake@1.16.5 build_system=autotools platform=linux os=almalinux10 target=icelake/jlgzwgd uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: binutils@2.44~debuginfod+gas~gold~gprofng~headers~interwork+ld~libiberty~lto~nls~pgo+plugins build_system=autotools compress_debug_sections=zlib libs:=shared,static platform=linux os=almalinux10 target=icelake/lu3pupo uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: boost@1.88.0+atomic~charconv+chrono~clanglibcpp~cobalt~container~context~contract~coroutine+date_time~debug+exception~fiber+filesystem+graph~graph_parallel+icu+iostreams~json+locale+log+math~mpi~mqtt5+multithreaded~nowide~numpy~pic+program_options~python+random+regex+serialization+shared~signals2~singlethreaded~stacktrace+system~taggedlayout+test+thread+timer~type_erasure~url~versionedlayout+wave build_system=generic cxxstd=11 patches:=8e3faa2,a440f96 visibility=hidden platform=linux os=almalinux10 target=icelake/3i5iyjb uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: cmake@3.31.8~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release platform=linux os=almalinux10 target=icelake/okjgb27 uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: cp2k@2025.1~cosma+cuda~cuda_arch_35_k20x~cuda_fft~deepmd~dftd4~dlaf~elpa~enable_regtests~ipo+libint~libvori+libxc+mpi~mpi_f08+openmp~pexsi~plumed~pytorch~quip~rocm~sirius~spglib~spla build_system=cmake build_type=Release cuda_arch:=80 generator=ninja lmax=5 smm=libxsmm platform=linux os=almalinux10 target=icelake/ilvb2dx uses more than one compiler, and might not fit the LMod hierarchy. Using gcc@14~binutils+bootstrap~graphite~mold~nvptx~piclibs~profiled~strip build_system=autotools build_type=RelWithDebInfo languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/hm7ozvb as the LMod compiler.
+==> Warning: curl@8.11.1~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs:=shared,static tls:=openssl platform=linux os=almalinux10 target=icelake/e3yrr5n uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: gettext@0.23.1+bzip2+curses+git~libunistring+libxml2+pic+shared~tar+xz build_system=autotools platform=linux os=almalinux10 target=icelake/6qhp5dx uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: lammps@20240829.3~adios~amoeba~asphere~atc~awpmd~bocs~body~bpm~brownian~cg-dna~cg-spica~class2~colloid~colvars~compress~coreshell+cuda~cuda_mps~curl~dielectric~diffraction~dipole~dpd-basic~dpd-meso~dpd-react~dpd-smooth~drude~eff~electrode~extra-command~extra-compute~extra-dump~extra-fix~extra-molecule~extra-pair~fep~ffmpeg~granular~h5md~heffte~intel~interlayer~ipo~jpeg~kim~kokkos+kspace~latboltz~lepton+lib~machdyn~manifold+manybody~mc~mdi~meam~mesont~mgpt~misc~ml-hdnnp~ml-iap~ml-pace~ml-pod~ml-rann~ml-snap~ml-uf3~mofff+molecule~molfile+mpi~netcdf~opencl+openmp~openmp-package~opt~orient~peri~phonon~plugin~plumed~png~poems~ptm~python~qeq~qtb~reaction~reaxff~replica~rheo+rigid~rocm~scafacos~shock~smtbq~sph~spin~srd~tally~tools~uef~voronoi~vtk~yaff build_system=cmake build_type=Release cuda_arch:=80 fft=fftw3 fftw_precision=double generator=make gpu_precision=mixed lammps_sizes=smallbig platform=linux os=almalinux10 target=icelake/nhf5cbc uses more than one compiler, and might not fit the LMod hierarchy. Using gcc@14~binutils+bootstrap~graphite~mold~nvptx~piclibs~profiled~strip build_system=autotools build_type=RelWithDebInfo languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/hm7ozvb as the LMod compiler.
+==> Warning: libint@2.9.0~debug~fma+fortran build_system=autotools tune=cp2k-lmax-5 platform=linux os=almalinux10 target=icelake/mnqgkbj uses more than one compiler, and might not fit the LMod hierarchy. Using gcc@14~binutils+bootstrap~graphite~mold~nvptx~piclibs~profiled~strip build_system=autotools build_type=RelWithDebInfo languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/hm7ozvb as the LMod compiler.
+==> Warning: libxml2@2.13.5~http+pic~python+shared build_system=autotools platform=linux os=almalinux10 target=icelake/gz5m4tr uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: m4@1.4.20+sigsegv build_system=autotools platform=linux os=almalinux10 target=icelake/g5vmqvp uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: meson@1.7.0 build_system=python_pip patches:=0f0b1bd platform=linux os=almalinux10 target=icelake/257ywsr uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: openssl@3.4.1~docs+shared build_system=generic certs=mozilla platform=linux os=almalinux10 target=icelake/qtfxh2c uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: perl@5.40.0+cpanm+opcode+open+shared+threads build_system=generic platform=linux os=almalinux10 target=icelake/busnbzp uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: py-cython@3.0.12 build_system=python_pip platform=linux os=almalinux10 target=icelake/iqwv45h uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: py-flit-core@3.12.0 build_system=python_pip platform=linux os=almalinux10 target=icelake/crs6jju uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: py-fypp@3.1 build_system=python_pip platform=linux os=almalinux10 target=icelake/njly4cy uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: py-meson-python@0.16.0 build_system=python_pip platform=linux os=almalinux10 target=icelake/6ueku6a uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: py-numpy@2.3.1 build_system=python_pip patches:=873745d platform=linux os=almalinux10 target=icelake/mz2ql44 uses more than one compiler, and might not fit the LMod hierarchy. Using gcc@14~binutils+bootstrap~graphite~mold~nvptx~piclibs~profiled~strip build_system=autotools build_type=RelWithDebInfo languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/hm7ozvb as the LMod compiler.
+==> Warning: py-packaging@25.0 build_system=python_pip platform=linux os=almalinux10 target=icelake/5otxw73 uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: py-pip@25.1.1 build_system=generic platform=linux os=almalinux10 target=icelake/nbxudti uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: py-pyproject-metadata@0.9.1 build_system=python_pip platform=linux os=almalinux10 target=icelake/j4qzowz uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: py-setuptools@80.9.0 build_system=generic platform=linux os=almalinux10 target=icelake/7ktqiof uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: py-wheel@0.45.1 build_system=generic platform=linux os=almalinux10 target=icelake/p4batky uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: python@3.13.5+bz2+ctypes+dbm~debug+libxml2+lzma~optimizations+pic+pyexpat+pythoncmd+readline+shared+sqlite3+ssl~tkinter+uuid+zlib build_system=generic platform=linux os=almalinux10 target=icelake/ilonq7c uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: python-venv@1.0 build_system=generic platform=linux os=almalinux10 target=icelake/ra66j4f uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Regenerating lmod module files
+=== 1 spec(s) failed: namd +cuda cuda_arch=80 %gcc ^charmpp build-target=charm++ ===
+From https://github.com/lonihpc/spack-rhel10
+ * branch            cluster-results -> FETCH_HEAD
+HEAD is now at f5ffcc5 job 64 (spack-gpu-test) results, exit=1
