@@ -18,9 +18,10 @@
 # we're not copying the old cluster's exact versions. Everything defaults
 # to intel-oneapi-compilers + intel-oneapi-mpi via packages.yaml, so no
 # per-package %compiler pin is needed except for GPU packages
-# (namd/lammps/cp2k here), which pin `+cuda cuda_arch=80 %gcc` explicitly.
+# (lammps/cp2k here), which pin `+cuda cuda_arch=80 %gcc` explicitly.
 # cuda_arch=80 is a site-wide default preference in packages.yaml
-# (confirmed GPU hardware).
+# (confirmed GPU hardware). namd is currently CPU-only here (~cuda,
+# implicit) - see below for why.
 #
 # %gcc, NOT %nvhpc and NOT %oneapi, for the host c/cxx compiler - this
 # was originally %nvhpc (an early "GPU packages use nvhpc" convention)
@@ -63,20 +64,18 @@
 # compute_60, and 3 cufftResult error codes CUDA 13.3 has removed from
 # cufft.h).
 #
-# namd's `+cuda` is currently ASPIRATIONAL, not confirmed working on
-# this cluster: real-compile-tested in environments/gpu-test through 5
-# escalating rounds of CUDA-13.3 incompatibilities (see that
+# namd is CPU-only here for now (reverted from `+cuda cuda_arch=80
+# %gcc`, 2026-09-14): real-compile-tested in environments/gpu-test
+# through 5 escalating rounds of CUDA-13.3 incompatibilities (see that
 # environment's spack.yaml and repos/spack_repo/rhel10_overrides/
 # packages/namd/package.py for the full chain), the last of which -
 # namd@3.0.3's own kernel code calling cub::LaneMaskLt/Min/Max, which
 # CUDA 13.3's CCCL has removed outright - the user decided not to
 # hand-patch (real, numerically-active kernel code, license-gated
-# source, no way to verify correctness on a GPU). namd was REMOVED from
-# environments/gpu-test's specs as a result, but this line here is left
-# as-is (not reverted to ~cuda) since it predates that investigation -
-# TODO: decide whether to revert this to CPU-only or leave it broken
-# until namd upstream catches up with CUDA 13.x / an older CUDA gets
-# used for this package specifically.
+# source, no way to verify correctness on a GPU). namd was removed from
+# environments/gpu-test's specs for the same reason. Revisit +cuda here
+# once namd upstream catches up with CUDA 13.x, or once an older CUDA
+# toolkit gets set up for this package specifically.
 specs:
 # amber: Spack's `amber` package only has versions 18/20 (no 22, unlike
 # the old cluster's amber/22) - it's licensed software, so Spack can only
@@ -178,6 +177,6 @@ specs:
 # package) is also fully deprecated in Spack's current repo - every
 # version fails concretization outright - so if MPI diversity is ever
 # needed again, use the `mvapich` successor package, not mvapich2.
-- namd +cuda cuda_arch=80 %gcc
+- namd
 # matlab is explicitly NOT here - CLAUDE.md says it's not a Spack package
 # and needs a manual install + hand-written modulefile instead.
