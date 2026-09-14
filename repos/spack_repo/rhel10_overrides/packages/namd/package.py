@@ -64,6 +64,27 @@
 #   error: #error CUB requires at least C++17. Define
 #   CCCL_IGNORE_DEPRECATED_CPP_DIALECT to suppress this message.
 # (repeated for Thrust's and libcu++'s own copies of the same check).
+# THIRD, discovered right after fixing the above (job 67): defining
+# CCCL_IGNORE_DEPRECATED_CPP_DIALECT only suppresses the *warning-level*
+# #error gate - it doesn't make an actual C++11 compile magically
+# support C++17 language features. Once the #error stopped blocking
+# compilation, real errors surfaced from deep inside CUDA 13.3's own
+# CCCL headers (__floating_point/storage.h, __limits/
+# numeric_limits_ext.h, etc.), e.g. "a constexpr function must contain
+# exactly one return statement" - a genuine C++11 restriction (relaxed
+# in C++14) that CCCL's own header code now relies on being relaxed.
+# So CUDA 13.3's CCCL genuinely requires C++17, not just a suppressed
+# warning about wanting it. The real fix is bumping
+# arch/Linux-x86_64.cuda's own `CUDA_COMPILER_FLAGS = -m64 -std=c++11`
+# to `-std=c++17` for nvcc's CUDA compilation units - this only affects
+# the separately-compiled .cu translation units (linked at the object
+# level with namd's other, still -std=c++11 g++-compiled host code;
+# the C++ standard flag doesn't affect libstdc++'s ABI, which is
+# controlled by a separate macro), so it's safe and narrowly scoped.
+# Once this is done, the CCCL_IGNORE_DEPRECATED_CPP_DIALECT macro from
+# the fix above technically becomes unnecessary (the version check it
+# suppresses would no longer fire) but is harmless to leave defined.
+#
 # Confirmed by pulling arch/Linux-x86_64.cuda directly off the cluster
 # (from the same manually-downloaded, license-gated source tarball as
 # the DeviceCUDA.C fix above) - it's a simple Makefile variable
@@ -129,6 +150,12 @@ class Namd(BuiltinNamd):
                 r"\1CUDA_COMPILER_FLAGS += -DTHRUST_IGNORE_DEPRECATED_CPP_DIALECT"
                 + "\n"
                 + r"\1CUDA_COMPILER_FLAGS += -DCCCL_IGNORE_DEPRECATED_CPP_DIALECT",
+                arch_cuda_file,
+                ignore_absent=True,
+            )
+            filter_file(
+                r"^(\s*)CUDA_COMPILER_FLAGS = -m64 -std=c\+\+11$",
+                r"\1CUDA_COMPILER_FLAGS = -m64 -std=c++17",
                 arch_cuda_file,
                 ignore_absent=True,
             )
