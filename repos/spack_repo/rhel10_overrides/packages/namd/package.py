@@ -38,6 +38,16 @@
 # this is the "old-style"/Adapter case where a @run_before hook on the
 # Package class DOES get merged into the effective builder automatically
 # (see cp2k's package.py comment for the contrasting case that doesn't).
+#
+# version("3.0.3", ...) below: builtin's namd package.py doesn't know
+# about 3.0.3 yet (NAMD's own site has released newer versions than
+# Spack's recipe has caught up to - only 3.0.2/3.0.1/2.x are declared
+# upstream). Since Spack's DirectiveMeta re-merges a parent class's
+# already-registered version()/variant()/depends_on() directives into
+# a subclass (confirmed elsewhere in this repo, e.g. the python
+# override), adding one more version() here is a normal, additive
+# extension - not a fork of the whole recipe. sha256 confirmed by the
+# user directly from the file they downloaded from NAMD's own site.
 import os
 
 from spack_repo.builtin.packages.namd.package import Namd as BuiltinNamd
@@ -46,14 +56,19 @@ from spack.package import *
 
 
 class Namd(BuiltinNamd):
+    version(
+        "3.0.3",
+        sha256="374537dd2c724116cbf45e3f72438f236012fd2664cb43e84de08c7fb9267424",
+    )
+
     @run_before("build")
     def fix_removed_cuda_device_compute_mode(self):
         # Written and verified against namd@2.14's src/DeviceCUDA.C (see
-        # module docstring above). We now build namd@3.0.2 instead (its
+        # module docstring above). We now build namd@3.0.3 instead (its
         # GPU backend was rewritten to use texture objects instead of
         # the legacy texture-reference API that made 2.14 uncompilable
         # under CUDA 13.3 - see environments/gpu-test/spack.yaml's
-        # comment), so it's unknown/unverified whether 3.0.2's
+        # comment), so it's unknown/unverified whether 3.0.3's
         # DeviceCUDA.C (if it still exists under this path at all) still
         # has these exact `.computeMode` lines. ignore_absent=True makes
         # a missing file a harmless no-op rather than a hard error, and
