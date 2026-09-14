@@ -1,0 +1,479 @@
+==> Starting concretization pool with 3 processes
+==> Concretized 3 specs:
+ -   4gckjms  cp2k@2025.1~cosma+cuda~cuda_arch_35_k20x~cuda_fft~deepmd~dftd4~dlaf~elpa~enable_regtests~ipo+libint~libvori+libxc+mpi~mpi_f08+openmp~pexsi~plumed~pytorch~quip~rocm~sirius~spglib~spla build_system=cmake build_type=Release cuda_arch:=80 generator=ninja lmax=5 smm=libxsmm platform=linux os=almalinux10 target=icelake %c,cxx,fortran=gcc@14
+[+]  okjgb27      ^cmake@3.31.8~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  e3yrr5n          ^curl@8.11.1~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs:=shared,static tls:=openssl platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  6q2szbj              ^nghttp2@1.65.0 build_system=autotools platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[e]  4etaskp          ^intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64
+[+]  vmccqrv          ^intel-oneapi-runtime@2026.1.0 build_system=generic platform=linux os=almalinux10 target=icelake
+[+]  yzi6sdy          ^ncurses@6.5~symlinks+termlib abi=none build_system=autotools patches:=7a351bc platform=linux os=almalinux10 target=icelake %c,cxx=nvhpc@26.5
+[+]  fh7o6zp          ^zlib-ng@2.2.4+compat+new_strategies+opt+pic+shared build_system=autotools platform=linux os=almalinux10 target=icelake %c,cxx=nvhpc@26.5
+[+]  qylsjfu      ^compiler-wrapper@1.0 build_system=generic platform=linux os=almalinux10 target=icelake
+[e]  cdlcx5c      ^cuda@13.3.0~allow-unsupported-compilers~dev build_system=generic platform=linux os=almalinux10 target=x86_64
+[+]  aztt2mr      ^dbcsr@2.8.0+cuda~cuda_arch_35_k20x~examples~g2g~ipo+mpi~mpi_f08~opencl+openmp~rocm+shared~tests build_system=cmake build_type=Release cuda_arch:=80 generator=ninja smm=libxsmm platform=linux os=almalinux10 target=icelake %c,cxx,fortran=gcc@14
+[e]  hm7ozvb      ^gcc@14~binutils+bootstrap~graphite~mold~nvptx~piclibs~profiled~strip build_system=autotools build_type=RelWithDebInfo languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64
+[+]  udjtres      ^gcc-runtime@14 build_system=generic platform=linux os=almalinux10 target=icelake
+[e]  ufp3xj3      ^glibc@2.39 build_system=autotools platform=linux os=almalinux10 target=x86_64
+[e]  iwz35ql      ^intel-oneapi-mkl@2026.1.0~cluster+envmods~gfortran~ilp64+shared build_system=generic mpi_family=none threads=none platform=linux os=almalinux10 target=x86_64
+[e]  a7ddspo      ^intel-oneapi-mpi@2021.18.0~classic-names+envmods~external-libfabric~generic-names~ilp64 build_system=generic platform=linux os=almalinux10 target=x86_64
+[+]  mnqgkbj      ^libint@2.9.0~debug~fma+fortran build_system=autotools tune=cp2k-lmax-5 platform=linux os=almalinux10 target=icelake %c,cxx,fortran=gcc@14
+[+]  7zdmxrw          ^autoconf@2.72 build_system=autotools platform=linux os=almalinux10 target=icelake
+[+]  g5vmqvp              ^m4@1.4.20+sigsegv build_system=autotools platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  sqknax7                  ^libsigsegv@2.14 build_system=autotools platform=linux os=almalinux10 target=icelake %c=nvhpc@26.5
+[+]  jlgzwgd          ^automake@1.16.5 build_system=autotools platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  3i5iyjb          ^boost@1.88.0+atomic~charconv+chrono~clanglibcpp~cobalt~container~context~contract~coroutine+date_time~debug+exception~fiber+filesystem+graph~graph_parallel+icu+iostreams~json+locale+log+math~mpi~mqtt5+multithreaded~nowide~numpy~pic+program_options~python+random+regex+serialization+shared~signals2~singlethreaded~stacktrace+system~taggedlayout+test+thread+timer~type_erasure~url~versionedlayout+wave build_system=generic cxxstd=11 patches:=8e3faa2,a440f96 visibility=hidden platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  jdyw7xn              ^icu4c@74.2 build_system=autotools cxxstd=11 platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  7wgjhrw              ^zstd@1.5.7~programs build_system=makefile libs:=shared,static platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  2oripjt          ^eigen@3.4.0~ipo~nightly~rocm build_system=cmake build_type=RelWithDebInfo generator=make platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  ijhihcw          ^gmp@6.3.0+cxx build_system=autotools libs:=shared,static platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  su7owxg          ^libtool@2.4.7 build_system=autotools platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  acgtlmj              ^findutils@4.10.0 build_system=autotools patches:=440b954 platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  tslu24q      ^libxc@7.0.0~cuda+fortran~ipo~kxc~lxc+shared build_system=cmake build_type=Release generator=ninja platform=linux os=almalinux10 target=icelake %c,fortran=gcc@14
+[+]  busnbzp          ^perl@5.40.0+cpanm+opcode+open+shared+threads build_system=generic platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  ijf24to              ^berkeley-db@18.1.40+cxx~docs+stl build_system=autotools patches:=26090f4,b231fcc platform=linux os=almalinux10 target=icelake %c,cxx=nvhpc@26.5
+[+]  xuhy2lr      ^libxsmm@1.17~debug~generator~header-only~large_jit_buffer~shared blas=default build_system=makefile platform=linux os=almalinux10 target=icelake %c,cxx,fortran=gcc@14
+[+]  lu3pupo          ^binutils@2.44~debuginfod+gas~gold~gprofng~headers~interwork+ld~libiberty~lto~nls~pgo+plugins build_system=autotools compress_debug_sections=zlib libs:=shared,static platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  6m76lfz              ^diffutils@3.10 build_system=autotools platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  j5lgwb3      ^netlib-scalapack@2.2.2~ipo~pic+shared build_system=cmake build_type=Release generator=make platform=linux os=almalinux10 target=icelake %c,fortran=gcc@14
+[+]  ljexdij      ^ninja@1.12.1+re2c build_system=generic patches:=93f4bb3 platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  niuqqbv          ^re2c@3.1 build_system=autotools platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  ucb3fyu      ^pkgconf@2.3.0 build_system=autotools platform=linux os=almalinux10 target=icelake %c=nvhpc@26.5
+[e]  eebo5n6          ^nvhpc@26.5+blas+lapack~mpi build_system=generic default_cuda=default install_type=single languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64
+[+]  njly4cy      ^py-fypp@3.1 build_system=python_pip platform=linux os=almalinux10 target=icelake
+[+]  nbxudti          ^py-pip@25.1.1 build_system=generic platform=linux os=almalinux10 target=icelake
+[+]  7ktqiof          ^py-setuptools@80.9.0 build_system=generic platform=linux os=almalinux10 target=icelake
+[+]  p4batky          ^py-wheel@0.45.1 build_system=generic platform=linux os=almalinux10 target=icelake
+[+]  ra66j4f          ^python-venv@1.0 build_system=generic platform=linux os=almalinux10 target=icelake
+[+]  mz2ql44      ^py-numpy@2.3.1 build_system=python_pip patches:=873745d platform=linux os=almalinux10 target=icelake %c,cxx=gcc@14
+[+]  iqwv45h          ^py-cython@3.0.12 build_system=python_pip platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  6ueku6a          ^py-meson-python@0.16.0 build_system=python_pip platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  257ywsr              ^meson@1.7.0 build_system=python_pip patches:=0f0b1bd platform=linux os=almalinux10 target=icelake
+[+]  5otxw73              ^py-packaging@25.0 build_system=python_pip platform=linux os=almalinux10 target=icelake
+[+]  crs6jju                  ^py-flit-core@3.12.0 build_system=python_pip platform=linux os=almalinux10 target=icelake
+[+]  j4qzowz              ^py-pyproject-metadata@0.9.1 build_system=python_pip platform=linux os=almalinux10 target=icelake
+[+]  ilonq7c      ^python@3.13.5+bz2+ctypes+dbm~debug+libxml2+lzma~optimizations+pic+pyexpat+pythoncmd+readline+shared+sqlite3+ssl~tkinter+uuid+zlib build_system=generic platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  c6krap7          ^bzip2@1.0.8~debug~pic+shared build_system=generic platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  j3ih4oa          ^expat@2.7.1+libbsd build_system=autotools platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  bbpk42q              ^libbsd@0.12.2 build_system=autotools platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  yiokm7w                  ^libmd@1.1.0 build_system=autotools platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  ttrc6xn          ^gdbm@1.23 build_system=autotools platform=linux os=almalinux10 target=icelake %c=nvhpc@26.5
+[+]  6qhp5dx          ^gettext@0.23.1+bzip2+curses+git~libunistring+libxml2+pic+shared~tar+xz build_system=autotools platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  p6pegcl              ^libiconv@1.18 build_system=autotools libs:=shared,static platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  gz5m4tr              ^libxml2@2.13.5~http+pic~python+shared build_system=autotools platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  cm2ipgf          ^libffi@3.4.8 build_system=autotools platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  qtfxh2c          ^openssl@3.4.1~docs+shared build_system=generic certs=mozilla platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  m5gffrb              ^ca-certificates-mozilla@2025-05-20 build_system=generic platform=linux os=almalinux10 target=icelake
+[+]  ejz2b4x          ^readline@8.2 build_system=autotools patches:=1ea4349,24f587b,3d9885e,5911a5b,622ba38,6c8adf8,758e2ec,79572ee,a177edc,bbf97f1,c7b45ff,e0013d9,e065038 platform=linux os=almalinux10 target=icelake %c=nvhpc@26.5
+[+]  d4yaol6          ^sqlite@3.46.0+column_metadata+dynamic_extensions+fts~functions+rtree build_system=autotools platform=linux os=almalinux10 target=icelake %c=nvhpc@26.5
+[+]  7zhqgtx          ^util-linux-uuid@2.41 build_system=autotools platform=linux os=almalinux10 target=icelake %c=nvhpc@26.5
+[+]  qefwn7m          ^xz@5.6.3~pic build_system=autotools libs:=shared,static patches:=3222863 platform=linux os=almalinux10 target=icelake %c=nvhpc@26.5
+ -   aem65qh  lammps@20240829.3~adios~amoeba~asphere~atc~awpmd~bocs~body~bpm~brownian~cg-dna~cg-spica~class2~colloid~colvars~compress~coreshell+cuda~cuda_mps~curl~dielectric~diffraction~dipole~dpd-basic~dpd-meso~dpd-react~dpd-smooth~drude~eff~electrode~extra-command~extra-compute~extra-dump~extra-fix~extra-molecule~extra-pair~fep~ffmpeg~granular~h5md~heffte~intel~interlayer~ipo~jpeg~kim~kokkos+kspace~latboltz~lepton+lib~machdyn~manifold+manybody~mc~mdi~meam~mesont~mgpt~misc~ml-hdnnp~ml-iap~ml-pace~ml-pod~ml-rann~ml-snap~ml-uf3~mofff+molecule~molfile+mpi~netcdf~opencl+openmp~openmp-package~opt~orient~peri~phonon~plugin~plumed~png~poems~ptm~python~qeq~qtb~reaction~reaxff~replica~rheo+rigid~rocm~scafacos~shock~smtbq~sph~spin~srd~tally~tools~uef~voronoi~vtk~yaff build_system=cmake build_type=Release cuda_arch:=80 fft=fftw3 fftw_precision=double generator=make gpu_precision=mixed lammps_sizes=smallbig platform=linux os=almalinux10 target=icelake %c,cxx=gcc@14
+[+]  lauilgx      ^cmake@3.31.8~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  xarhthm          ^curl@8.11.1~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs:=shared,static tls:=openssl platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  6xiludk              ^nghttp2@1.65.0 build_system=autotools platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  lqv4aqp                  ^diffutils@3.10 build_system=autotools platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  ytaxwge                      ^libiconv@1.18 build_system=autotools libs:=shared,static platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  t43m74q              ^openssl@3.4.1~docs+shared build_system=generic certs=mozilla platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  lg4ltmi                  ^perl@5.40.0+cpanm+opcode+open+shared+threads build_system=generic platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  safaags                      ^berkeley-db@18.1.40+cxx~docs+stl build_system=autotools patches:=26090f4,b231fcc platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  rdqzzbg                      ^bzip2@1.0.8~debug~pic+shared build_system=generic platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  uwiwhvu                      ^gdbm@1.23 build_system=autotools platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  qlzbmd5                          ^readline@8.2 build_system=autotools patches:=1ea4349,24f587b,3d9885e,5911a5b,622ba38,6c8adf8,758e2ec,79572ee,a177edc,bbf97f1,c7b45ff,e0013d9,e065038 platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  bqysmfd              ^pkgconf@2.3.0 build_system=autotools platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+[+]  hgagzak          ^ncurses@6.5~symlinks+termlib abi=none build_system=autotools patches:=7a351bc platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  3lxknbb          ^zlib-ng@2.2.4+compat+new_strategies+opt+pic+shared build_system=autotools platform=linux os=almalinux10 target=icelake %c,cxx=oneapi@2026.1.0
+[+]  an52kh6      ^gmake@4.4.1~guile build_system=generic platform=linux os=almalinux10 target=icelake %c=oneapi@2026.1.0
+ -   ejpt4hl  namd@2.14+cuda~memopt~rocm~single_node_gpu build_system=makefile cuda_arch:=80 fftw=3 interface=tcl patches:=cdcbc38 platform=linux os=almalinux10 target=icelake %c,cxx=gcc@14
+ -   74vjs5x      ^charmpp@6.10.2~cuda+fortran~omp~papi+production~pthreads+shared+smp~syncft~tcp~tracing backend=netlrts build-target=LIBS build_system=generic pmi=none platform=linux os=almalinux10 target=icelake %c,cxx,fortran=gcc@14
+[+]  47pxw2h      ^fftw@3.3.10+mpi~openmp~pfft_patches+shared build_system=autotools patches:=872cff9 precision:=double,float platform=linux os=almalinux10 target=icelake %c,fortran=nvhpc@26.5
+[+]  6issxzh      ^gmake@4.4.1~guile build_system=generic platform=linux os=almalinux10 target=icelake %c=nvhpc@26.5
+[+]  qbo24qa      ^tcl@8.6.12 build_system=autotools platform=linux os=almalinux10 target=icelake %c,cxx=nvhpc@26.5
+
+=== spack install -j 16 cp2k +cuda cuda_arch=80 %gcc ===
+[ ] 4gckjms cp2k@2025.1 staging (5s)
+[ ] 4gckjms cp2k@2025.1 cmake (14s)
+[x] 4gckjms cp2k@2025.1 failed: /tmp/fchen14/spack-stage/spack-stage-cp2k-2025.1-4gckjmsnnfpgfl3akyma5bgelvx22ayv-zr2kslj0.log (22s)
+-- lines 1 to 43 --
+  ==> Using cached archive: /project/fchen14/spack-rhel10-gpu-test/spack-install/cache/sources/_source-cache/archive/65/65c8ad5488897b0f995919b9fa77f2aba4b61677ba1e3c19bb093d5c08a8ce1d.tar.bz2
+  ==> Ran patch() for cp2k
+  ==> cp2k: Executing phase: 'cmake'
+  ==> [2026-09-14-10:54:12.892363] /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/cmake-3.31.8-okjgb27wzfmrkbw4i4jzyylu6ciygqww/bin/cmake -G Ninja -DCMAKE_INSTALL_PREFIX:STRING=/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/cp2k-2025.1-4gckjmsnnfpgfl3akyma5bgelvx22ayv -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON '-DCMAKE_INSTALL_RPATH:STRING=/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/cp2k-2025.1-4gckjmsnnfpgfl3akyma5bgelvx22ayv/lib;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/cp2k-2025.1-4gckjmsnnfpgfl3akyma5bgelvx22ayv/lib64' '-DCMAKE_PREFIX_PATH:STRING=/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/cmake-3.31.8-okjgb27wzfmrkbw4i4jzyylu6ciygqww;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/dbcsr-2.8.0-aztt2mriddocv2kttblo44fymbtnfud7;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/libint-2.9.0-mnqgkbjoehnncqmc6fnmgu5vhflc3wzw;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/libxc-7.0.0-tslu24qv4zv3ukoleuxk6ejmuxobpg5o;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/netlib-scalapack-2.2.2-j5lgwb3yelrndtp3evjh7iw6fxfvsxsk;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/ninja-1.12.1-ljexdijlgtlhdlvw4nbiq2akt3f6cab7;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/pkgconf-2.3.0-ucb3fyumtu4wb3hxbh6wrs526yh2xmm5;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/py-fypp-3.1-njly4cyskze6ovnh3pbjbaed6jx2sohz;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/py-numpy-2.3.1-mz2ql4466kzhdvlc42hp5omtl7rzrqho;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/libxsmm-1.17-xuhy2lr6tv5ivdfrno72dv4u52awe3vm;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/boost-1.88.0-3i5iyjb4so3s5tnmhvpavirsopw2xufm;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/eigen-3.4.0-2oripjtrxkhfvuq7fp2cpm5yss3mj7kx;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/gmp-6.3.0-ijhihcw6yqu53wodfg2srm62zgenzrgd;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/python-3.13.5-ilonq7c6724rahlbfzwwkoaxuy5eu3cn;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/icu4c-74.2-jdyw7xnloalka3vi3hc67dougtys44gr;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/zstd-1.5.7-7wgjhrwatb2o7nh27hzhadn2sqbnyu7m;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/expat-2.7.1-j3ih4oamnmlju35qnmb33bjotdtjoqnu;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/gdbm-1.23-ttrc6xnauksk4z5mbcxfwbmemhldv35z;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/gettext-0.23.1-6qhp5dxxbiplgphufjmnejrnbj5cpvhd;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/libffi-3.4.8-cm2ipgfug3n52t7hodxhn5qam5i6dret;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/openssl-3.4.1-qtfxh2cy5ccsfecp6p6vv5hak65buh6k;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/sqlite-3.46.0-d4yaol652prrfxhjompfgzf667wsd7iw;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/util-linux-uuid-2.41-7zhqgtxsmhwln4qjojdad7qn2ztochna;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/libbsd-0.12.2-bbpk42qpugfixip57jjn4ehizjc4qc7g;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/bzip2-1.0.8-c6krap7fsozxqobyoo6ducpuxszsz7sr;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/libxml2-2.13.5-gz5m4trmwfyvpizequgnuoghpf6pvusg;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/readline-8.2-ejz2b4xsq4ftbvzx3ifuqause3pz4eqp;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/libmd-1.1.0-yiokm7wdzctztawaqtcvp4qjdcqvd7y6;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/libiconv-1.18-p6pegclq4jxryzk7qr2wtn65utsoliwk;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/xz-5.6.3-qefwn7mgmrhwqn6c3qkrhddgb3m64yff;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/zlib-ng-2.2.4-fh7o6zpcdeybgusjii2w2yssn2qrizqc;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/ncurses-6.5-yzi6sdyusvllbgn33klwpzfwdiprs4gv;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/intel-oneapi-runtime-2026.1.0-vmccqrv5c23vhbpbwuu32s7curgfjkiv;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/gcc-runtime-14-udjtreslglqzy35bederrrgscfdhgxte;/usr/local/packages/cuda/13.3;/usr/local/packages/cuda/13.3/targets/x86_64-linux/lib/cmake;/usr/local/packages/compilers/intel-oneapi-2026;/usr/local/packages/compilers/intel-oneapi-2026' -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INTERPROCEDURAL_OPTIMIZATION:BOOL=OFF -DCMAKE_POLICY_DEFAULT_CMP0090:STRING=NEW -DCMAKE_FIND_USE_PACKAGE_REGISTRY:BOOL=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -DPYTHON_EXECUTABLE:STRING=/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/python-3.13.5-ilonq7c6724rahlbfzwwkoaxuy5eu3cn/bin/python3.13 -DPython_EXECUTABLE:STRING=/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/python-3.13.5-ilonq7c6724rahlbfzwwkoaxuy5eu3cn/bin/python3.13 -DPython3_EXECUTABLE:STRING=/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/python-3.13.5-ilonq7c6724rahlbfzwwkoaxuy5eu3cn/bin/python3.13 -DCP2K_USE_ACCEL:STRING=CUDA -DCP2K_WITH_GPU:STRING=A100 -DCP2K_USE_FFTW3=ON -DCP2K_USE_MPI:BOOL=ON -DCP2K_ENABLE_REGTESTS:BOOL=OFF -DCP2K_USE_ELPA:BOOL=OFF -DCP2K_USE_DLAF:BOOL=OFF -DCP2K_USE_LIBINT2:BOOL=ON -DCP2K_USE_SIRIUS:BOOL=OFF -DCP2K_USE_SPLA:BOOL=OFF -DCP2K_USE_COSMA:BOOL=OFF -DCP2K_USE_LIBXC:BOOL=ON -DCP2K_USE_LIBTORCH:BOOL=OFF -DCP2K_USE_METIS:BOOL=OFF -DCP2K_USE_SUPERLU:BOOL=OFF -DCP2K_USE_PLUMED:BOOL=OFF -DCP2K_USE_SPGLIB:BOOL=OFF -DCP2K_USE_VORI:BOOL=OFF -DCP2K_USE_SPLA:BOOL=OFF -DCP2K_USE_QUIP:BOOL=OFF -DCP2K_USE_DFTD4:BOOL=OFF -DCP2K_USE_MPI_F08:BOOL=OFF '' '' '' '' '' '' -DCP2K_USE_DEEPMD:BOOL=OFF '' '' '' -DCP2K_ENABLE_ELPA_OPENMP_SUPPORT:BOOL=OFF -DCP2K_USE_LIBXSMM=ON -DCP2K_USE_FFTW3_WITH_MKL=ON -DCP2K_BLAS_VENDOR=MKL -DCP2K_SCALAPACK_VENDOR=MKL -DCMAKE_CUDA_ARCHITECTURES:STRING=80 /tmp/fchen14/spack-stage/spack-stage-cp2k-2025.1-4gckjmsnnfpgfl3akyma5bgelvx22ayv/spack-src
+> CMake Warning:
+    Ignoring empty string ("") provided on the command line.
+  
+  
+> CMake Warning:
+    Ignoring empty string ("") provided on the command line.
+  
+  
+> CMake Warning:
+    Ignoring empty string ("") provided on the command line.
+  
+  
+> CMake Warning:
+    Ignoring empty string ("") provided on the command line.
+  
+  
+> CMake Warning:
+    Ignoring empty string ("") provided on the command line.
+  
+  
+> CMake Warning:
+    Ignoring empty string ("") provided on the command line.
+  
+  
+> CMake Warning:
+    Ignoring empty string ("") provided on the command line.
+  
+  
+> CMake Warning:
+    Ignoring empty string ("") provided on the command line.
+  
+  
+> CMake Warning:
+    Ignoring empty string ("") provided on the command line.
+  
+  
+  -- The Fortran compiler identification is GNU 14.3.1
+  -- The C compiler identification is GNU 14.3.1
+  -- The CXX compiler identification is GNU 14.3.1
+-- lines 85 to 97 --
+  -- Found SCALAPACK: /project/fchen14/spack-rhel10/packages/compilers/intel/oneapi/mkl/2026.1/lib/intel64/libmkl_scalapack_lp64.so;;/project/fchen14/spack-rhel10/packages/compilers/intel/oneapi/mkl/2026.1/lib/intel64/libmkl_blacs_intelmpi_lp64.so
+  -- The CUDA compiler identification is NVIDIA 13.3.73 with host compiler GNU 14.3.1
+  -- Detecting CUDA compiler ABI info
+  -- Detecting CUDA compiler ABI info - failed
+  -- Check for working CUDA compiler: /usr/local/packages/cuda/13.3/bin/nvcc
+  -- Check for working CUDA compiler: /usr/local/packages/cuda/13.3/bin/nvcc - broken
+> CMake Error at /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/cmake-3.31.8-okjgb27wzfmrkbw4i4jzyylu6ciygqww/share/cmake-3.31/Modules/CMakeTestCUDACompiler.cmake:59 (message):
+    The CUDA compiler
+  
+      "/usr/local/packages/cuda/13.3/bin/nvcc"
+  
+    is not able to compile a simple test program.
+  
+-- lines 98 to 120 --
+    It fails with the following output:
+  
+      Change Dir: '/tmp/fchen14/spack-stage/spack-stage-cp2k-2025.1-4gckjmsnnfpgfl3akyma5bgelvx22ayv/spack-build-4gckjms/CMakeFiles/CMakeScratch/TryCompile-Sn0Swh'
+  
+      Run Build Command(s): /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/ninja-1.12.1-ljexdijlgtlhdlvw4nbiq2akt3f6cab7/bin/ninja-build -v cmTC_8b05d
+      [1/2] /usr/local/packages/cuda/13.3/bin/nvcc -forward-unknown-to-host-compiler -ccbin=/usr/bin/g++   -allow-unsupported-compiler  -std=c++11 "--generate-code=arch=compute_60,code=[compute_60,sm_60]" -Xcompiler=-fPIE -MD -MT CMakeFiles/cmTC_8b05d.dir/main.cu.o -MF CMakeFiles/cmTC_8b05d.dir/main.cu.o.d -x cu -c /tmp/fchen14/spack-stage/spack-stage-cp2k-2025.1-4gckjmsnnfpgfl3akyma5bgelvx22ayv/spack-build-4gckjms/CMakeFiles/CMakeScratch/TryCompile-Sn0Swh/main.cu -o CMakeFiles/cmTC_8b05d.dir/main.cu.o
+>     FAILED: CMakeFiles/cmTC_8b05d.dir/main.cu.o
+      /usr/local/packages/cuda/13.3/bin/nvcc -forward-unknown-to-host-compiler -ccbin=/usr/bin/g++   -allow-unsupported-compiler  -std=c++11 "--generate-code=arch=compute_60,code=[compute_60,sm_60]" -Xcompiler=-fPIE -MD -MT CMakeFiles/cmTC_8b05d.dir/main.cu.o -MF CMakeFiles/cmTC_8b05d.dir/main.cu.o.d -x cu -c /tmp/fchen14/spack-stage/spack-stage-cp2k-2025.1-4gckjmsnnfpgfl3akyma5bgelvx22ayv/spack-build-4gckjms/CMakeFiles/CMakeScratch/TryCompile-Sn0Swh/main.cu -o CMakeFiles/cmTC_8b05d.dir/main.cu.o
+      nvcc fatal   : Unsupported gpu architecture 'compute_60'
+      ninja: build stopped: subcommand failed.
+  
+  
+  
+  
+  
+    CMake will not be able to correctly generate this project.
+  Call Stack (most recent call first):
+    CMakeLists.txt:526 (enable_language)
+  
+  
+  -- Configuring incomplete, errors occurred!
+  Command exited with status 1:
+      /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/cmake-3.31.8-okjgb27wzfmrkbw4i4jzyylu6ciygqww/bin/cmake -G Ninja -DCMAKE_INSTALL_PREFIX:STRING=/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/cp2k-2025.1-4gckjmsnnfpgfl3akyma5bgelvx22ayv -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON '-DCMAKE_INSTALL_RPATH:STRING=/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/cp2k-2025.1-4gckjmsnnfpgfl3akyma5bgelvx22ayv/lib;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/cp2k-2025.1-4gckjmsnnfpgfl3akyma5bgelvx22ayv/lib64' '-DCMAKE_PREFIX_PATH:STRING=/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/cmake-3.31.8-okjgb27wzfmrkbw4i4jzyylu6ciygqww;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/dbcsr-2.8.0-aztt2mriddocv2kttblo44fymbtnfud7;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/libint-2.9.0-mnqgkbjoehnncqmc6fnmgu5vhflc3wzw;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/libxc-7.0.0-tslu24qv4zv3ukoleuxk6ejmuxobpg5o;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/netlib-scalapack-2.2.2-j5lgwb3yelrndtp3evjh7iw6fxfvsxsk;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/ninja-1.12.1-ljexdijlgtlhdlvw4nbiq2akt3f6cab7;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/pkgconf-2.3.0-ucb3fyumtu4wb3hxbh6wrs526yh2xmm5;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/py-fypp-3.1-njly4cyskze6ovnh3pbjbaed6jx2sohz;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/py-numpy-2.3.1-mz2ql4466kzhdvlc42hp5omtl7rzrqho;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/libxsmm-1.17-xuhy2lr6tv5ivdfrno72dv4u52awe3vm;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/boost-1.88.0-3i5iyjb4so3s5tnmhvpavirsopw2xufm;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/eigen-3.4.0-2oripjtrxkhfvuq7fp2cpm5yss3mj7kx;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/gmp-6.3.0-ijhihcw6yqu53wodfg2srm62zgenzrgd;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/python-3.13.5-ilonq7c6724rahlbfzwwkoaxuy5eu3cn;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/icu4c-74.2-jdyw7xnloalka3vi3hc67dougtys44gr;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/zstd-1.5.7-7wgjhrwatb2o7nh27hzhadn2sqbnyu7m;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/expat-2.7.1-j3ih4oamnmlju35qnmb33bjotdtjoqnu;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/gdbm-1.23-ttrc6xnauksk4z5mbcxfwbmemhldv35z;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/gettext-0.23.1-6qhp5dxxbiplgphufjmnejrnbj5cpvhd;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/libffi-3.4.8-cm2ipgfug3n52t7hodxhn5qam5i6dret;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/openssl-3.4.1-qtfxh2cy5ccsfecp6p6vv5hak65buh6k;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/sqlite-3.46.0-d4yaol652prrfxhjompfgzf667wsd7iw;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/util-linux-uuid-2.41-7zhqgtxsmhwln4qjojdad7qn2ztochna;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/libbsd-0.12.2-bbpk42qpugfixip57jjn4ehizjc4qc7g;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/bzip2-1.0.8-c6krap7fsozxqobyoo6ducpuxszsz7sr;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/libxml2-2.13.5-gz5m4trmwfyvpizequgnuoghpf6pvusg;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/readline-8.2-ejz2b4xsq4ftbvzx3ifuqause3pz4eqp;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/libmd-1.1.0-yiokm7wdzctztawaqtcvp4qjdcqvd7y6;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/libiconv-1.18-p6pegclq4jxryzk7qr2wtn65utsoliwk;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/xz-5.6.3-qefwn7mgmrhwqn6c3qkrhddgb3m64yff;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/zlib-ng-2.2.4-fh7o6zpcdeybgusjii2w2yssn2qrizqc;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/ncurses-6.5-yzi6sdyusvllbgn33klwpzfwdiprs4gv;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/intel-oneapi-runtime-2026.1.0-vmccqrv5c23vhbpbwuu32s7curgfjkiv;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/gcc-runtime-14-udjtreslglqzy35bederrrgscfdhgxte;/usr/local/packages/cuda/13.3;/usr/local/packages/cuda/13.3/targets/x86_64-linux/lib/cmake;/usr/local/packages/compilers/intel-oneapi-2026;/usr/local/packages/compilers/intel-oneapi-2026' -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INTERPROCEDURAL_OPTIMIZATION:BOOL=OFF -DCMAKE_POLICY_DEFAULT_CMP0090:STRING=NEW -DCMAKE_FIND_USE_PACKAGE_REGISTRY:BOOL=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -DPYTHON_EXECUTABLE:STRING=/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/python-3.13.5-ilonq7c6724rahlbfzwwkoaxuy5eu3cn/bin/python3.13 -DPython_EXECUTABLE:STRING=/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/python-3.13.5-ilonq7c6724rahlbfzwwkoaxuy5eu3cn/bin/python3.13 -DPython3_EXECUTABLE:STRING=/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/python-3.13.5-ilonq7c6724rahlbfzwwkoaxuy5eu3cn/bin/python3.13 -DCP2K_USE_ACCEL:STRING=CUDA -DCP2K_WITH_GPU:STRING=A100 -DCP2K_USE_FFTW3=ON -DCP2K_USE_MPI:BOOL=ON -DCP2K_ENABLE_REGTESTS:BOOL=OFF -DCP2K_USE_ELPA:BOOL=OFF -DCP2K_USE_DLAF:BOOL=OFF -DCP2K_USE_LIBINT2:BOOL=ON -DCP2K_USE_SIRIUS:BOOL=OFF -DCP2K_USE_SPLA:BOOL=OFF -DCP2K_USE_COSMA:BOOL=OFF -DCP2K_USE_LIBXC:BOOL=ON -DCP2K_USE_LIBTORCH:BOOL=OFF -DCP2K_USE_METIS:BOOL=OFF -DCP2K_USE_SUPERLU:BOOL=OFF -DCP2K_USE_PLUMED:BOOL=OFF -DCP2K_USE_SPGLIB:BOOL=OFF -DCP2K_USE_VORI:BOOL=OFF -DCP2K_USE_SPLA:BOOL=OFF -DCP2K_USE_QUIP:BOOL=OFF -DCP2K_USE_DFTD4:BOOL=OFF -DCP2K_USE_MPI_F08:BOOL=OFF '' '' '' '' '' '' -DCP2K_USE_DEEPMD:BOOL=OFF '' '' '' -DCP2K_ENABLE_ELPA_OPENMP_SUPPORT:BOOL=OFF -DCP2K_USE_LIBXSMM=ON -DCP2K_USE_FFTW3_WITH_MKL=ON -DCP2K_BLAS_VENDOR=MKL -DCP2K_SCALAPACK_VENDOR=MKL -DCMAKE_CUDA_ARCHITECTURES:STRING=80 /tmp/fchen14/spack-stage/spack-stage-cp2k-2025.1-4gckjmsnnfpgfl3akyma5bgelvx22ayv/spack-src
+==> Error: The following packages failed to install:
+cp2k@2025.1/4gckjmsnnfpgfl3akyma5bgelvx22ayv: /tmp/fchen14/spack-stage/spack-stage-cp2k-2025.1-4gckjmsnnfpgfl3akyma5bgelvx22ayv-zr2kslj0.log
+!!! FAILED: cp2k +cuda cuda_arch=80 %gcc
+=== spack install -j 16 lammps +cuda cuda_arch=80 %gcc ===
+[ ] aem65qh lammps@20240829.3 staging (1s)
+[ ] aem65qh lammps@20240829.3 cmake (4s)
+[x] aem65qh lammps@20240829.3 failed: /tmp/fchen14/spack-stage/spack-stage-lammps-20240829.3-aem65qhwgupmesfprql3dlahrimp5afr-mc_m0nvt.log (6s)
+-- lines 1 to 11 --
+  ==> Using cached archive: /project/fchen14/spack-rhel10-gpu-test/spack-install/cache/sources/_source-cache/archive/75/75a9fb55d3c10f44cbc7b30313351ce9b12ab3003c1400147fa3590b6d651c73.tar.gz
+  ==> No patches needed for lammps
+  ==> lammps: Executing phase: 'cmake'
+  ==> [2026-09-14-10:54:26.005173] /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/cmake-3.31.8-lauilgx6yhpaljwirympz3d6prrjvdgy/bin/cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX:STRING=/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/lammps-20240829.3-aem65qhwgupmesfprql3dlahrimp5afr -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON '-DCMAKE_INSTALL_RPATH:STRING=/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/lammps-20240829.3-aem65qhwgupmesfprql3dlahrimp5afr/lib;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/lammps-20240829.3-aem65qhwgupmesfprql3dlahrimp5afr/lib64' '-DCMAKE_PREFIX_PATH:STRING=/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/cmake-3.31.8-lauilgx6yhpaljwirympz3d6prrjvdgy;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/gcc-runtime-14-udjtreslglqzy35bederrrgscfdhgxte;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/gmake-4.4.1-an52kh6xl62igsnt3qemnvltytfjhtjf;/usr/local/packages/cuda/13.3;/usr/local/packages/cuda/13.3/targets/x86_64-linux/lib/cmake;/usr/local/packages/compilers/intel-oneapi-2026;/usr/local/packages/compilers/intel-oneapi-2026' -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_INTERPROCEDURAL_OPTIMIZATION:BOOL=OFF -DCMAKE_POLICY_DEFAULT_CMP0090:STRING=NEW -DCMAKE_FIND_USE_PACKAGE_REGISTRY:BOOL=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -DBUILD_SHARED_LIBS:BOOL=ON '' -DBUILD_MPI:BOOL=ON -DBUILD_OMP:BOOL=ON -DBUILD_TOOLS:BOOL=OFF -DENABLE_TESTING:BOOL=OFF -DDOWNLOAD_POTENTIALS:BOOL=OFF -DPKG_GPU:BOOL=ON -DGPU_API:STRING=cuda -DGPU_PREC:STRING=mixed -DGPU_ARCH:STRING=sm_80 -DCUDA_MPS_SUPPORT:BOOL=OFF -DBUILD_LIB:BOOL=ON '-DCMAKE_TUNE_FLAGS:STRING=-march=icelake-client -mtune=icelake-client' -DLAMMPS_SIZES:STRING=smallbig -DWITH_JPEG:BOOL=OFF -DWITH_PNG:BOOL=OFF -DWITH_FFMPEG:BOOL=OFF -DWITH_CURL:BOOL=OFF -DPKG_ADIOS:BOOL=OFF -DPKG_AMOEBA:BOOL=OFF -DPKG_ASPHERE:BOOL=OFF -DPKG_ATC:BOOL=OFF -DPKG_AWPMD:BOOL=OFF -DPKG_BOCS:BOOL=OFF -DPKG_BODY:BOOL=OFF -DPKG_BPM:BOOL=OFF -DPKG_BROWNIAN:BOOL=OFF -DPKG_CG-DNA:BOOL=OFF -DPKG_CG-SPICA:BOOL=OFF -DPKG_CLASS2:BOOL=OFF -DPKG_COLLOID:BOOL=OFF -DPKG_COLVARS:BOOL=OFF -DPKG_COMPRESS:BOOL=OFF -DPKG_CORESHELL:BOOL=OFF -DPKG_DIELECTRIC:BOOL=OFF -DPKG_DIFFRACTION:BOOL=OFF -DPKG_DIPOLE:BOOL=OFF -DPKG_DPD-BASIC:BOOL=OFF -DPKG_DPD-MESO:BOOL=OFF -DPKG_DPD-REACT:BOOL=OFF -DPKG_DPD-SMOOTH:BOOL=OFF -DPKG_DRUDE:BOOL=OFF -DPKG_EFF:BOOL=OFF -DPKG_ELECTRODE:BOOL=OFF -DPKG_EXTRA-COMMAND:BOOL=OFF -DPKG_EXTRA-COMPUTE:BOOL=OFF -DPKG_EXTRA-DUMP:BOOL=OFF -DPKG_EXTRA-FIX:BOOL=OFF -DPKG_EXTRA-MOLECULE:BOOL=OFF -DPKG_EXTRA-PAIR:BOOL=OFF -DPKG_FEP:BOOL=OFF -DPKG_GRANULAR:BOOL=OFF -DPKG_H5MD:BOOL=OFF -DPKG_INTEL:BOOL=OFF -DPKG_INTERLAYER:BOOL=OFF -DPKG_KIM:BOOL=OFF -DPKG_KOKKOS:BOOL=OFF -DPKG_KSPACE:BOOL=ON -DPKG_LATBOLTZ:BOOL=OFF -DPKG_LEPTON:BOOL=OFF -DPKG_MACHDYN:BOOL=OFF -DPKG_MANIFOLD:BOOL=OFF -DPKG_MANYBODY:BOOL=ON -DPKG_MC:BOOL=OFF -DPKG_MDI:BOOL=OFF -DPKG_MEAM:BOOL=OFF -DPKG_MESONT:BOOL=OFF -DPKG_MGPT:BOOL=OFF -DPKG_MISC:BOOL=OFF -DPKG_ML-HDNNP:BOOL=OFF -DPKG_ML-IAP:BOOL=OFF -DPKG_ML-PACE:BOOL=OFF -DPKG_ML-POD:BOOL=OFF -DPKG_ML-RANN:BOOL=OFF -DPKG_ML-SNAP:BOOL=OFF -DPKG_ML-UF3:BOOL=OFF -DPKG_MOFFF:BOOL=OFF -DPKG_MOLECULE:BOOL=ON -DPKG_MOLFILE:BOOL=OFF -DPKG_NETCDF:BOOL=OFF -DPKG_OPENMP:BOOL=OFF -DPKG_OPT:BOOL=OFF -DPKG_ORIENT:BOOL=OFF -DPKG_PERI:BOOL=OFF -DPKG_PHONON:BOOL=OFF -DPKG_PLUGIN:BOOL=OFF -DPKG_PLUMED:BOOL=OFF -DPKG_POEMS:BOOL=OFF -DPKG_PTM:BOOL=OFF -DPKG_PYTHON:BOOL=OFF -DPKG_QEQ:BOOL=OFF -DPKG_QTB:BOOL=OFF -DPKG_REACTION:BOOL=OFF -DPKG_REAXFF:BOOL=OFF -DPKG_RHEO:BOOL=OFF -DPKG_REPLICA:BOOL=OFF -DPKG_RIGID:BOOL=ON -DPKG_SCAFACOS:BOOL=OFF -DPKG_SHOCK:BOOL=OFF -DPKG_SMTBQ:BOOL=OFF -DPKG_SPH:BOOL=OFF -DPKG_SPIN:BOOL=OFF -DPKG_SRD:BOOL=OFF -DPKG_TALLY:BOOL=OFF -DPKG_UEF:BOOL=OFF -DPKG_VORONOI:BOOL=OFF -DPKG_VTK:BOOL=OFF -DPKG_YAFF:BOOL=OFF -DFFT:STRING=fftw3 -DFFT_USE_HEFFTE:BOOL=OFF -DFFT_SINGLE:BOOL=OFF /tmp/fchen14/spack-stage/spack-stage-lammps-20240829.3-aem65qhwgupmesfprql3dlahrimp5afr/spack-src/cmake
+> CMake Warning:
+    Ignoring empty string ("") provided on the command line.
+  
+  
+  CMake Deprecation Warning at CMakeLists.txt:18 (cmake_policy):
+    The OLD behavior for policy CMP0109 will be removed from a future version
+    of CMake.
+-- lines 35 to 52 --
+  -- Could NOT find FFMPEG (missing: FFMPEG_EXECUTABLE)
+  -- Found PkgConfig: /usr/bin/pkg-config (found version "2.1.0")
+  -- Checking for module 'fftw3'
+  --   Package 'fftw3', required by 'virtual:world', not found
+  -- Checking for module 'fftw3'
+  --   Package 'fftw3', required by 'virtual:world', not found
+> CMake Error at /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/cmake-3.31.8-lauilgx6yhpaljwirympz3d6prrjvdgy/share/cmake-3.31/Modules/FindPackageHandleStandardArgs.cmake:233 (message):
+    Could NOT find FFTW3 (missing: FFTW3_LIBRARY FFTW3_INCLUDE_DIR)
+  Call Stack (most recent call first):
+    /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/cmake-3.31.8-lauilgx6yhpaljwirympz3d6prrjvdgy/share/cmake-3.31/Modules/FindPackageHandleStandardArgs.cmake:603 (_FPHSA_FAILURE_MESSAGE)
+    Modules/FindFFTW3.cmake:21 (find_package_handle_standard_args)
+    Modules/Packages/KSPACE.cmake:19 (find_package)
+    CMakeLists.txt:593 (include)
+  
+  
+  -- Configuring incomplete, errors occurred!
+  Command exited with status 1:
+      /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/cmake-3.31.8-lauilgx6yhpaljwirympz3d6prrjvdgy/bin/cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX:STRING=/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/lammps-20240829.3-aem65qhwgupmesfprql3dlahrimp5afr -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON '-DCMAKE_INSTALL_RPATH:STRING=/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/lammps-20240829.3-aem65qhwgupmesfprql3dlahrimp5afr/lib;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/lammps-20240829.3-aem65qhwgupmesfprql3dlahrimp5afr/lib64' '-DCMAKE_PREFIX_PATH:STRING=/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/cmake-3.31.8-lauilgx6yhpaljwirympz3d6prrjvdgy;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/compiler-wrapper-1.0-qylsjfuhzai5n22mysfdk3jgdqemf4pz;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/gcc-runtime-14-udjtreslglqzy35bederrrgscfdhgxte;/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/gmake-4.4.1-an52kh6xl62igsnt3qemnvltytfjhtjf;/usr/local/packages/cuda/13.3;/usr/local/packages/cuda/13.3/targets/x86_64-linux/lib/cmake;/usr/local/packages/compilers/intel-oneapi-2026;/usr/local/packages/compilers/intel-oneapi-2026' -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_INTERPROCEDURAL_OPTIMIZATION:BOOL=OFF -DCMAKE_POLICY_DEFAULT_CMP0090:STRING=NEW -DCMAKE_FIND_USE_PACKAGE_REGISTRY:BOOL=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -DBUILD_SHARED_LIBS:BOOL=ON '' -DBUILD_MPI:BOOL=ON -DBUILD_OMP:BOOL=ON -DBUILD_TOOLS:BOOL=OFF -DENABLE_TESTING:BOOL=OFF -DDOWNLOAD_POTENTIALS:BOOL=OFF -DPKG_GPU:BOOL=ON -DGPU_API:STRING=cuda -DGPU_PREC:STRING=mixed -DGPU_ARCH:STRING=sm_80 -DCUDA_MPS_SUPPORT:BOOL=OFF -DBUILD_LIB:BOOL=ON '-DCMAKE_TUNE_FLAGS:STRING=-march=icelake-client -mtune=icelake-client' -DLAMMPS_SIZES:STRING=smallbig -DWITH_JPEG:BOOL=OFF -DWITH_PNG:BOOL=OFF -DWITH_FFMPEG:BOOL=OFF -DWITH_CURL:BOOL=OFF -DPKG_ADIOS:BOOL=OFF -DPKG_AMOEBA:BOOL=OFF -DPKG_ASPHERE:BOOL=OFF -DPKG_ATC:BOOL=OFF -DPKG_AWPMD:BOOL=OFF -DPKG_BOCS:BOOL=OFF -DPKG_BODY:BOOL=OFF -DPKG_BPM:BOOL=OFF -DPKG_BROWNIAN:BOOL=OFF -DPKG_CG-DNA:BOOL=OFF -DPKG_CG-SPICA:BOOL=OFF -DPKG_CLASS2:BOOL=OFF -DPKG_COLLOID:BOOL=OFF -DPKG_COLVARS:BOOL=OFF -DPKG_COMPRESS:BOOL=OFF -DPKG_CORESHELL:BOOL=OFF -DPKG_DIELECTRIC:BOOL=OFF -DPKG_DIFFRACTION:BOOL=OFF -DPKG_DIPOLE:BOOL=OFF -DPKG_DPD-BASIC:BOOL=OFF -DPKG_DPD-MESO:BOOL=OFF -DPKG_DPD-REACT:BOOL=OFF -DPKG_DPD-SMOOTH:BOOL=OFF -DPKG_DRUDE:BOOL=OFF -DPKG_EFF:BOOL=OFF -DPKG_ELECTRODE:BOOL=OFF -DPKG_EXTRA-COMMAND:BOOL=OFF -DPKG_EXTRA-COMPUTE:BOOL=OFF -DPKG_EXTRA-DUMP:BOOL=OFF -DPKG_EXTRA-FIX:BOOL=OFF -DPKG_EXTRA-MOLECULE:BOOL=OFF -DPKG_EXTRA-PAIR:BOOL=OFF -DPKG_FEP:BOOL=OFF -DPKG_GRANULAR:BOOL=OFF -DPKG_H5MD:BOOL=OFF -DPKG_INTEL:BOOL=OFF -DPKG_INTERLAYER:BOOL=OFF -DPKG_KIM:BOOL=OFF -DPKG_KOKKOS:BOOL=OFF -DPKG_KSPACE:BOOL=ON -DPKG_LATBOLTZ:BOOL=OFF -DPKG_LEPTON:BOOL=OFF -DPKG_MACHDYN:BOOL=OFF -DPKG_MANIFOLD:BOOL=OFF -DPKG_MANYBODY:BOOL=ON -DPKG_MC:BOOL=OFF -DPKG_MDI:BOOL=OFF -DPKG_MEAM:BOOL=OFF -DPKG_MESONT:BOOL=OFF -DPKG_MGPT:BOOL=OFF -DPKG_MISC:BOOL=OFF -DPKG_ML-HDNNP:BOOL=OFF -DPKG_ML-IAP:BOOL=OFF -DPKG_ML-PACE:BOOL=OFF -DPKG_ML-POD:BOOL=OFF -DPKG_ML-RANN:BOOL=OFF -DPKG_ML-SNAP:BOOL=OFF -DPKG_ML-UF3:BOOL=OFF -DPKG_MOFFF:BOOL=OFF -DPKG_MOLECULE:BOOL=ON -DPKG_MOLFILE:BOOL=OFF -DPKG_NETCDF:BOOL=OFF -DPKG_OPENMP:BOOL=OFF -DPKG_OPT:BOOL=OFF -DPKG_ORIENT:BOOL=OFF -DPKG_PERI:BOOL=OFF -DPKG_PHONON:BOOL=OFF -DPKG_PLUGIN:BOOL=OFF -DPKG_PLUMED:BOOL=OFF -DPKG_POEMS:BOOL=OFF -DPKG_PTM:BOOL=OFF -DPKG_PYTHON:BOOL=OFF -DPKG_QEQ:BOOL=OFF -DPKG_QTB:BOOL=OFF -DPKG_REACTION:BOOL=OFF -DPKG_REAXFF:BOOL=OFF -DPKG_RHEO:BOOL=OFF -DPKG_REPLICA:BOOL=OFF -DPKG_RIGID:BOOL=ON -DPKG_SCAFACOS:BOOL=OFF -DPKG_SHOCK:BOOL=OFF -DPKG_SMTBQ:BOOL=OFF -DPKG_SPH:BOOL=OFF -DPKG_SPIN:BOOL=OFF -DPKG_SRD:BOOL=OFF -DPKG_TALLY:BOOL=OFF -DPKG_UEF:BOOL=OFF -DPKG_VORONOI:BOOL=OFF -DPKG_VTK:BOOL=OFF -DPKG_YAFF:BOOL=OFF -DFFT:STRING=fftw3 -DFFT_USE_HEFFTE:BOOL=OFF -DFFT_SINGLE:BOOL=OFF /tmp/fchen14/spack-stage/spack-stage-lammps-20240829.3-aem65qhwgupmesfprql3dlahrimp5afr/spack-src/cmake
+==> Error: The following packages failed to install:
+lammps@20240829.3/aem65qhwgupmesfprql3dlahrimp5afr: /tmp/fchen14/spack-stage/spack-stage-lammps-20240829.3-aem65qhwgupmesfprql3dlahrimp5afr-mc_m0nvt.log
+!!! FAILED: lammps +cuda cuda_arch=80 %gcc
+=== spack install -j 16 namd +cuda cuda_arch=80 %gcc ===
+[ ] 74vjs5x charmpp@6.10.2 staging (0s)
+[ ] 74vjs5x charmpp@6.10.2 install (0s)
+[x] 74vjs5x charmpp@6.10.2 failed: /tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3-i4l3bika.log (1m07s)
+-- lines 13 to 25 --
+  Soft-linking over include
+  Soft-linking over tmp
+  Copying src/scripts/Makefile to /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/tmp
+  Generating /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/tmp/conv-mach-pre.sh
+  Generating /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/tmp/conv-mach-opt.h, conv-mach-opt.sh, conv-mach-opt.mak
+  Performing '/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/gmake-4.4.1-6issxzhqz2q5oly2bpb2gokwqftyzuo3/bin/gmake -j 16 basics OPTS=-optimize -production QUIET= CONFIG_OPTS=--disable-controlpoint --disable-tracing --disable-tracing-commthread --disable-charmdebug --disable-replay --disable-error-checking --disable-stats ' in /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/tmp
+> gmake: warning: -j16 forced in submake: resetting jobserver mode.
+  pwd
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/tmp
+  find . -type l -exec rm {} \;
+  rm -rf QuickThreads
+  rm -rf hwloc
+  rm -rf libs
+-- lines 514 to 549 --
+  ../bin/charmc -host  -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/ -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/sdag/ -I.   -c -o xi-Chare.o /tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/xi-Chare.C
+  ../bin/charmc -host  -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/ -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/sdag/ -I.   -c -o xi-Message.o /tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/xi-Message.C
+  ../bin/charmc -host  -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/ -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/sdag/ -I.   -c -o xi-Construct.o /tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/xi-Construct.C
+  ../bin/charmc -host  -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/ -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/sdag/ -I.   -c -o xi-Module.o /tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/xi-Module.C
+  ../bin/charmc -host  -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/ -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/sdag/ -I.   -c -o xi-SdagCollection.o /tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/xi-SdagCollection.C
+  lex.yy.c: In function 'int yylex()':
+> lex.yy.c:1021:25: warning: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+> lex.yy.c:1022:17: warning: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+> lex.yy.c:1022:25: warning: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+> lex.yy.c:1023:15: warning: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+> lex.yy.c:1081:21: warning: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+  lex.yy.c: In function 'int yy_get_next_buffer()':
+> lex.yy.c:1351:21: warning: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+> lex.yy.c:1352:17: warning: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+> lex.yy.c:1353:15: warning: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+> lex.yy.c:1353:31: warning: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+  lex.yy.c: In function 'yy_state_type yy_get_previous_state()':
+> lex.yy.c:1456:25: warning: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+> lex.yy.c:1457:17: warning: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+> lex.yy.c:1466:20: warning: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+  lex.yy.c: In function 'yy_state_type yy_try_NUL_trans(yy_state_type)':
+> lex.yy.c:1487:15: warning: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+> lex.yy.c:1489:19: warning: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+  lex.yy.c: At global scope:
+> lex.yy.c:1504:49: warning: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+  lex.yy.c: In function 'void yyunput(int, char*)':
+> lex.yy.c:1506:17: warning: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+> lex.yy.c:1516:22: warning: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+> lex.yy.c:1517:18: warning: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+> lex.yy.c:1519:18: warning: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+  ../bin/charmc -host  -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/ -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/sdag/ -I.   -c -o xi-Value.o /tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/xi-Value.C
+  ../bin/charmc -host  -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/ -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/sdag/ -I.   -c -o xi-util.o /tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/xi-util.C
+  ../bin/charmc -host  -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/ -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/sdag/ -I.   -c -o sdag-globals.o /tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/sdag/sdag-globals.C
+  ../bin/charmc -host  -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/ -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/sdag/ -I.   -c -o CSdagConstruct.o /tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/sdag/CSdagConstruct.C
+  ../bin/charmc -host  -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/ -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/sdag/ -I.   -c -o CEntry.o /tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/sdag/CEntry.C
+  ../bin/charmc -host  -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/ -I/tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/sdag/ -I.   -c -o CParsedFile.o /tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/spack-src/src/xlat-i/sdag/CParsedFile.C
+-- lines 647 to 659 --
+  Soft-linking headers...
+  for hdr in AdaptiveLB.decl.h AdaptiveLB.h BaseLB.decl.h BaseLB.h BlockLB.decl.h BlockLB.h BlueGene.decl.h BlueGene.h CentralLB.decl.h CentralLB.h CentralLBMsg.h CkArray.decl.h CkCallback.decl.h CkCheckpoint.decl.h CkCheckpointStatus.decl.h CkFutures.decl.h CkLocation.decl.h CkMarshall.decl.h CkMemCheckpoint.decl.h CkMulticast.decl.h CkReduction.decl.h ComboCentLB.decl.h ComboCentLB.h CommAwareRefineLB.decl.h CommAwareRefineLB.h CommLB.decl.h CommLB.h CommLBHeap.h CommonLBs.decl.h ControlPoints.decl.h DistBaseLB.decl.h DistBaseLB.h DistributedLB.decl.h DistributedLB.h DummyLB.decl.h DummyLB.h EveryLB.decl.h GraphBFTLB.decl.h GraphBFTLB.h GraphPartLB.decl.h GraphPartLB.h GreedyAgentLB.decl.h GreedyAgentLB.h GreedyCommLB.decl.h GreedyCommLB.h GreedyLB.decl.h GreedyLB.h GreedyRefineLB.decl.h GreedyRefineLB.h GridCommLB.decl.h GridCommLB.h GridCommRefineLB.decl.h GridCommRefineLB.h GridHybridLB.decl.h GridHybridLB.h GridHybridSeedLB.decl.h GridHybridSeedLB.h GridMetisLB.decl.h GridMetisLB.h HbmLB.decl.h HbmLB.h HierarchicalLB.decl.h HierarchicalLB.h HybridBaseLB.decl.h HybridBaseLB.h HybridLB.decl.h HybridLB.h HybridLBMsg.h LBAgent.h LBComm.h LBDBManager.h LBDatabase.decl.h LBDatabase.h LBMachineUtil.h LBOM.h LBObj.h LBProfit.h LBSimulation.h MetaBalancer.decl.h MetaBalancer.h MetisLB.decl.h MetisLB.h NborBaseLB.decl.h NborBaseLB.h NeighborCommLB.decl.h NeighborCommLB.h NeighborLB.decl.h NeighborLB.h NeighborLBMsg.h NodeLevelLB.decl.h NodeLevelLB.h NullLB.decl.h OrbLB.decl.h OrbLB.h PathHistory.decl.h PhasebyArrayLB.decl.h PhasebyArrayLB.h RandCentLB.decl.h RandCentLB.h RandomForestModel.h RecBipartLB.decl.h RecBipartLB.h RefineCommLB.decl.h RefineCommLB.h RefineKLB.decl.h RefineKLB.h RefineLB.decl.h RefineLB.h RefineSwapLB.decl.h RefineSwapLB.h RefineTopoLB.decl.h RefineTopoLB.h Refiner.h RefinerApprox.h RefinerComm.h RefinerTemp.h RotateLB.decl.h RotateLB.h SSE-Double.h SSE-Float.h ScotchLB.decl.h ScotchLB.h TeamLB.decl.h TeamLB.h TempAwareCommLB.decl.h TempAwareCommLB.h TempAwareGreedyLB.decl.h TempAwareGreedyLB.h TempAwareRefineLB.decl.h TempAwareRefineLB.h TopoCentLB.decl.h TopoCentLB.h TopoLB.decl.h TopoLB.h TraceAutoPerf.decl.h TraceControlPoints.decl.h TraceProjections.decl.h TraceSimple.decl.h TraceSummary.decl.h TraceTau.decl.h TraceUtilization.decl.h TreeMatchLB.decl.h TreeMatchLB.h WSLB.decl.h WSLB.h XArraySectionReducer.h arrayRedistributor.h bgconverse.h bigsim_debug.h bigsim_logs.h bigsim_network.h bigsim_ooc.h bigsim_record.h bigsim_timing.h bitvecset.h blue-conv.h blue.h blue_defs.h blue_impl.h blue_types.h ccs-auth.C ccs-auth.h ccs-client.C ccs-client.h ccs-server.h charm++.h charm++_type_traits.h charm-api.h charm.h ck.h ckBIconfig.h ckIgetControl.h ckarray.h ckarrayindex.h ckarrayoptions.h ckbitvector.h ckcallback-ccs.h ckcallback.h ckcheckpoint.h ckcomplex.h ckdll.h ckevacuation.h ckfutures.h ckgraph.h ckgraphTemp.h ckhashtable.h ckheap.h ckimage.h cklists.h ckliststring.h cklocation.h cklocrec.h ckmemcheckpoint.h ckmessage.h ckmigratable.h ckmulticast.h ckobjQ.h ckobjid.h ckrdma.h ckreduction.h ckregex.h cksection.h cksequence.h cksequence_factory.h cksequence_internal.h ckset.h ckstatistics.h ckstream.h cktiming.h ckvector3d.h cmimemcpy.h cmipool.h cmiqueue.h cmirdmautils.h cmitls.h controlPoints.h controlPointsf.h conv-autoconfig.h conv-ccs.h conv-common.h conv-config.h conv-config.sh conv-cpath.h conv-cpm.h conv-header.h conv-lists.h conv-mach-common.h conv-mach.h conv-mach.sh conv-qd.h conv-random.h conv-rdma.h conv-taskQ.h conv-trace.h converse.h cp_effects.h cpthreads.h crc32.h debug-charm.h debug-conv++.h debug-conv.h elements.h envelope-path.h envelope.h init.h lbdb++.h lbdb.h lrts-common.h lrtslock.h manager.h memory-isomalloc.h mempool.h middle-blue.h middle-conv.h middle.h mpi-interoperate.h mpi_main.decl.h msgq.h objid.h pathHistory.h persistent.h picsautoperf.h picsautoperfAPI.h picsautoperfAPIC.h picsdecisiontree.h picsdefs.h picstreenode.h pup.h pup_c.h pup_c_functions.h pup_cmialloc.h pup_mpi.h pup_paged.h pup_stl.h pup_toNetwork.h pup_toNetwork4.h pupf.h pvm3.h pvmc.h qd.h queueing.h rand48_replacement.h random_sequence.h readonly.h register.h sdag.h shared-alloc.h simd.h simplemsg.h sm.h sockRoutines.C sockRoutines.h spanningTree.h stats.h strided_sequence.h taskqueue.h topology.h trace-bluegene.h trace-common.h trace-controlPoints.h trace-perf.h trace-projections.h trace-simple.h trace.h vector2d.h waitqd.decl.h waitqd.h ; do test ! -f "../include/`basename $hdr`" && ./system_ln "../tmp/$hdr" ../include ; done
+  touch headerlinks
+  gmake[1]: Leaving directory '/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/tmp'
+  touch basics
+  Performing '/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/gmake-4.4.1-6issxzhqz2q5oly2bpb2gokwqftyzuo3/bin/gmake -j 16 LIBS OPTS=-optimize -production QUIET=' in /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/tmp
+> gmake: warning: -j16 forced in submake: resetting jobserver mode.
+  ( /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/gmake-4.4.1-6issxzhqz2q5oly2bpb2gokwqftyzuo3/bin/gmake -C hwloc )
+  ../bin/charmc -seq  -DCMK_NOT_USE_CONVERSE=1 -o sockRoutines-seq.o sockRoutines.C
+  ../bin/charmc  -optimize -production  -build-shared -I.   -c -o trace-common.o trace-common.C
+  ../bin/charmc  -optimize -production  -build-shared -I.   -c -o tracec.o tracec.C
+  ../bin/charmc  -optimize -production  -build-shared -I.   -c -o tracef.o tracef.C
+  ../bin/charmc  -optimize -production  -build-shared -I.   -c -o init.o init.C
+-- lines 903 to 927 --
+  ../bin/charmc  -optimize -production  -build-shared -I. -o libmemory-os-leak.o        -DCMK_MEMORY_BUILD_OS_WRAPPED -DCMK_MEMORY_BUILD_LEAK       -touch-on-failure memory.C
+  ../bin/charmc  -optimize -production  -build-shared -I. -o libmemory-os-paranoid.o    -DCMK_MEMORY_BUILD_OS_WRAPPED -DCMK_MEMORY_BUILD_PARANOID   -touch-on-failure memory.C
+  ../bin/charmc  -optimize -production  -build-shared -I. -o libmemory-os-lock.o        -DCMK_MEMORY_BUILD_OS_WRAPPED -DCMK_MEMORY_BUILD_LOCK       -touch-on-failure memory.C
+  ../bin/charmc  -optimize -production  -build-shared -o ../lib/libmemory-os-wrapper.a memory-os-wrapper.C || touch ../lib/libmemory-os-wrapper.a
+  ../bin/charmc  -optimize -production  -build-shared -I. -o libmemory-gnu.o -DCMK_MEMORY_BUILD_GNU -touch-on-failure memory.C
+  memory.C: In function 'CMK_TYPEDEF_UINT8 MemusageMallinfo()':
+> memory.C:501:18: warning: 'mallinfo mallinfo()' is deprecated [-Wdeprecated-declarations]
+    501 |     mi = mallinfo();
+        |          ~~~~~~~~^~
+  In file included from memory.C:489:
+> /usr/include/malloc.h:114:24: note: declared here
+    114 | extern struct mallinfo mallinfo (void) __THROW __MALLOC_DEPRECATED;
+        |                        ^~~~~~~~
+  memory.C: In function 'CMK_TYPEDEF_UINT8 MemusageMallinfo()':
+> memory.C:501:18: warning: 'mallinfo mallinfo()' is deprecated [-Wdeprecated-declarations]
+    501 |     mi = mallinfo();
+        |          ~~~~~~~~^~
+  In file included from memory.C:489:
+> /usr/include/malloc.h:114:24: note: declared here
+    114 | extern struct mallinfo mallinfo (void) __THROW __MALLOC_DEPRECATED;
+        |                        ^~~~~~~~
+  ../bin/charmc  -optimize -production  -build-shared -I. -o libmemory-gnu-verbose.o -DCMK_MEMORY_BUILD_VERBOSE -touch-on-failure memory.C
+  ar: creating ../lib/libldb-neighbor.a
+  Making pup routines for data type int/i/integer
+  Making pup routines for data type short/s/integer(kind=2)
+-- lines 999 to 1032 --
+  touch uFcontext_asm
+  ../bin/charmc -host  conv-cpm.C
+  /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/gmake-4.4.1-6issxzhqz2q5oly2bpb2gokwqftyzuo3/bin/gmake -C topomanager -f Makefile_charm
+  gmake[1]: Entering directory '/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/tmp/topomanager'
+  ../../bin/charmc -optimize -production  -build-shared -I../../tmp -o TopoManager.o TopoManager.C
+  md/setjmp64_.c: In function 'qt_args_1':
+> md/setjmp64_.c:67:5: warning: '_longjmp' accessing 200 bytes in a region of size 8 [-Wstringop-overflow=]
+     67 |     _longjmp(*(jmp_buf *)&rjb, push_buf((void *)jb));
+        |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> md/setjmp64_.c:67:5: note: referencing argument 1 of type 'struct __jmp_buf_tag[1]'
+  In file included from md/setjmp64_.c:13:
+> /usr/include/setjmp.h:61:13: note: in a call to function '_longjmp'
+     61 | extern void _longjmp (struct __jmp_buf_tag __env[1], int __val)
+        |             ^~~~~~~~
+  md/setjmp64_.c: In function 'qt_block':
+> md/setjmp64_.c:104:5: warning: '_longjmp' accessing 200 bytes in a region of size 8 [-Wstringop-overflow=]
+    104 |     _longjmp(*(jmp_buf *)&sp, push_buf((void *)&help));
+        |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> md/setjmp64_.c:104:5: note: referencing argument 1 of type 'struct __jmp_buf_tag[1]'
+> /usr/include/setjmp.h:61:13: note: in a call to function '_longjmp'
+     61 | extern void _longjmp (struct __jmp_buf_tag __env[1], int __val)
+        |             ^~~~~~~~
+  md/setjmp64_.c: In function 'qt_abort':
+> md/setjmp64_.c:118:3: warning: '_longjmp' accessing 200 bytes in a region of size 8 [-Wstringop-overflow=]
+    118 |   _longjmp(*(jmp_buf *)&sp, push_buf((void *)&help));
+        |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> md/setjmp64_.c:118:3: note: referencing argument 1 of type 'struct __jmp_buf_tag[1]'
+> /usr/include/setjmp.h:61:13: note: in a call to function '_longjmp'
+     61 | extern void _longjmp (struct __jmp_buf_tag __env[1], int __val)
+        |             ^~~~~~~~
+  ../../bin/charmc -seq -I. -optimize -production  -build-shared -Wno-error -U_FORTIFY_SOURCE -o libckqt.a qt.o qtmds.o
+  ../bin/charmc  -optimize -production  -build-shared -I.   -c -o DummyLB.o DummyLB.C
+  ../../bin/charmc -optimize -production  -build-shared -I../../tmp -o CrayNid.o CrayNid.c
+  ar: creating libckqt.a
+-- lines 1038 to 1071 --
+  ../bin/charmc  -optimize -production  -build-shared -I.   -c -o CommLB.o CommLB.C
+  ../../bin/charmc -seq -I. -shared -optimize -production  -build-shared -Wno-error -c -o qtmds_shared.o md/setjmp64_.c
+  ../bin/charmc  -optimize -production  -build-shared -I. -o ../lib/libmemory-gnu.a -DCMK_MEMORY_BUILD_GNU -touch-on-failure libmemory-gnu.o
+  ../bin/charmc  -optimize -production  -build-shared -I.   -c -o RandCentLB.o RandCentLB.C
+  ../bin/charmc  -optimize -production  -build-shared -I. -o ../lib/libmemory-gnu-verbose.a -DCMK_MEMORY_BUILD_VERBOSE -touch-on-failure libmemory-gnu-verbose.o
+  md/setjmp64_.c: In function 'qt_args_1':
+> md/setjmp64_.c:67:5: warning: '_longjmp' accessing 200 bytes in a region of size 8 [-Wstringop-overflow=]
+     67 |     _longjmp(*(jmp_buf *)&rjb, push_buf((void *)jb));
+        |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> md/setjmp64_.c:67:5: note: referencing argument 1 of type 'struct __jmp_buf_tag[1]'
+  In file included from md/setjmp64_.c:13:
+> /usr/include/setjmp.h:61:13: note: in a call to function '_longjmp'
+     61 | extern void _longjmp (struct __jmp_buf_tag __env[1], int __val)
+        |             ^~~~~~~~
+  md/setjmp64_.c: In function 'qt_block':
+> md/setjmp64_.c:104:5: warning: '_longjmp' accessing 200 bytes in a region of size 8 [-Wstringop-overflow=]
+    104 |     _longjmp(*(jmp_buf *)&sp, push_buf((void *)&help));
+        |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> md/setjmp64_.c:104:5: note: referencing argument 1 of type 'struct __jmp_buf_tag[1]'
+> /usr/include/setjmp.h:61:13: note: in a call to function '_longjmp'
+     61 | extern void _longjmp (struct __jmp_buf_tag __env[1], int __val)
+        |             ^~~~~~~~
+  md/setjmp64_.c: In function 'qt_abort':
+> md/setjmp64_.c:118:3: warning: '_longjmp' accessing 200 bytes in a region of size 8 [-Wstringop-overflow=]
+    118 |   _longjmp(*(jmp_buf *)&sp, push_buf((void *)&help));
+        |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> md/setjmp64_.c:118:3: note: referencing argument 1 of type 'struct __jmp_buf_tag[1]'
+> /usr/include/setjmp.h:61:13: note: in a call to function '_longjmp'
+     61 | extern void _longjmp (struct __jmp_buf_tag __env[1], int __val)
+        |             ^~~~~~~~
+  ../bin/charmc  -optimize -production  -build-shared -I.   -c -o RefineLB.o RefineLB.C
+  ../../bin/charmc -seq -I. -shared -optimize -production  -build-shared -Wno-error -o libckqt.so qt_shared.o qtmds_shared.o
+  ar: creating ../lib/libmemory-gnu.a
+  ../bin/charmc  -optimize -production  -build-shared -I. -o ../lib/libmemory-gnu-paranoid.a -DCMK_MEMORY_BUILD_PARANOID -touch-on-failure libmemory-gnu-paranoid.o
+-- lines 1418 to 1442 --
+  ../bin/charmc  -optimize -production  -build-shared -o ../lib/libconv-utilf.a pup_f.o || touch ../lib/libconv-utilf.a
+  ar: creating ../lib/libconv-utilf.a
+  ar: creating ../lib/libmoduleEveryLB.a
+  if [ ! -f charmrun ]; then \
+  		(cd charmrun-src ; /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/gmake-4.4.1-6issxzhqz2q5oly2bpb2gokwqftyzuo3/bin/gmake OPTS='-optimize -production  -build-shared -Wno-error' -j1) ; fi
+  gmake[1]: Entering directory '/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/tmp/charmrun-src'
+> gmake[1]: warning: -j1 forced in submake: resetting jobserver mode.
+  ../../bin/charmc -optimize -production  -build-shared -Wno-error -lm -I.. -L../libs -c -seq -DCMK_NOT_USE_CONVERSE=1 charmrun.C -o charmrun.o
+  ( [ -r libmoduleEveryLB.dep ] && cp -f libmoduleEveryLB.dep ../lib/ ) || true
+  In function 'ppdeffind pparam_find(const char*)',
+      inlined from 'int pparam_parseopt()' at charmrun.C:589:28,
+      inlined from 'int pparam_parsecmd(char, const char**)' at charmrun.C:645:29,
+      inlined from 'void arg_init(int, const char**)' at charmrun.C:949:22,
+      inlined from 'int main(int, const char**, char**)' at charmrun.C:4129:11:
+> charmrun.C:392:17: warning: 'int strcmp(const char*, const char*)' reading 1 or more bytes from a region of size 0 [-Wstringop-overread]
+    392 |       if (strcmp(def->lname, lname + (sizeof(no_prefix)-1)) == 0)
+        |           ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  charmrun.C: In function 'int main(int, const char**, char**)':
+> charmrun.C:585:10: note: at offset 3 into source object 'name' of size 2
+    585 |     char name[2];
+        |          ^~~~
+  ../../bin/charmc -optimize -production  -build-shared -Wno-error -lm -I.. -L../libs -cp ../../bin -seq -language c++ -o charmrun charmrun.o
+  ../../bin/charmc -optimize -production  -build-shared -Wno-error -lm -I.. -L../libs -seq -c daemon.C -o daemon.o
+  ../../bin/charmc -optimize -production  -build-shared -Wno-error -lm -I.. -L../libs -cp ../../bin -seq daemon.o ../sockRoutines-seq.o -o charmd
+  ../../bin/charmc -optimize -production  -build-shared -Wno-error -lm -I.. -L../libs -seq -DFACELESS -c daemon.C -o daemon-faceless.o
+-- lines 1467 to 1487 --
+  ../../../../bin/charmc -optimize -production  -build-shared -I../../../../tmp -o NDMeshStreamer.o NDMeshStreamer.C
+  /bin/cp NDMeshStreamer.decl.h ../../../../include
+  /bin/cp NDMeshStreamer.def.h ../../../../include
+  touch ckio.ci.stamp
+  cp ckio.h CkIO.decl.h CkIO.def.h CkIO_impl.decl.h CkIO_impl.def.h ../../../../include/
+  In file included from fs_parameters.c:5:
+> /usr/include/lustre/lustreapi.h:522:9: error: unknown type name 'atomic_int'
+    522 |         atomic_int fwq_active_units;
+        |         ^~~~~~~~~~
+> Fatal Error by charmc in directory /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/tmp/libs/ck-libs/io
+     Command gcc -DCMK_GFORTRAN -DCMK_GFORTRAN -D_REENTRANT -I../../../../bin/../include -D__CHARMC__=1 -O2 -U_FORTIFY_SOURCE -fno-stack-protector -fPIC -c fs_parameters.c -o fs_parameters.o returned error code 1
+  charmc exiting...
+  touch headers
+  ../../../../bin/charmc -optimize -production  -build-shared -c ckio.C
+> gmake[1]: *** [Makefile:27: fs_parameters.o] Error 1
+  gmake[1]: *** Waiting for unfinished jobs....
+  ../../../../bin/charmc -optimize -production  -build-shared -o ../../../../lib/libcms.a cms.o
+  ar: creating ../../../../lib/libcms.a
+  rm -f ../../../../include/cms.h
+  cp cms.h ../../../../include
+  gmake[3]: Leaving directory '/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/tmp/libs/conv-libs/master-slave'
+-- lines 1496 to 1509 --
+  gmake[1]: Leaving directory '/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/tmp/libs'
+  ../../../../bin/charmc -optimize -production  -build-shared -o ../../../../lib/libmoduleNDMeshStreamer.a NDMeshStreamer.o
+  ar: creating ../../../../lib/libmoduleNDMeshStreamer.a
+  /bin/cp libmoduleNDMeshStreamer.dep ../../../../lib
+  gmake[1]: Leaving directory '/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/tmp/libs/ck-libs/NDMeshStreamer'
+  gmake[1]: Leaving directory '/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/tmp/libs/ck-libs/io'
+> gmake: *** [Makefile:105: io] Error 2
+  -------------------------------------------------
+  Charm++ NOT BUILT. Either cd into /project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3/tmp and try
+  to resolve the problems yourself, visit
+  http://charm.cs.illinois.edu/
+  for more information. Otherwise, email the developers at charm@cs.illinois.edu
+  Command exited with status 2:
+      ./build LIBS netlrts-linux-x86_64 gcc gfortran -j16 --destination=/project/fchen14/spack-rhel10-gpu-test/spack-install/linux-icelake/charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3 smp --build-shared --with-production
+==> Error: The following packages failed to install:
+charmpp@6.10.2/74vjs5xckou7gfx2yhvkz5zp4dahgyz3: /tmp/fchen14/spack-stage/spack-stage-charmpp-6.10.2-74vjs5xckou7gfx2yhvkz5zp4dahgyz3-i4l3bika.log
+!!! FAILED: namd +cuda cuda_arch=80 %gcc
+==> Warning: autoconf@2.72 build_system=autotools platform=linux os=almalinux10 target=icelake/7zdmxrw uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: automake@1.16.5 build_system=autotools platform=linux os=almalinux10 target=icelake/jlgzwgd uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: binutils@2.44~debuginfod+gas~gold~gprofng~headers~interwork+ld~libiberty~lto~nls~pgo+plugins build_system=autotools compress_debug_sections=zlib libs:=shared,static platform=linux os=almalinux10 target=icelake/lu3pupo uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: boost@1.88.0+atomic~charconv+chrono~clanglibcpp~cobalt~container~context~contract~coroutine+date_time~debug+exception~fiber+filesystem+graph~graph_parallel+icu+iostreams~json+locale+log+math~mpi~mqtt5+multithreaded~nowide~numpy~pic+program_options~python+random+regex+serialization+shared~signals2~singlethreaded~stacktrace+system~taggedlayout+test+thread+timer~type_erasure~url~versionedlayout+wave build_system=generic cxxstd=11 patches:=8e3faa2,a440f96 visibility=hidden platform=linux os=almalinux10 target=icelake/3i5iyjb uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: cmake@3.31.8~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release platform=linux os=almalinux10 target=icelake/okjgb27 uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: curl@8.11.1~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs:=shared,static tls:=openssl platform=linux os=almalinux10 target=icelake/e3yrr5n uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: gettext@0.23.1+bzip2+curses+git~libunistring+libxml2+pic+shared~tar+xz build_system=autotools platform=linux os=almalinux10 target=icelake/6qhp5dx uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: libint@2.9.0~debug~fma+fortran build_system=autotools tune=cp2k-lmax-5 platform=linux os=almalinux10 target=icelake/mnqgkbj uses more than one compiler, and might not fit the LMod hierarchy. Using gcc@14~binutils+bootstrap~graphite~mold~nvptx~piclibs~profiled~strip build_system=autotools build_type=RelWithDebInfo languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/hm7ozvb as the LMod compiler.
+==> Warning: libxml2@2.13.5~http+pic~python+shared build_system=autotools platform=linux os=almalinux10 target=icelake/gz5m4tr uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: m4@1.4.20+sigsegv build_system=autotools platform=linux os=almalinux10 target=icelake/g5vmqvp uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: meson@1.7.0 build_system=python_pip patches:=0f0b1bd platform=linux os=almalinux10 target=icelake/257ywsr uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: openssl@3.4.1~docs+shared build_system=generic certs=mozilla platform=linux os=almalinux10 target=icelake/qtfxh2c uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: perl@5.40.0+cpanm+opcode+open+shared+threads build_system=generic platform=linux os=almalinux10 target=icelake/busnbzp uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: py-cython@3.0.12 build_system=python_pip platform=linux os=almalinux10 target=icelake/iqwv45h uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: py-flit-core@3.12.0 build_system=python_pip platform=linux os=almalinux10 target=icelake/crs6jju uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: py-fypp@3.1 build_system=python_pip platform=linux os=almalinux10 target=icelake/njly4cy uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: py-meson-python@0.16.0 build_system=python_pip platform=linux os=almalinux10 target=icelake/6ueku6a uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: py-numpy@2.3.1 build_system=python_pip patches:=873745d platform=linux os=almalinux10 target=icelake/mz2ql44 uses more than one compiler, and might not fit the LMod hierarchy. Using gcc@14~binutils+bootstrap~graphite~mold~nvptx~piclibs~profiled~strip build_system=autotools build_type=RelWithDebInfo languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/hm7ozvb as the LMod compiler.
+==> Warning: py-packaging@25.0 build_system=python_pip platform=linux os=almalinux10 target=icelake/5otxw73 uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: py-pip@25.1.1 build_system=generic platform=linux os=almalinux10 target=icelake/nbxudti uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: py-pyproject-metadata@0.9.1 build_system=python_pip platform=linux os=almalinux10 target=icelake/j4qzowz uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: py-setuptools@80.9.0 build_system=generic platform=linux os=almalinux10 target=icelake/7ktqiof uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: py-wheel@0.45.1 build_system=generic platform=linux os=almalinux10 target=icelake/p4batky uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: python@3.13.5+bz2+ctypes+dbm~debug+libxml2+lzma~optimizations+pic+pyexpat+pythoncmd+readline+shared+sqlite3+ssl~tkinter+uuid+zlib build_system=generic platform=linux os=almalinux10 target=icelake/ilonq7c uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Warning: python-venv@1.0 build_system=generic platform=linux os=almalinux10 target=icelake/ra66j4f uses more than one compiler, and might not fit the LMod hierarchy. Using intel-oneapi-compilers@2026.1.0~amd+envmods~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64/4etaskp as the LMod compiler.
+==> Regenerating lmod module files
+=== 3 spec(s) failed: cp2k +cuda cuda_arch=80 %gcc lammps +cuda cuda_arch=80 %gcc namd +cuda cuda_arch=80 %gcc ===
+From https://github.com/lonihpc/spack-rhel10
+ * branch            cluster-results -> FETCH_HEAD
+HEAD is now at 4b6ed6b job 59 (spack-smoke-test) results, exit=0
