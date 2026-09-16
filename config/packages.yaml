@@ -89,12 +89,31 @@ packages:
       prefix: /usr/local/packages/compilers/intel-oneapi-2026
     buildable: false
 
-  # CUDA - confirmed by user: 13.3.0 is the target version, matching the
-  # GPU driver's supported userspace CUDA version.
+  # CUDA - confirmed by user: 13.3.0 is the target/default version,
+  # matching the GPU driver's supported userspace CUDA version. Used by
+  # cp2k/lammps (both real-compile-validated +cuda on this cluster).
+  #
+  # cuda@12.9.0 is a SECOND, deliberately parallel external, installed
+  # specifically for namd - researched and confirmed (2026-09) that
+  # NAMD's own release notes cap official CUDA support at "9.1-12.x";
+  # namd@3.0.3's own kernel code (cub::LaneMaskLt/Min/Max) uses CUB/CCCL
+  # symbols CUDA 13.3 has removed outright, which the user decided not
+  # to hand-patch (see repos/spack_repo/rhel10_overrides/packages/namd/
+  # package.py and environments/gpu-test/spack.yaml for the full 5-round
+  # investigation). Installed standalone (--toolkit --toolkitpath, no
+  # driver) rather than via nvhpc's bundled cuda/12.9 subdirectory - the
+  # user is this cluster's admin and preferred a direct, minimal
+  # install parallel to the existing cuda@13.3.0 layout over downloading
+  # the much larger nvhpc "multi-CUDA" package just to harvest one
+  # subdirectory from it. Only namd should depend on this version (via
+  # `^cuda@12.9.0` in its spec) - everything else keeps using the
+  # default cuda@13.3.0.
   cuda:
     externals:
     - spec: cuda@13.3.0
       prefix: /usr/local/packages/cuda/13.3
+    - spec: cuda@12.9.0
+      prefix: /usr/local/packages/cuda/12.9
     buildable: false
 
   # Global variant preference (not an external) - avoids pulling in tar as

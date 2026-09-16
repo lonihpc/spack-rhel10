@@ -98,16 +98,17 @@ spack concretize -f
 # Spack-built fftw for cp2k's fftw-api dependency (BLAS/LAPACK/ScaLAPACK
 # stay on MKL, unaffected).
 #
-# namd PAUSED (2026-09-14, job 68) - see environments/gpu-test/
-# spack.yaml's comment for the full 5-round fix chain and why the user
-# decided to stop before hand-patching namd@3.0.3's own numerically-
-# active kernel code (cub::LaneMaskLt/Min/Max, removed in CUDA 13.3's
-# CCCL) sight-unseen with no way to verify correctness on a real GPU.
-# cp2k and lammps both build successfully; namd removed from this list
-# until revisited.
+# namd's `^cuda@12.9.0`: see environments/gpu-test/spack.yaml's comment
+# for the full 5-round CUDA-13.3 fix chain and why it was paused, then
+# resolved via a second, parallel `cuda@12.9.0` external (registered in
+# ../../config/packages.yaml) - NAMD's own release notes cap official
+# CUDA support at "9.1-12.x", so this pins namd to a CUDA version it
+# actually supports instead of the default cuda@13.3.0 that cp2k/lammps
+# use.
 SPECS=(
   "cp2k +cuda cuda_arch=80 %gcc ^fftw"
   "lammps +cuda cuda_arch=80 %gcc ^fftw"
+  "namd@3.0.3 +cuda cuda_arch=80 %gcc ^charmpp build-target=charm++ ^cuda@12.9.0"
 )
 
 FAILED=()

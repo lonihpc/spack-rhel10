@@ -177,25 +177,33 @@ spack:
   # ROMIO entirely and sidestepping the failure rather than debugging a
   # ROMIO/MPI configure issue for functionality namd never uses.
   #
-  # namd PAUSED (2026-09-14, job 68), NOT in specs: below - after
-  # 5 rounds of real, escalating CUDA-13.3-vs-namd incompatibilities
-  # (texture-reference removal -> switched to namd@3.0.3; cudaDeviceProp
-  # .computeMode removal; CUB/Thrust/libcu++ merged into CCCL with a
-  # renamed dialect-check macro; CCCL itself now genuinely requiring
-  # C++17, not just claiming to; and finally namd@3.0.3's own kernel
-  # code - ComputeBondedCUDAKernel.cu, CudaTileListKernel.cu - directly
-  # calling cub::LaneMaskLt/cub::Min/cub::Max, which CUDA 13.3's CCCL
-  # has removed outright), the user decided to stop here rather than
-  # continue: unlike every fix above (Makefile flags, cosmetic string
-  # tables, dead diagnostic checks), this next round would mean hand-
-  # patching real, numerically-active kernel code (warp-level thread
-  # cooperation, min/max comparisons) sight-unseen (namd's source is
-  # license-gated - no way to inspect ahead of time) with no way to
-  # actually run it on a GPU to verify correctness. cp2k and lammps
-  # both build and install successfully +cuda on this cluster (see
-  # commit history for the full fix chain) - namd needs either a
-  # version namd upstream has itself validated against CUDA 13.x, or
-  # building against an older CUDA toolkit, before revisiting.
+  # namd was PAUSED (2026-09-14, job 68) after 5 rounds of real,
+  # escalating CUDA-13.3-vs-namd incompatibilities (texture-reference
+  # removal -> switched to namd@3.0.3; cudaDeviceProp.computeMode
+  # removal; CUB/Thrust/libcu++ merged into CCCL with a renamed
+  # dialect-check macro; CCCL itself genuinely requiring C++17, not just
+  # claiming to; and finally namd@3.0.3's own kernel code -
+  # ComputeBondedCUDAKernel.cu, CudaTileListKernel.cu - directly calling
+  # cub::LaneMaskLt/cub::Min/cub::Max, which CUDA 13.3's CCCL has
+  # removed outright). Rather than hand-patch that last one (real,
+  # numerically-active kernel code, license-gated source, no way to
+  # verify correctness on a GPU), researched NAMD's own release notes:
+  # "Support for CUDA versions 9.1-12.x" - even the latest 3.0.3 has
+  # never been validated against CUDA 13.x at all, so no namd
+  # version/patch was ever going to fix this on CUDA 13.3.
+  #
+  # RESOLVED (2026-09-15) via a second, parallel `cuda` external: the
+  # user (this cluster's admin) installed a standalone CUDA 12.9.0
+  # toolkit at /usr/local/packages/cuda/12.9 (--toolkit --toolkitpath,
+  # no driver install - the existing GPU driver already supports the
+  # newer CUDA 13.3, so it trivially supports the older 12.9 runtime
+  # too) specifically for namd, registered as `cuda@12.9.0` in
+  # ../../config/packages.yaml alongside the existing default
+  # cuda@13.3.0 (used by cp2k/lammps, untouched). `^cuda@12.9.0` below
+  # pins namd to the version NAMD upstream actually supports, instead
+  # of whatever `cuda_arch=80`'s default-provider resolution would pick
+  # (the default cuda@13.3.0).
   specs:
   - cp2k +cuda cuda_arch=80 %gcc ^fftw
   - lammps +cuda cuda_arch=80 %gcc ^fftw
+  - namd@3.0.3 +cuda cuda_arch=80 %gcc ^charmpp build-target=charm++ ^cuda@12.9.0
