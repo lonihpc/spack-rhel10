@@ -17,6 +17,11 @@ amber, ambertools, boost, bowtie2, bwa, cmake, conda/mamba, cosma, cp2k,
 lammps, matlab(非 spack 包,需单独装+手写 modulefile), metis, namd 等,
 后续可以继续加。(mpich/mvapich2 不再是目标软件,见下方编译器决定。)
 
+**GPU 软件(cp2k/lammps/namd)均已 `+cuda cuda_arch=80` 真实编译验证通过**
+(2026-09-15/16),详见下面"GPU(+cuda)软件真实编译验证与 CUDA 版本分流"
+章节——过程中挖出一长串 CUDA 13.3 相关的真实上游/配置兼容性 bug,namd
+最终还专门配了第二份 CUDA(12.9.0)。
+
 **Tier 1/2/3 批次(已加入 `config/specs.yaml`,详见下面"当前进度"章节
 末尾)**:
 - Tier 1:eigen, git, gsl, hwloc, valgrind(加已在清单里的 boost/
@@ -45,13 +50,18 @@ default provider。
 - GPU:Ampere 级(如 A100),`cuda_arch=80`,作为
   `packages:all:variants` 的默认值,GPU 软件(namd、lammps 等)在
   spack.yaml 里再显式加 `+cuda cuda_arch=80 %nvhpc`。
-- CUDA 版本:pin 到 13.3.0,匹配 GPU 驱动支持的 CUDA 版本。**最终决定
-  (中间反复过,现在拍板):跟 intel-oneapi-compilers/intel-oneapi-mpi/
+- CUDA 版本:默认 pin 到 13.3.0,匹配 GPU 驱动支持的 CUDA 版本。**最终
+  决定(中间反复过,现在拍板):跟 intel-oneapi-compilers/intel-oneapi-mpi/
   nvhpc 一样是 external**,指向集群上真实的手动安装路径
   `/usr/local/packages/cuda/13.3`,不是 Spack 自装。中间一度改成
   Spack 自装过(`packages:cuda:require: "@13.3.0"`),但后来连同其余
   三个一起又改回了 external——完整过程和原因见下面"编译器/MPI/CUDA
   external 路径:最终决定"章节。
+  **2026-09-16 追加:又注册了第二份、并行的 `cuda@12.9.0` external**
+  (`/usr/local/packages/cuda/12.9`,独立 --toolkit 安装,不装驱动),
+  专门给 namd 用——原因和完整过程见下面"GPU(+cuda)软件真实编译验证与
+  CUDA 版本分流"章节。cp2k/lammps 仍然用默认的 13.3.0,两份 CUDA 互不
+  影响(`unify: false` 保证不同 root spec 能各自选不同版本)。
 - 已知问题(测出来的,不是猜的,`spack info amber` 验证过):Spack 的
   `amber` 包(仅 18/20 两个版本)在 `+cuda cuda_arch=80` 时实际支持的
   CUDA 范围是 `cuda@11.0:11.1`——不只是"上限 11.1",而是两条
@@ -354,6 +364,155 @@ module,会去 source 一个 `vars.sh` 环境脚本;因为我们的 external pref
 是占位符,这一步会报错失败——真机上 oneAPI 装好之后要确认这个
 `vars.sh` 路径是对的,不然这两个编译器自己的 module 生不出来。）
 
+## GPU(+cuda)软件真实编译验证与 CUDA 版本分流
+
+cp2k、lammps、namd 三个都已经在集群上用真实 `spack install +cuda
+cuda_arch=80` 编译验证通过(独立的 `environments/gpu-test` +
+`scripts/gpu-test-install.sh`,install_tree 独立、不碰 production)。
+过程中挖出一长串真实的 CUDA 13.3 兼容性问题,修法都记在
+`repos/spack_repo/rhel10_overrides/packages/{cp2k,namd,charmpp}/package.py`
+的详细注释里,这里只列结论,细节看那几个文件 + git log。
+
+### host 编译器:统一 `%gcc`,不是 `%nvhpc`
+最早的约定是"GPU 软件用 nvhpc",实测发现 cp2k/lammps/namd 三个都不需要
+nvhpc 当 host c/cxx 编译器(CUDA 部分各自有独立机制:CMake 原生
+CUDA-as-language、namd 自己的 CUDADIR),强制用 nvhpc 反而拖累出一堆跟
+GPU 代码无关的 nvhpc 编译器 bug(内部编译器崩溃、汇编不兼容指令、
+stdatomic.h/converse.h 冲突)。`%oneapi` 也不行——nvcc 直接拒绝 icx
+("option: icx is not supported in this version!"),NVIDIA 官方支持列表
+里根本没有 icx。最终定为 `%gcc`(nvcc 支持范围内、且没有 nvhpc 那些
+bug)。`config/specs.yaml` 里 cp2k/lammps/namd 三个 `+cuda` spec 都是
+`... %gcc`。
+
+### cp2k `+cuda` 遇到的真实 bug(3 个,都在
+`repos/spack_repo/rhel10_overrides/packages/cp2k/package.py`)
+1. **CMAKE_CUDA_ARCHITECTURES 探测坑**:cp2k 自己的 CMakeLists.txt 在
+   `enable_language(CUDA)` 之前硬编码了一个"占位符"`set(CMAKE_CUDA_ARCHITECTURES 60)`
+   (P100),这个探测阶段用的占位符值在 CUDA 13.3 里已经不支持
+   (`nvcc fatal: Unsupported gpu architecture 'compute_60'`),导致探测
+   直接失败——跟我们真正要的 `cuda_arch=80` 完全无关,命令行传的
+   `-DCMAKE_CUDA_ARCHITECTURES=80` 会被这行硬编码覆盖掉。修法:用
+   `filter_file` 把源码里那个 `60` 直接替换成真实的 cuda_arch。
+   **踩过一个 Spack 内部机制的坑**:这个 hook 一开始挂在 `Cp2k` 包类上,
+   `@run_before("cmake")` 完全不触发(无报错,静默失效)——查了
+   `spack/lib/spack/spack/phase_callbacks.py` 才发现:Package 类上的
+   `@run_before`/`@run_after` 钩子只会给"没有独立 Builder 子类"的老式包
+   自动合并到 Builder 上;cp2k 有自己独立的 `CMakeBuilder`,钩子必须直接
+   挂在 `CMakeBuilder` 上才会生效。
+2. **cufftResult 枚举值被移除**:`src/offload/offload_fft.h` 里一个把
+   cufft 错误码转字符串的 switch 语句,用到了
+   `CUFFT_INCOMPLETE_PARAMETER_LIST`/`CUFFT_PARSE_ERROR`/
+   `CUFFT_LICENSE_ERROR` 三个枚举值,CUDA 13.3 的 `cufft.h` 已经彻底删掉
+   了(不是 deprecated,是真删除)。修法:把这三个 case 注释掉(函数本身
+   没有 default 分支,但 switch 之后有 `return "<unknown>"` 兜底,注释掉
+   完全安全)——这其实是照抄 upstream 自己在 HIP 那一侧已经用过的同款
+   修法(`// case HIPFFT_LICENSE_ERROR:` 已经被注释掉了,只是 CUDA 那侧
+   还没跟上)。
+3. **MKL 不提供 pkg-config 版 fftw3**:cp2k 的 fftw-api 依赖默认会解析成
+   external 的 `intel-oneapi-mkl`(全局默认 provider),但 cp2k 自己的
+   `cmake/modules/FindFftw.cmake` 找不到 MKL 的 FFTW 兼容层(即使传了
+   `-DCP2K_USE_FFTW3_WITH_MKL=ON`)。修法:spec 里强制 `^fftw`,让 cp2k
+   的 fftw-api 依赖用真正 Spack 编译的 fftw(BLAS/LAPACK/ScaLAPACK 仍然
+   走 MKL,不受影响)——lammps 也有同一个问题,同样用 `^fftw` 解决。
+
+### lammps `+cuda` 遇到的真实 bug
+跟 cp2k 一样的 MKL/fftw3 pkg-config 问题,同样用 `^fftw` 解决。另外
+charmpp(namd 的依赖,不是 lammps 的)相关的坑不适用于 lammps。
+
+### namd `+cuda` 遇到的一长串真实 bug(6 轮,详见
+`repos/spack_repo/rhel10_overrides/packages/{namd,charmpp}/package.py`)
+1. **charmpp 默认 build-target=LIBS 会连带编译不需要的 AMPI/ROMIO**,
+   ROMIO 自己的 MPI-configure 自检在 netlrts backend(没有真 MPI)下必
+   然失败。修法:namd 的 spec 里加 `^charmpp build-target=charm++`,只编
+   译 namd 真正用到的 charm++ 本体。
+2. **charmpp 的 `memory_order`/`<stdatomic.h>` 冲突**:charmpp 自己在
+   `converse.h` 里手写了一份 `memory_order` 枚举,跟真正的
+   `<stdatomic.h>`(这个集群的 `/project` 是 Lustre,`lustreapi.h` 需要
+   真的 `<stdatomic.h>` 提供 `atomic_int`)冲突。第一次"假装
+   `_STDATOMIC_H` 已经被 include 过"的修法本身有两个 bug(改坏了换行、
+   又把真正的 `<stdatomic.h>` 挡在后面代码之外),最终改成直接
+   `#include <stdatomic.h>`、把 charmpp 自己手写的枚举用 `#if 0` 禁掉。
+3. **namd@2.14 的 CUDA kernel 用了旧式"纹理引用"API**
+   (`texture<...> force_table;` + `tex1D(force_table,...)`),CUDA 13.3
+   已经彻底删除了这套 API(不是 deprecated)。改用 **namd@3.0.3**(GPU
+   后端已经改写成纹理对象 API)。namd 的 manual_download 包,3.0.3 这个
+   版本 Spack 自带的 recipe 还没收录,在 override 里手动加了
+   `version("3.0.3", sha256=...)`。
+4. **`cudaDeviceProp.computeMode` 字段被移除**:namd@3.0.3 的
+   `src/DeviceCUDA.C` 三处用 `.computeMode` 检测"prohibited"/
+   "exclusive-process" GPU 模式,这个字段新版 CUDA Runtime API 已经删了。
+   修法:把这三处判断改写成字面上"当作普通设备"的结果(`if(1`/`if(0)`),
+   只改含 `.computeMode` 的那一行,其余多行条件不动。
+5. **CUB/Thrust/libcu++ 合并成 CCCL,绕过版本检查的宏改名了**:namd 自己
+   的 `arch/Linux-x86_64.cuda` 已经在传旧宏
+   (`-DCUB_IGNORE_DEPRECATED_CPP_DIALECT`/`-DTHRUST_IGNORE_DEPRECATED_CPP_DIALECT`),
+   CUDA 13.3 统一成了 `CCCL_IGNORE_DEPRECATED_CPP_DIALECT`,没跟上导致
+   `#error CUB requires at least C++17` 照样触发。补上新宏之后,发现
+   **CCCL 是真的需要 C++17**(不只是警告),`storage.h`/
+   `numeric_limits_ext.h` 等头文件本身用了只有 C++14+ 才合法的多
+   return 语句 `constexpr` 函数。最终把
+   `CUDA_COMPILER_FLAGS = -m64 -std=c++11` 改成 `-std=c++17`(只影响
+   nvcc 编译的 .cu 文件,不影响 g++ 编译的宿主代码,libstdc++ ABI 由
+   另一个宏控制、不受 `-std=` 影响)。
+6. **namd 自己的 kernel 代码直接调用了 CUDA 13.3 已经删除的 CUB 函数**
+   (`cub::LaneMaskLt`/`cub::Min`/`cub::Max`,出现在
+   `ComputeBondedCUDAKernel.cu`/`CudaTileListKernel.cu`)——这是真正参与
+   数值计算的 GPU kernel 代码(warp 级线程协作、数值比较),不是构建配置
+   或错误码字符串表,用户明确决定不去盲改这类代码(namd 源码许可证限
+   制、看不到全貌,也没法真的跑 GPU 验证正确性)。
+
+   **研究后发现根本不是 namd 版本问题**:NAMD 官方 3.0.3(已经是最新版)
+   自己的 release notes 写的是 "Support for CUDA versions 9.1-12.x"——
+   即便最新版也从没在 CUDA 13.x 上验证过,降级 namd 版本只会更糟(2.14
+   连纹理对象 API 都没换)。**真正的修法是给 namd 单独配一个它真正支持
+   的 CUDA 版本**:管理员(用户本人)在集群上独立装了一份 standalone
+   CUDA 12.9.0 toolkit(`cuda_12.9.0_575.51.03_linux.run --silent
+   --toolkit --toolkitpath=/usr/local/packages/cuda/12.9`,只装 toolkit
+   不装驱动——现有驱动本来就支持更新的 13.3,向下兼容 12.9 完全没问题),
+   在 `packages.yaml` 里注册成第二个 `cuda@12.9.0` external,namd 的
+   spec 里显式 `^cuda@12.9.0`。cp2k/lammps 继续用默认的 `cuda@13.3.0`,
+   两者互不干扰(已用 Python 直接遍历 environment 依赖图验证过,不是只
+   看 `spack spec` 的文字输出——`spack spec`/`find -d` 的树状打印会因为
+   dedup 逻辑产生误导性的省略,不能直接拿来判断某个 root 到底依赖哪个
+   版本,必须用 `env.concrete_roots()` + `spec.traverse()` 编程式确认)。
+
+最终 `config/specs.yaml` 里三个的完整 spec:
+```
+- cp2k +cuda cuda_arch=80 %gcc ^fftw
+- lammps +cuda cuda_arch=80 %gcc ^fftw
+- namd@3.0.3 +cuda cuda_arch=80 %gcc ^charmpp build-target=charm++ ^cuda@12.9.0
+```
+
+## Cluster-results 自动回传机制
+
+集群上 sbatch 作业跑完后,日志会自动 push 回 GitHub 的 `cluster-results`
+分支,本地/WSL 端只需要 `git pull` 就能直接看日志文件,不用再手动
+复制粘贴。
+
+- 机制:每个 install 脚本(`smoke-test-install.sh`/
+  `tierN-test-install.sh`/`gpu-test-install.sh`)在开头 `source
+  scripts/lib/push-results.sh` 并 `trap push_results EXIT`,脚本退出时
+  (不管成功失败)自动把日志 commit 到一个**独立的 git worktree**
+  (`/project/fchen14/spack-rhel10-results`,checkout 的是
+  `cluster-results` 分支,不影响主 checkout 的分支/工作区状态),路径是
+  `results/<job_name>/<时间戳>_job<jobid>/`,里面有日志文件和一个
+  `EXIT_CODE` 标记文件,然后 push,失败会重试(fetch+rebase)最多 3 次。
+- `scripts/push-latest-results.sh`:手动兜底脚本,给"Slurm 硬杀
+  (walltime/OOM)导致 EXIT trap 根本没机会跑"这种情况用,手动指定
+  job_name/job_id/日志路径/退出码调用同一个 `push_results` 函数。
+- 集群侧认证:一开始想用 SSH deploy key,遇到 GitHub 显示 "Disabled by
+  lonihpc"、一度怀疑是 SSH Certificate Authorities 组织策略(后来确认
+  这个猜测是错的,`lonihpc` 不是 GitHub Enterprise,那只是升级推广位),
+  根因没有查清楚,最终放弃 deploy key,改用**细粒度 Personal Access
+  Token + `git config credential.helper store`**(明文缓存在
+  `~/.git-credentials`),集群侧只需要 `git push`,已验证工作正常。
+- 本地/WSL 端要看某次 job 的日志:
+  ```
+  cd /project/fchen14/spack-rhel10-results
+  git fetch origin cluster-results && git merge --ff-only origin/cluster-results
+  ```
+  然后直接去 `results/<job_name>/` 下找对应时间戳的目录。
+
 ## 工作方式(重要约束)
 - 出于安全原因,集群上不能直接跑 Claude。
 - 本地(WSL2 Ubuntu on dellpro16)用 Claude Code 做:配置文件编写、
@@ -588,3 +747,15 @@ module,会去 source 一个 `vars.sh` 环境脚本;因为我们的 external pref
     `~sra ~tools` 避免了不必要的额外编译面。**Tier 3 六个包最终全部
     真实编译通过**(`spack -e environments/tier3-test find` 确认
     6/6 已装)。
+  - **建立了 cluster-results 自动回传机制**(sbatch 作业日志自动 push
+    回 GitHub,本地 `git pull` 直接看),详见上面专门的"Cluster-results
+    自动回传机制"章节。
+  - **cp2k/lammps/namd 三个 `+cuda cuda_arch=80` 全部真实编译验证通过**
+    (2026-09-14 ~ 09-16,独立的 `environments/gpu-test`),过程中挖出一
+    长串真实的 CUDA 13.3 兼容性 bug(cp2k 的 CMAKE_CUDA_ARCHITECTURES
+    探测坑、cufftResult 枚举值移除;namd 的纹理引用 API 移除、
+    computeMode 字段移除、CCCL 宏改名+真实需要 C++17、kernel 代码直接
+    调用已删除的 CUB 函数),namd 最终确认自己上游都没在 CUDA 13.x 上
+    验证过、需要专门配一份 `cuda@12.9.0` 才能编译。三个都已经正式纳入
+    `config/specs.yaml`。完整过程详见上面专门的"GPU(+cuda)软件真实编译
+    验证与 CUDA 版本分流"章节,还没挪到 production。
