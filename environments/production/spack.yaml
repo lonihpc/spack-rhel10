@@ -179,7 +179,7 @@ spack:
   # package) is also fully deprecated in Spack's current repo - every
   # version fails concretization outright - so if MPI diversity is ever
   # needed again, use the `mvapich` successor package, not mvapich2.
-  - namd
+  - namd@3.0.3 +cuda cuda_arch=80 %gcc ^charmpp build-target=charm++ ^cuda@12.9.0
   # matlab is explicitly NOT here - CLAUDE.md says it's not a Spack package
   # and needs a manual install + hand-written modulefile instead.
   # <<< END GENERATED SPECS

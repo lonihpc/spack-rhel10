@@ -18,10 +18,9 @@
 # we're not copying the old cluster's exact versions. Everything defaults
 # to intel-oneapi-compilers + intel-oneapi-mpi via packages.yaml, so no
 # per-package %compiler pin is needed except for GPU packages
-# (lammps/cp2k here), which pin `+cuda cuda_arch=80 %gcc` explicitly.
+# (lammps/cp2k/namd here), which pin `+cuda cuda_arch=80 %gcc` explicitly.
 # cuda_arch=80 is a site-wide default preference in packages.yaml
-# (confirmed GPU hardware). namd is currently CPU-only here (~cuda,
-# implicit) - see below for why.
+# (confirmed GPU hardware).
 #
 # %gcc, NOT %nvhpc and NOT %oneapi, for the host c/cxx compiler - this
 # was originally %nvhpc (an early "GPU packages use nvhpc" convention)
@@ -64,18 +63,24 @@
 # compute_60, and 3 cufftResult error codes CUDA 13.3 has removed from
 # cufft.h).
 #
-# namd is CPU-only here for now (reverted from `+cuda cuda_arch=80
-# %gcc`, 2026-09-14): real-compile-tested in environments/gpu-test
-# through 5 escalating rounds of CUDA-13.3 incompatibilities (see that
-# environment's spack.yaml and repos/spack_repo/rhel10_overrides/
-# packages/namd/package.py for the full chain), the last of which -
+# namd's `@3.0.3 ... ^charmpp build-target=charm++ ^cuda@12.9.0`:
+# real-compile-validated in environments/gpu-test (job 71, 2026-09-15)
+# after 5 escalating rounds of CUDA-13.3 incompatibilities (see
+# repos/spack_repo/rhel10_overrides/packages/namd/package.py for the
+# computeMode/CCCL-macro-rename/C++17 source fixes). The last round -
 # namd@3.0.3's own kernel code calling cub::LaneMaskLt/Min/Max, which
-# CUDA 13.3's CCCL has removed outright - the user decided not to
-# hand-patch (real, numerically-active kernel code, license-gated
-# source, no way to verify correctness on a GPU). namd was removed from
-# environments/gpu-test's specs for the same reason. Revisit +cuda here
-# once namd upstream catches up with CUDA 13.x, or once an older CUDA
-# toolkit gets set up for this package specifically.
+# CUDA 13.3's CCCL has removed outright - turned out not to be
+# patchable at all: NAMD's own release notes cap official CUDA support
+# at "9.1-12.x", so no namd version was ever going to build clean
+# against CUDA 13.3. Resolved by researching that cap and setting up a
+# SECOND, parallel `cuda@12.9.0` external (config/packages.yaml,
+# installed standalone via --toolkit --toolkitpath, no driver, alongside
+# the existing cuda@13.3.0) specifically for namd - `^cuda@12.9.0`
+# pins namd to it while cp2k/lammps keep using the default cuda@13.3.0.
+# build-target=charm++ on charmpp: see environments/gpu-test/spack.yaml's
+# comment - without it, charmpp's default build-target=LIBS also builds
+# the AMPI/ROMIO sub-library namd never uses, and ROMIO's own
+# MPI-configure self-test fails outright under the netlrts backend.
 specs:
 # amber: Spack's `amber` package only has versions 18/20 (no 22, unlike
 # the old cluster's amber/22) - it's licensed software, so Spack can only
@@ -177,6 +182,6 @@ specs:
 # package) is also fully deprecated in Spack's current repo - every
 # version fails concretization outright - so if MPI diversity is ever
 # needed again, use the `mvapich` successor package, not mvapich2.
-- namd
+- namd@3.0.3 +cuda cuda_arch=80 %gcc ^charmpp build-target=charm++ ^cuda@12.9.0
 # matlab is explicitly NOT here - CLAUDE.md says it's not a Spack package
 # and needs a manual install + hand-written modulefile instead.
