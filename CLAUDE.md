@@ -74,7 +74,8 @@ scripts/
   DB 锁死锁教训),前提是同一个 install_tree 同时只跑一个作业。
 - 提交作业(在 repo 根目录):
   `sbatch -J db-smoke-test scripts/deepbayou/install-env.sh smoke-test`。
-  allocation `hpc_db4admin`,默认 `single` 分区、16 核、4 小时,命令行
+  allocation `hpc_db4admin`,默认 `single` 分区、12 核(`single` QOS 每作业上限
+  cpu=12,超过会一直 PD `QOSMaxCpuPerJobLimit`)、4 小时,命令行
   `-t/-c/-p` 可覆盖。脚本固定做 `concretize -f --fresh` → `install` →
   `module lmod refresh -y --delete-tree`,日志自动推到 `cluster-results`。
 - Spack 本体放在 db 的 `/project/fchen14/spack-tool`(v1.2.2,与 QB4 同),
