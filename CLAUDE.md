@@ -91,6 +91,10 @@ scripts/
   只有 kokkos 失败,原因是 recipe 自己的检查:`+cuda` 配 gcc host 编译器
   必须带 `+wrapper` 或 `+cmake_lang`。改成
   `kokkos +cuda +cmake_lang cuda_arch=70 %gcc`。
+- **db smoke-test 全部通过(job 11,2026-11-21)**:kokkos `+cmake_lang`
+  用 nvcc 12.9.1 + gcc 14 为 sm_70 真实编译成功(34 秒),`spack install`
+  退出码 0,`module lmod refresh` 正常完成。Deep Bayou 的"沙盒配置 →
+  db 真编 → 结果自动回传"整条链路端到端验证通过。
 - **沙盒验证的盲点**:`spack install --fake` 不执行 `cmake_args()` 等构建
   阶段代码,所以 recipe 在这些阶段里 `raise InstallError` 的检查(比如上面
   kokkos 这条)沙盒里发现不了,只有真编才会暴露。对新加的包,可以用
