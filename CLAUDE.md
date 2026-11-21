@@ -21,7 +21,7 @@ config/
       packages.yaml       #   target=icelake、cuda_arch=80
       modules.yaml        #   core_compilers(必须与 packages.yaml 版本逐字一致)
       specs.yaml          #   QB4 正式软件清单(render-specs.py 的来源)
-    deepbayou/            # Deep Bayou 专属:oneAPI 2026.1 / MPI / MKL、gcc@14、
+    deepbayou/            # Deep Bayou 专属:oneAPI 2026.2 / MPI 2021.19 / MKL、gcc@14、
       packages.yaml       #   cuda@12.9.1(唯一一份)、target=cascadelake、
       modules.yaml        #   cuda_arch=70;没有 nvhpc
 environments/
@@ -60,6 +60,15 @@ scripts/
   QB4 上 namd 专门分流的 12.9 在这里成为唯一 CUDA。
 - **不装 nvhpc**(用户决定):QB4 上 GPU 包最终全部是 `%gcc`,只剩
   smoke-test 的 `bwa %nvhpc`;Deep Bayou 的 bwa 用默认 oneAPI。
+- **oneAPI 用 2026.2**(比 QB4 的 2026.1 新一个小版本;oneAPI 不受驱动
+  限制):intel-oneapi-compilers@2026.2.0、intel-oneapi-mpi@2021.19.0、
+  intel-oneapi-mkl@2026.2.0。实际安装位置
+  `/project/fchen14/spack-rhel10-packages/compilers/intel/oneapi-2026.2`
+  (故意放在 git checkout **之外**——QB4 当年装在 repo 里的 `packages/`,
+  没被 .gitignore 覆盖,有被 `git add -A` 扫进去的风险),root 建 symlink
+  `/usr/local/packages/compilers/intel-oneapi-2026.2`(名字带小版本号,
+  以后 2026.x 可以并存)。所以 Deep Bayou 的 module 名是
+  `intel-oneapi-compilers-2026.2.0`,和 QB4 的 `2026.1.0` 不同。
 - AVX512 也在,所以 spades 的 `-mno-avx512f` 绕法(override 里)照样适用。
 - 环境默认 `config: locks: false`(QB4 tier3 在共享 `/project` 上的 Spack
   DB 锁死锁教训),前提是同一个 install_tree 同时只跑一个作业。
@@ -71,8 +80,8 @@ scripts/
 - Spack 本体放在 db 的 `/project/fchen14/spack-tool`(v1.2.2,与 QB4 同),
   脚本可用 `SPACK_ROOT_DIR` 覆盖。
 - smoke-test 在沙盒 fake install 生成的 module 名(全部平铺 `Core/`):
-  `bwa/0.7.19/intel-oneapi-compilers-2026.1.0`、
-  `cosma/2.8.4/intel-oneapi-compilers-2026.1.0-intel-oneapi-mpi-2021.18.0`、
+  `bwa/0.7.19/intel-oneapi-compilers-2026.2.0`、
+  `cosma/2.8.4/intel-oneapi-compilers-2026.2.0-intel-oneapi-mpi-2021.19.0`、
   `kokkos/5.1.1/gcc-14-cuda-12.9.1`(kokkos 是新加的 CUDA canary,真编
   sm_70 设备代码)。
 

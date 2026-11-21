@@ -24,29 +24,36 @@
 # if some package genuinely needs it (and add it to modules.yaml's
 # core_compilers at the same time).
 packages:
-  # Same oneAPI release as QB4, installed on Deep Bayou's own /project and
-  # symlinked to the same stable path, so these paths match QB4's exactly.
+  # oneAPI 2026.2 (unified intel-oneapi-toolkit-2026.2.0.667 offline
+  # installer, 2026-11-21) - one minor release newer than QB4's 2026.1,
+  # since oneAPI isn't driver-bound. Real install (no root needed):
+  #   /project/fchen14/spack-rhel10-packages/compilers/intel/oneapi-2026.2
+  # (deliberately OUTSIDE the git checkout), symlinked by root to the
+  # stable path below. The version-suffixed link name lets a future
+  # 2026.x coexist. Component dirs confirmed on db009:
+  # compiler/2026.2, mpi/2021.19 (Intel MPI has its own 2021.x scheme),
+  # mkl/2026.2.
   intel-oneapi-compilers:
     externals:
-    - spec: intel-oneapi-compilers@2026.1.0 languages:='c,c++,fortran'
-      prefix: /usr/local/packages/compilers/intel-oneapi-2026
+    - spec: intel-oneapi-compilers@2026.2.0 languages:='c,c++,fortran'
+      prefix: /usr/local/packages/compilers/intel-oneapi-2026.2
       extra_attributes:
         compilers:
-          c: /usr/local/packages/compilers/intel-oneapi-2026/compiler/2026.1/bin/icx
-          cxx: /usr/local/packages/compilers/intel-oneapi-2026/compiler/2026.1/bin/icpx
-          fortran: /usr/local/packages/compilers/intel-oneapi-2026/compiler/2026.1/bin/ifx
+          c: /usr/local/packages/compilers/intel-oneapi-2026.2/compiler/2026.2/bin/icx
+          cxx: /usr/local/packages/compilers/intel-oneapi-2026.2/compiler/2026.2/bin/icpx
+          fortran: /usr/local/packages/compilers/intel-oneapi-2026.2/compiler/2026.2/bin/ifx
     buildable: false
 
   intel-oneapi-mpi:
     externals:
-    - spec: intel-oneapi-mpi@2021.18.0
-      prefix: /usr/local/packages/compilers/intel-oneapi-2026
+    - spec: intel-oneapi-mpi@2021.19.0
+      prefix: /usr/local/packages/compilers/intel-oneapi-2026.2
     buildable: false
 
   intel-oneapi-mkl:
     externals:
-    - spec: intel-oneapi-mkl@2026.1.0
-      prefix: /usr/local/packages/compilers/intel-oneapi-2026
+    - spec: intel-oneapi-mkl@2026.2.0
+      prefix: /usr/local/packages/compilers/intel-oneapi-2026.2
     buildable: false
 
   # Fallback compiler (and host compiler for nvcc - nvcc rejects icx, see

@@ -9,5 +9,5 @@ modules:
   default:
     lmod:
       core_compilers:
-      - intel-oneapi-compilers@2026.1.0
+      - intel-oneapi-compilers@2026.2.0
       - gcc@14
