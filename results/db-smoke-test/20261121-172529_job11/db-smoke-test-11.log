@@ -1,0 +1,60 @@
+=== host db009, env environments/deepbayou/smoke-test, spack 1.2.2 (3e19345b6e12f5ff1b874f4059622fc6a1fd804a), repo f1f88c2 ===
+==> Starting concretization pool with 4 processes
+==> Concretized 4 specs:
+[+]  pmjb7fp  bwa@0.7.19 build_system=generic platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  vrzte5o      ^compiler-wrapper@1.1.0 build_system=generic platform=linux os=almalinux10 target=cascadelake
+[e]  ufp3xj3      ^glibc@2.39 build_system=autotools platform=linux os=almalinux10 target=x86_64
+[+]  oxc3ij7      ^gmake@4.4.1~guile build_system=generic platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[e]  7p7nd2h      ^intel-oneapi-compilers@2026.2.0~amd+envmods~fix_rt_linkage~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64
+[+]  mmksqdc      ^intel-oneapi-runtime@2026.2.0 build_system=generic platform=linux os=almalinux10 target=cascadelake
+[+]  tdqj6ht      ^zlib-ng@2.3.3+compat+new_strategies+opt+pic+shared build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  ebh6euq  cmake@3.31.11~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  bo3vrd2      ^curl@8.20.0~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs:=shared,static tls:=openssl platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  4e5kxxi          ^nghttp2@1.67.1 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  svdi2wf              ^diffutils@3.12 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  e664nhm                  ^libiconv@1.18 build_system=autotools libs:=shared,static platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  j6qxvjo          ^openssl@3.6.1~docs+shared build_system=generic certs=mozilla platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  73whxxo              ^ca-certificates-mozilla@2026-03-19 build_system=generic platform=linux os=almalinux10 target=cascadelake
+[+]  zc5tgyn              ^perl@5.42.0+cpanm+opcode+open+shared+threads build_system=generic platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  7ca7xu5                  ^berkeley-db@18.1.40+cxx~docs+stl build_system=autotools patches:=26090f4,b231fcc platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  37a6p7b                  ^bzip2@1.0.8~debug~pic+shared build_system=generic platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  5rrquco                  ^gdbm@1.26 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  n7spikc                      ^readline@8.3 build_system=autotools patches:=21f0a03,72dee13,e273643 platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  2ywpydy                  ^less@692 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  zzwb5tn          ^pkgconf@2.5.1 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  zevzdqg      ^ncurses@6.6~symlinks+termlib abi=none build_system=autotools patches:=7a351bc platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  bfzksna  cosma@2.8.4~apps~cuda~gpu_direct~ipo~profiling~rocm~scalapack+shared~tests build_system=cmake build_type=Release generator=make platform=linux os=almalinux10 target=cascadelake %c,cxx,fortran=oneapi@2026.2.0
+[+]  krr2ikf      ^costa@2.3.2~apps~benchmarks~ipo~profiling~scalapack+shared~tests build_system=cmake build_type=Release generator=make platform=linux os=almalinux10 target=cascadelake %cxx=oneapi@2026.2.0
+[e]  d73huag      ^intel-oneapi-mkl@2026.2.0~cluster+envmods~gfortran~ilp64+shared build_system=generic mpi_family=none threads=none platform=linux os=almalinux10 target=x86_64
+[e]  bamabnc      ^intel-oneapi-mpi@2021.19.0~classic-names+envmods~external-libfabric~generic-names~ilp64 build_system=generic platform=linux os=almalinux10 target=x86_64
+ -   rhkuae5  kokkos@5.1.1~aggressive_vectorization~alloc_async+cmake_lang+complex_align+cuda~cuda_constexpr~cuda_relocatable_device_code~debug~debug_bounds_check+deprecated_code~hip_relocatable_device_code~hpx~hwloc~ipo~openmp~pic~rocm+serial+shared~sycl~tests~threads~tuning~wrapper build_system=cmake build_type=Release cuda_arch=70 cxxstd=20 generator=make intel_gpu_arch=none platform=linux os=almalinux10 target=cascadelake %cxx=gcc@14
+[+]  jxiuavj      ^cmake@3.31.11~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release platform=linux os=almalinux10 target=cascadelake %c,cxx=gcc@14
+[+]  rgx46ze          ^curl@8.20.0~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs:=shared,static tls:=openssl platform=linux os=almalinux10 target=cascadelake %c,cxx=gcc@14
+[+]  yufdoez              ^nghttp2@1.67.1 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,cxx=gcc@14
+[+]  tjmwpfu                  ^diffutils@3.12 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  o6fzqur                      ^libiconv@1.18 build_system=autotools libs:=shared,static platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  hini5zw              ^openssl@3.6.1~docs+shared build_system=generic certs=mozilla platform=linux os=almalinux10 target=cascadelake %c,cxx=gcc@14
+[+]  e3y3hxi                  ^perl@5.42.0+cpanm+opcode+open+shared+threads build_system=generic platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  rs4ni5s                      ^berkeley-db@18.1.40+cxx~docs+stl build_system=autotools patches:=26090f4,b231fcc platform=linux os=almalinux10 target=cascadelake %c,cxx=gcc@14
+[+]  zb4p5iy                      ^bzip2@1.0.8~debug~pic+shared build_system=generic platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  fdqw4fs                      ^gdbm@1.26 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  jyav7y4                          ^readline@8.3 build_system=autotools patches:=21f0a03,72dee13,e273643 platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  64slua3                      ^less@692 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  mhd5rtt              ^pkgconf@2.5.1 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  wtahree          ^ncurses@6.6~symlinks+termlib abi=none build_system=autotools patches:=7a351bc platform=linux os=almalinux10 target=cascadelake %c,cxx=gcc@14
+[+]  vqabfjc          ^zlib-ng@2.3.3+compat+new_strategies+opt+pic+shared build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,cxx=gcc@14
+[e]  xx4id7x      ^cuda@12.9.1~allow-unsupported-compilers~dev build_system=generic platform=linux os=almalinux10 target=x86_64
+[e]  jzrbfde      ^gcc@14+binutils+bootstrap~graphite+libsanitizer~mold~nvptx~piclibs~profiled~strip build_system=autotools build_type=RelWithDebInfo languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64
+[+]  aymjqwl      ^gcc-runtime@14 build_system=generic platform=linux os=almalinux10 target=cascadelake
+[+]  jgndvdj      ^gmake@4.4.1~guile build_system=generic platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+
+[ ] rhkuae5 kokkos@5.1.1 staging (0s)
+[ ] rhkuae5 kokkos@5.1.1 cmake (0s)
+[ ] rhkuae5 kokkos@5.1.1 build (7s)
+[ ] rhkuae5 kokkos@5.1.1 install (31s)
+[+] rhkuae5 kokkos@5.1.1 /project/fchen14/spack-rhel10-db-smoke-test/spack-install/linux-cascadelake/kokkos-5.1.1-rhkuae5fywpvtiknqfbhvrfovvpcfy5b (34s)
+==> Regenerating lmod module files
+=== done: environments/deepbayou/smoke-test ===
+From https://github.com/lonihpc/spack-rhel10
+ * branch            cluster-results -> FETCH_HEAD
+HEAD is now at 96ac3cb job 10 (db-smoke-test) results, exit=1
