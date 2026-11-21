@@ -14,18 +14,19 @@
 # options override the #SBATCH defaults below (e.g. -t, -c, -p).
 #
 # Defaults: Deep Bayou RHEL10 nodes are db009/db010 (2x 24-core Cascade
-# Lake). `single` partition (7-day limit) since builds don't need a GPU to
-# compile CUDA code - nvcc only needs the toolkit, not a device. Its QOS
-# (`single`) caps each job at cpu=12 (sacctmgr, 2026-11-21) - asking for
-# more leaves the job pending forever with QOSMaxCpuPerJobLimit. For a
-# whole 48-core node use -p gpu/gpu2 instead (charged per GPU-hour).
+# Lake = 48 cores). These nodes are currently reserved for this deployment
+# work (user, 2026-11-21), so take the whole node: partition gpu2 (QOS
+# `normal`, 3-day limit, no per-job CPU cap) with all 48 cores. NOT
+# `single`: its QOS caps each job at cpu=12 (sacctmgr) - asking for more
+# leaves the job pending forever with QOSMaxCpuPerJobLimit. Builds don't
+# need a GPU device (nvcc only needs the toolkit), so no --gres here.
 #
 #SBATCH --job-name=db-spack
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=12
+#SBATCH --cpus-per-task=48
 #SBATCH --time=04:00:00
-#SBATCH --partition=single
+#SBATCH --partition=gpu2
 #SBATCH --account=hpc_db4admin
 #SBATCH --output=%x-%j.log
 
