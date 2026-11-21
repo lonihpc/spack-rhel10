@@ -58,8 +58,9 @@ packages:
 
   # Fallback compiler (and host compiler for nvcc - nvcc rejects icx, see
   # CLAUDE.md "host 编译器:统一 %gcc").
-  # TODO(deepbayou): confirm with `gcc --version` / `which gfortran` on a
-  # db RHEL10 node - AlmaLinux 10 ships gcc 14, same as QB4.
+  # Confirmed on db009 (2026-11-21): gcc 14.3.1 (Red Hat 14.3.1-4),
+  # /usr/bin/gfortran present. `gcc@14` matches it, same as QB4. gcc 14
+  # is within nvcc 12.9's supported host-compiler range.
   gcc:
     externals:
     - spec: "gcc@14 languages='c,c++,fortran'"
