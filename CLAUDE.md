@@ -86,6 +86,15 @@ scripts/
   `cosma/2.8.4/intel-oneapi-compilers-2026.2.0-intel-oneapi-mpi-2021.19.0`、
   `kokkos/5.1.1/gcc-14-cuda-12.9.1`(kokkos 是新加的 CUDA canary,真编
   sm_70 设备代码)。
+- **db smoke-test 第一次真编(job 10,2026-11-21)**:cmake、cosma(+costa,
+  oneAPI MPI+MKL)、bwa 全部编译成功,oneAPI 2026.2 工具链在 db 上真实可用;
+  只有 kokkos 失败,原因是 recipe 自己的检查:`+cuda` 配 gcc host 编译器
+  必须带 `+wrapper` 或 `+cmake_lang`。改成
+  `kokkos +cuda +cmake_lang cuda_arch=70 %gcc`。
+- **沙盒验证的盲点**:`spack install --fake` 不执行 `cmake_args()` 等构建
+  阶段代码,所以 recipe 在这些阶段里 `raise InstallError` 的检查(比如上面
+  kokkos 这条)沙盒里发现不了,只有真编才会暴露。对新加的包,可以用
+  `spack location -p <pkg>` 看 package.py 里有没有这类 raise。
 
 ## 现有集群 module 命名格式(需要在新集群上延续)
 `<软件>/<版本>/<编译器>-<编译器版本>[-cuda-<版本>][-<mpi>-<mpi版本>]`

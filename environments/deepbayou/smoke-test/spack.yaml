@@ -62,4 +62,10 @@ spack:
   # CUDA canary: compiles real device code with nvcc for sm_70 against the
   # cuda@12.9.1 external, host compiler %gcc (nvcc rejects icx). Small
   # enough for a smoke test; if this fails, the GPU tier would too.
-  - kokkos +cuda cuda_arch=70 %gcc
+  # +cmake_lang is required: kokkos' recipe refuses +cuda with a gcc host
+  # compiler unless it gets either +wrapper (nvcc_wrapper package) or
+  # +cmake_lang (CMake's native CUDA language support) - job 10 on db009
+  # failed with exactly "Kokkos requires +wrapper when using +cuda without
+  # %clang, %cce or +cmake_lang". cmake_lang chosen: no extra wrapper
+  # package, same CUDA-as-a-CMake-language route cp2k/lammps use.
+  - kokkos +cuda +cmake_lang cuda_arch=70 %gcc
