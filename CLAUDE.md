@@ -5,6 +5,77 @@
 格式与现有集群(linux-rhel8-icelake)保持一致。软件版本不必照抄旧版本,尽量用最新的;
 编译器优先用最新的 Intel oneAPI。
 
+**2026-11-21 起同一个 repo 服务两个站点**:QB4(LONI,qbd5,本文档下面
+大部分章节记录的就是它)和 Deep Bayou(LSU HPC,db,见下一节)。
+
+## 站点拆分(QB4 / Deep Bayou,2026-11-21)
+
+```
+config/
+  common/                 # 与站点无关的策略,两个站点共用
+    packages.yaml         #   provider 顺序、gettext~tar、python~tkinter
+    modules.yaml          #   projections / hierarchy / hash_length 等命名规则
+    repos.yaml            #   rhel10_overrides package repo
+  sites/
+    qb4/                  # QB4 专属:externals(含 nvhpc、cuda 13.3+12.9)、
+      packages.yaml       #   target=icelake、cuda_arch=80
+      modules.yaml        #   core_compilers(必须与 packages.yaml 版本逐字一致)
+      specs.yaml          #   QB4 正式软件清单(render-specs.py 的来源)
+    deepbayou/            # Deep Bayou 专属:oneAPI 2026.1 / MPI / MKL、gcc@14、
+      packages.yaml       #   cuda@12.9.1(唯一一份)、target=cascadelake、
+      modules.yaml        #   cuda_arch=70;没有 nvhpc
+environments/
+  qb4/{dev-local,production,smoke-test,tier1-test,tier2-test,tier3-test,gpu-test}
+  deepbayou/smoke-test    # 后续 tier 按同样方式加在这里
+scripts/
+  qb4/*-install.sh        # QB4 原有的每环境一份 sbatch 脚本(只改了路径)
+  deepbayou/install-env.sh  # Deep Bayou 通用 sbatch 脚本,参数是环境名
+  lib/push-results.sh, push-latest-results.sh, render-specs.py  # 共用
+```
+
+- 每个环境的 `include:` 顺序:先站点(`config/sites/<site>/packages.yaml`、
+  `modules.yaml`),再 `config/common/{packages,modules,repos}.yaml`。
+- **关键规则(实测验证过)**:Spack 合并多个 include 文件时,**列表是拼接
+  而不是覆盖**(两个文件分别写 `target: [icelake]`/`[cascadelake]`,结果是
+  `[icelake, cascadelake]`)。所以 `target`、`variants: cuda_arch=`、
+  externals、`core_compilers` 这类站点相关的键只能出现在 `sites/<site>/`
+  里,绝不能放进 `common/`,否则两个站点的值会互相渗透。
+- 拆分正确性验证:拆分前后在沙盒里对 QB4 全部 7 个环境(共 94 个 root)
+  做 `spack concretize -f --fresh`,root hash 逐个比对**完全一致**——
+  对 QB4 来说这次重构是纯文件搬家,不会触发任何重编译。
+- `scripts/render-specs.py` 改成按站点处理:有
+  `config/sites/<site>/specs.yaml` 的站点,渲染进
+  `environments/<site>/{dev-local,production}/spack.yaml`(生成区块的
+  BEGIN 标记里带站点路径)。Deep Bayou 目前还没有 specs.yaml,会被跳过。
+- 集群上旧路径(`environments/smoke-test` 等)里遗留的 `spack.lock`/
+  `.spack-env/` 是 git-ignored 的,pull 之后会留在原地,可以手动删掉;已经
+  装好的软件在 install_tree 里,不受影响。
+
+### Deep Bayou 站点要点
+- 硬件(db009 实测):Xeon Gold 6248R(Cascade Lake,有 AVX512)×2,
+  2× V100S(sm_70),AlmaLinux 10.2,驱动 580.196.07。目前 RHEL10 节点只有
+  db009/db010;分区 single(7 天)/gpu、gpu2(3 天)节点相同。
+- 版本原则(用户决定):不追最新,CUDA 取"驱动/硬件允许的最高版本"。
+  CUDA 13.x 不支持 Volta、580 是最后支持 Volta 的驱动分支 → **cuda@12.9.1**。
+  QB4 上 namd 专门分流的 12.9 在这里成为唯一 CUDA。
+- **不装 nvhpc**(用户决定):QB4 上 GPU 包最终全部是 `%gcc`,只剩
+  smoke-test 的 `bwa %nvhpc`;Deep Bayou 的 bwa 用默认 oneAPI。
+- AVX512 也在,所以 spades 的 `-mno-avx512f` 绕法(override 里)照样适用。
+- 环境默认 `config: locks: false`(QB4 tier3 在共享 `/project` 上的 Spack
+  DB 锁死锁教训),前提是同一个 install_tree 同时只跑一个作业。
+- 提交作业(在 repo 根目录):
+  `sbatch -J db-smoke-test scripts/deepbayou/install-env.sh smoke-test`。
+  allocation `hpc_db4admin`,默认 `single` 分区、16 核、4 小时,命令行
+  `-t/-c/-p` 可覆盖。脚本固定做 `concretize -f --fresh` → `install` →
+  `module lmod refresh -y --delete-tree`,日志自动推到 `cluster-results`。
+- Spack 本体放在 db 的 `/project/fchen14/spack-tool`(v1.2.2,与 QB4 同),
+  脚本可用 `SPACK_ROOT_DIR` 覆盖。
+- smoke-test 在沙盒 fake install 生成的 module 名(全部平铺 `Core/`):
+  `bwa/0.7.19/intel-oneapi-compilers-2026.1.0`、
+  `cosma/2.8.4/intel-oneapi-compilers-2026.1.0-intel-oneapi-mpi-2021.18.0`、
+  `kokkos/5.1.1/gcc-14-cuda-12.9.1`(kokkos 是新加的 CUDA canary,真编
+  sm_70 设备代码)。
+
 ## 现有集群 module 命名格式(需要在新集群上延续)
 `<软件>/<版本>/<编译器>-<编译器版本>[-cuda-<版本>][-<mpi>-<mpi版本>]`
 例如:
@@ -22,7 +93,7 @@ lammps, matlab(非 spack 包,需单独装+手写 modulefile), metis, namd 等,
 章节——过程中挖出一长串 CUDA 13.3 相关的真实上游/配置兼容性 bug,namd
 最终还专门配了第二份 CUDA(12.9.0)。
 
-**Tier 1/2/3 批次(已加入 `config/specs.yaml`,详见下面"当前进度"章节
+**Tier 1/2/3 批次(已加入 `config/sites/qb4/specs.yaml`,详见下面"当前进度"章节
 末尾)**:
 - Tier 1:eigen, git, gsl, hwloc, valgrind(加已在清单里的 boost/
   cmake)——都只需要普通编译器,不涉及 MPI/CUDA。
@@ -32,7 +103,7 @@ lammps, matlab(非 spack 包,需单独装+手写 modulefile), metis, namd 等,
 - Tier 3:bowtie2, hisat2, star, spades(`~sra ~tools`), vcftools,
   revbayes——生信工具。
 
-三批都各自用独立的 `environments/tierN-test` + `scripts/
+三批都各自用独立的 `environments/qb4/tierN-test` + `scripts/
 tierN-test-install.sh` 在个人账号目录下做过真实批量编译验证(install_tree
 互相独立,不复用),**Tier 1/2/3 均已真实编译全部通过**,详见下面
 "当前进度"章节末尾的过程记录(尤其是 Tier 3 的 spades 遇到的一系列坑)。
@@ -227,7 +298,7 @@ environments/
     `include:` 能拉的"section"文件不包括 `specs:`(只有
     config/packages/modules/concretizer 等,specs 是 environment
     manifest 自己的字段),所以没法直接 `include:` 共享。已经用
-    **config/specs.yaml + scripts/render-specs.py** 解决了手动同步的
+    **config/sites/qb4/specs.yaml + scripts/render-specs.py** 解决了手动同步的
     问题,见下面"改软件清单流程"。
   - `concretizer:targets:host_compatible: false`:dev-local 上是必须的
     (本机识别成 skylake),production 上其实用不上(真机就是 icelake),
@@ -238,26 +309,26 @@ environments/
 "当前进度"。
 
 ## 改软件清单流程(已确认)
-目标软件列表(`specs:`)现在唯一来源是 `config/specs.yaml`,不要直接改
+目标软件列表(`specs:`)现在唯一来源是 `config/sites/qb4/specs.yaml`,不要直接改
 `environments/{dev-local,production}/spack.yaml` 里
 `# >>> BEGIN GENERATED SPECS` 到 `# <<< END GENERATED SPECS` 之间的内容
 ——那段是生成出来的,手改了下次跑脚本会被覆盖。
 
 流程:
-1. 编辑 `config/specs.yaml` 里的 `specs:` 列表(加/删软件、改
+1. 编辑 `config/sites/qb4/specs.yaml` 里的 `specs:` 列表(加/删软件、改
    variant/编译器 pin,比如 `+cuda cuda_arch=80 %nvhpc`)。
 2. 跑 `python3 scripts/render-specs.py`,会把改动同步套进两份
    spack.yaml 的生成区块。
 3. `git diff` 确认两份 spack.yaml 的改动跟预期一致。
 4. 用 dev-local 跑一遍 `spack concretize`(必要时 `spack install
    --fake` 做 module 生成的 smoke test)确认没有 concretize 失败。
-5. 把 `config/specs.yaml` 和两份 spack.yaml 一起 commit。
+5. 把 `config/sites/qb4/specs.yaml` 和两份 spack.yaml 一起 commit。
 
 `scripts/render-specs.py --check` 可以只检查、不写文件——如果有人手改了
-生成区块导致跟 `config/specs.yaml` 不一致,会打印 `OUT OF DATE` 并以非零
+生成区块导致跟 `config/sites/qb4/specs.yaml` 不一致,会打印 `OUT OF DATE` 并以非零
 状态退出,适合接进 CI/pre-commit(目前还没接,先记录这个能力)。
 
-脚本原理:把 `config/specs.yaml` 里从 `specs:` 那一行到文件末尾整段当
+脚本原理:把 `config/sites/qb4/specs.yaml` 里从 `specs:` 那一行到文件末尾整段当
 纯文本(不解析/重新序列化成 YAML,避免把注释格式搞乱),缩进两格之后
 原样塞进两份 spack.yaml 的 BEGIN/END 标记之间。
 
@@ -283,7 +354,7 @@ environments/
 
 ## Step 5: module 命名方案(Lmod)结论
 
-modules.yaml 已经从 Tcl 草稿切到 Lmod(现在是共享的 config/modules.yaml,
+modules.yaml 已经从 Tcl 草稿切到 Lmod(现在是共享的 config/{common,sites/qb4}/modules.yaml,
 见上面"Environment 目录结构"章节),projections 尽量拼目标格式
 `<软件>/<版本>/<编译器>-<编译器版本>[-cuda-<版本>][-<mpi>-<mpi版本>]`。
 amber 跳过(它在 Spack 里不声明编译器依赖,没法拼)。
@@ -367,8 +438,8 @@ module,会去 source 一个 `vars.sh` 环境脚本;因为我们的 external pref
 ## GPU(+cuda)软件真实编译验证与 CUDA 版本分流
 
 cp2k、lammps、namd 三个都已经在集群上用真实 `spack install +cuda
-cuda_arch=80` 编译验证通过(独立的 `environments/gpu-test` +
-`scripts/gpu-test-install.sh`,install_tree 独立、不碰 production)。
+cuda_arch=80` 编译验证通过(独立的 `environments/qb4/gpu-test` +
+`scripts/qb4/gpu-test-install.sh`,install_tree 独立、不碰 production)。
 过程中挖出一长串真实的 CUDA 13.3 兼容性问题,修法都记在
 `repos/spack_repo/rhel10_overrides/packages/{cp2k,namd,charmpp}/package.py`
 的详细注释里,这里只列结论,细节看那几个文件 + git log。
@@ -381,7 +452,7 @@ GPU 代码无关的 nvhpc 编译器 bug(内部编译器崩溃、汇编不兼容�
 stdatomic.h/converse.h 冲突)。`%oneapi` 也不行——nvcc 直接拒绝 icx
 ("option: icx is not supported in this version!"),NVIDIA 官方支持列表
 里根本没有 icx。最终定为 `%gcc`(nvcc 支持范围内、且没有 nvhpc 那些
-bug)。`config/specs.yaml` 里 cp2k/lammps/namd 三个 `+cuda` spec 都是
+bug)。`config/sites/qb4/specs.yaml` 里 cp2k/lammps/namd 三个 `+cuda` spec 都是
 `... %gcc`。
 
 ### cp2k `+cuda` 遇到的真实 bug(3 个,都在
@@ -476,7 +547,7 @@ charmpp(namd 的依赖,不是 lammps 的)相关的坑不适用于 lammps。
    dedup 逻辑产生误导性的省略,不能直接拿来判断某个 root 到底依赖哪个
    版本,必须用 `env.concrete_roots()` + `spec.traverse()` 编程式确认)。
 
-最终 `config/specs.yaml` 里三个的完整 spec:
+最终 `config/sites/qb4/specs.yaml` 里三个的完整 spec:
 ```
 - cp2k +cuda cuda_arch=80 %gcc ^fftw
 - lammps +cuda cuda_arch=80 %gcc ^fftw
@@ -517,6 +588,13 @@ charmpp(namd 的依赖,不是 lammps 的)相关的坑不适用于 lammps。
 - 出于安全原因,集群上不能直接跑 Claude。
 - 本地(WSL2 Ubuntu on dellpro16)用 Claude Code 做:配置文件编写、
   spack concretize/spec 这类不需要匹配目标硬件的验证、脚本开发。
+- 2026-11-21 起也可以用 Claude Code 云沙盒代替 WSL:沙盒里 clone Spack
+  v1.2.2 到任意位置、`pip install clingo`(沙盒网络白名单挡住了 Spack 的
+  clingo 二进制 bootstrap,要 `spack bootstrap disable github-actions-v2`
+  和 `github-actions-v0.6`),再把 repo 软链接到
+  `/project/fchen14/spack-rhel10`(`config/common/repos.yaml` 用的是这个
+  绝对路径)。沙盒不持久,每个新会话要重做一遍;repo 是唯一的真实来源。
+  沙盒同样只能 concretize/`--fake`,不能真编(源码下载也被白名单挡住)。
 - 真正的 `spack install` 编译必须在集群的 compute node 上跑(sbatch/qsub
   提交,不要在 login node 上跑),因为涉及目标 CPU 优化、InfiniBand/MPI
   底层库、license 软件(Matlab)、真实文件系统路径。
@@ -542,7 +620,7 @@ charmpp(namd 的依赖,不是 lammps 的)相关的坑不适用于 lammps。
     packages.yaml 里以 external package 形式声明(带 deprecation 迁移
     逻辑),所以没有单独的 compilers.yaml 文件。
   - 用 `spack -C environments/hpc-software ...`(当时还没拆分,这个
-    environment 现在已经不存在了,后续验证都在 environments/dev-local
+    environment 现在已经不存在了,后续验证都在 environments/qb4/dev-local
     下做)和 `spack env activate environments/hpc-software` 在本机
     (WSL2)做了 schema 校验 + 完整 `spack concretize`(全部 14 个目标
     软件都能 concretize 成功,没有真的 install)。发现的问题都已经记在对应
@@ -577,8 +655,8 @@ charmpp(namd 的依赖,不是 lammps 的)相关的坑不适用于 lammps。
     (WSL2)识别成 skylake 不是 icelake,额外加了
     `concretizer:targets:host_compatible: false` 才能让 icelake
     偏好在本地生效(真机上跑在 icelake 节点则无影响)。
-  - 按用户要求把 environments/hpc-software 拆成 environments/dev-local +
-    environments/production,共享配置提到 config/{packages,modules}.yaml
+  - 按用户要求把 environments/hpc-software 拆成 environments/qb4/dev-local +
+    environments/qb4/production,共享配置提到 config/{packages,modules}.yaml
     (见上面"Environment 目录结构"章节)。用 dev-local 重新跑过一遍完整
     验证:`spack concretize` 干净通过(target=icelake、cuda_arch:=80 都
     生效);`spack install --fake` 装了整个 environment,除了两个
@@ -590,7 +668,7 @@ charmpp(namd 的依赖,不是 lammps 的)相关的坑不适用于 lammps。
     (cuda 版本号已经是新的 13.3.0)。验证完之后卸载了所有 fake 包并清空
     了 spack-install/,没有留下测试垃圾。
   - dev-local/production 的 `specs:` 列表核对过是完全一致的(拆分时
-    diff 过,没有分叉),已经提到 `config/specs.yaml` 作为唯一来源,配
+    diff 过,没有分叉),已经提到 `config/sites/qb4/specs.yaml` 作为唯一来源,配
     `scripts/render-specs.py` 生成进两份 spack.yaml(见上面"改软件清单
     流程"章节)。跑了两遍脚本确认幂等(第二遍全部 unchanged,`--check`
     退出码 0)。同时把 amber+cuda 不兼容的说明更新成更精确的版本
@@ -599,11 +677,11 @@ charmpp(namd 的依赖,不是 lammps 的)相关的坑不适用于 lammps。
     照常排除在外):amber, ambertools, boost, bowtie2, bwa, cmake, mamba,
     cosma, cp2k, lammps(+cuda cuda_arch=80 %nvhpc), metis, namd(+cuda
     cuda_arch=80 %nvhpc)。
-  - 新建了 environments/smoke-test/spack.yaml(不动 dev-local/
+  - 新建了 environments/qb4/smoke-test/spack.yaml(不动 dev-local/
     production):3 个代表性软件 cmake/cosma/`bwa %nvhpc`,install_tree
     和 module roots 都指到集群上一个独立的临时目录
     (/project/fchen14/spack-rhel10-smoke-test/...),不是
-    /usr/local/packages。配套写了 scripts/smoke-test-install.sh 当
+    /usr/local/packages。配套写了 scripts/qb4/smoke-test-install.sh 当
     sbatch 模板(4 核、2 小时、不要 GPU,因为这几个包本身不需要在 GPU
     上跑)。这个脚本后来被(在集群上真实跑过一次之后)手动改过:换成了
     真实的 spack 路径 `/project/fchen14/spack-tool`(不是本仓库自带的
@@ -625,7 +703,7 @@ charmpp(namd 的依赖,不是 lammps 的)相关的坑不适用于 lammps。
     主版本号,"2026.0.0" 根本不存在,已改成真实存在的最新版 2021.18.0
     (`spack versions intel-oneapi-mpi` 验证过)。重新 concretize 过
     dev-local 全部 12 个软件,确认干净无报错。评估过
-    scripts/smoke-test-install.sh 的 walltime/磁盘:因为最终只有 cuda
+    scripts/qb4/smoke-test-install.sh 的 walltime/磁盘:因为最终只有 cuda
     改自装,而 smoke-test 的 3 个软件(cmake/cosma/`bwa %nvhpc`)都不
     依赖独立的 cuda 包(concretize 验证过,cuda 没出现在依赖图里),
     所以这次改动对 smoke-test 的实际下载/编译量没有影响,2 小时 walltime
@@ -646,20 +724,20 @@ charmpp(namd 的依赖,不是 lammps 的)相关的坑不适用于 lammps。
     BLAS backend"。`modules.yaml` 的 `core_compilers` 版本号(之前的
     2026.0.0/24.1 是笔误,和 packages.yaml 真实版本不匹配导致 Lmod 精确
     版本匹配失败、退回嵌套目录布局)已同步改成 2026.1.0/26.5。
-  - `scripts/smoke-test-install.sh` 修了一个真实复现过的 bug:`REPO_ROOT`
+  - `scripts/qb4/smoke-test-install.sh` 修了一个真实复现过的 bug:`REPO_ROOT`
     原来靠 `readlink -f "$0"` 解析脚本自身路径,如果 sbatch 用相对路径
     提交、且计算节点作业启动 cwd 跟提交目录不一致,会解析错(这就是
     之前 "No such environment" 报错的根因)。改成优先用 Slurm 自己保证
     设置的 `SLURM_SUBMIT_DIR`,原逻辑降级为只在手动跑(不在 Slurm 下)时
     的 fallback。
   - **加入了 Tier 1 批次**(eigen, git, gsl, hwloc, valgrind,加上已经在
-    清单里的 boost/cmake)到 `config/specs.yaml`,目的是在正式清单规模
+    清单里的 boost/cmake)到 `config/sites/qb4/specs.yaml`,目的是在正式清单规模
     下验证批量编译流程。为了不碰生产路径 `/usr/local/packages`(命名还
-    没最终定),照着 `environments/smoke-test` 的套路新建了
-    `environments/tier1-test/spack.yaml`(只列这 7 个包,不 include 整个
-    `config/specs.yaml`,install_tree 指向独立的
+    没最终定),照着 `environments/qb4/smoke-test` 的套路新建了
+    `environments/qb4/tier1-test/spack.yaml`(只列这 7 个包,不 include 整个
+    `config/sites/qb4/specs.yaml`,install_tree 指向独立的
     `/project/fchen14/spack-rhel10-tier1-test/`,不跟 smoke-test 共用
-    目录)和配套的 `scripts/tier1-test-install.sh`(sbatch 模板,4 小时
+    目录)和配套的 `scripts/qb4/tier1-test-install.sh`(sbatch 模板,4 小时
     walltime——比 smoke-test 的 2 小时长,因为 git 拉出一整条 gcc
     autotools 引导链的小包,加上 boost/curl/perl/openssl 因为两种编译器
     各建一份而重复编译)。
@@ -670,16 +748,16 @@ charmpp(namd 的依赖,不是 lammps 的)相关的坑不适用于 lammps。
     `packages.yaml` 里加了 `gettext: variants: ~tar` 关掉这个功能绕开了
     坏的编译路径,gettext 本身给 git 用的国际化功能不受影响。
   - **Tier 1(eigen/git/gsl/hwloc/valgrind + 已在清单里的 boost/cmake)在
-    集群上真实编译全部通过**,已正式纳入 `config/specs.yaml`。同时又
+    集群上真实编译全部通过**,已正式纳入 `config/sites/qb4/specs.yaml`。同时又
     加了 Tier 2(fftw/hdf5/netcdf-c/netcdf-cxx4/netcdf-fortran/
     parallel-netcdf/parmetis/superlu-dist/hypre/petsc,都依赖
     intel-oneapi-mpi)和 Tier 3(bowtie2/hisat2/star/spades/vcftools/
     revbayes,生信工具),每一批都照 Tier 1 的套路建了独立的
-    `environments/tierN-test` + `scripts/tierN-test-install.sh`
+    `environments/qb4/tierN-test` + `scripts/qb4/tierN-test-install.sh`
     (install_tree 各自独立、不复用),Tier 2 也已真实编译通过。
   - **新增了 `repos/spack_repo/rhel10_overrides` 这个自定义 Spack package
     repo**,用来给 builtin 包打site-specific补丁,不用手改/fork整个
-    recipe:通过 `config/repos.yaml`(所有 environment 都 include)注册,
+    recipe:通过 `config/common/repos.yaml`(所有 environment 都 include)注册,
     优先级天然高于 `builtin`(builtin 只在 Spack 最低优先级的
     "defaults" scope 注册,environment scope 的配置总是赢)。已验证的
     正确用法:继承 builtin 的包类(比如
@@ -703,15 +781,15 @@ charmpp(namd 的依赖,不是 lammps 的)相关的坑不适用于 lammps。
     重新决定用哪个 repo 的 recipe——必须 `spack concretize --fresh -f`
     重新锁一次,新 lock 里的 python 节点才会指向我们的 override。
   - **发现并解决了一个共享文件系统(`/project`)上的 Spack 数据库锁死锁
-    问题**:`environments/tierN-test` 的真实 `spack install` 连续三次
+    问题**:`environments/qb4/tierN-test` 的真实 `spack install` 连续三次
     (job 41/42/43)卡死在完全同一个位置(revbayes 装完之后~7分27秒,
     跟前面装没装成功、失败没失败无关),`strace` 确认卡在
     `fcntl(F_SETLK)` 对 `.spack-db/lock` 拿 `EAGAIN`,但 `lslocks`
     显示没有任何进程真正持有这把锁——是 `/project` 这类共享文件系统
     fcntl 锁释放语义不可靠导致的死锁,不是并发/某个包失败触发的偶发
-    问题(后来把 `scripts/tier3-test-install.sh` 改成严格串行、一次
+    问题(后来把 `scripts/qb4/tier3-test-install.sh` 改成严格串行、一次
     只跑一个 spec 的 `spack install` 之后照样在两次独立调用之间卡死,
-    证明确实跟并发无关)。最终修法:`environments/tier3-test/spack.yaml`
+    证明确实跟并发无关)。最终修法:`environments/qb4/tier3-test/spack.yaml`
     里加 `config: locks: false` 彻底关掉 Spack 自己的文件锁——串行安装
     下本来就没有真正的并发写风险,关掉锁是安全的。
   - **spades@4.0.0 真实编译一路挖出 6 个独立问题**,记在
@@ -745,17 +823,17 @@ charmpp(namd 的依赖,不是 lammps 的)相关的坑不适用于 lammps。
     附属程序)这两个 variant 都默认开着,但上游 SPAdes 自己默认是关的
     (`sra` 官方文档写明"due to possible compatibility issues"),关掉
     `~sra ~tools` 避免了不必要的额外编译面。**Tier 3 六个包最终全部
-    真实编译通过**(`spack -e environments/tier3-test find` 确认
+    真实编译通过**(`spack -e environments/qb4/tier3-test find` 确认
     6/6 已装)。
   - **建立了 cluster-results 自动回传机制**(sbatch 作业日志自动 push
     回 GitHub,本地 `git pull` 直接看),详见上面专门的"Cluster-results
     自动回传机制"章节。
   - **cp2k/lammps/namd 三个 `+cuda cuda_arch=80` 全部真实编译验证通过**
-    (2026-09-14 ~ 09-16,独立的 `environments/gpu-test`),过程中挖出一
+    (2026-09-14 ~ 09-16,独立的 `environments/qb4/gpu-test`),过程中挖出一
     长串真实的 CUDA 13.3 兼容性 bug(cp2k 的 CMAKE_CUDA_ARCHITECTURES
     探测坑、cufftResult 枚举值移除;namd 的纹理引用 API 移除、
     computeMode 字段移除、CCCL 宏改名+真实需要 C++17、kernel 代码直接
     调用已删除的 CUB 函数),namd 最终确认自己上游都没在 CUDA 13.x 上
     验证过、需要专门配一份 `cuda@12.9.0` 才能编译。三个都已经正式纳入
-    `config/specs.yaml`。完整过程详见上面专门的"GPU(+cuda)软件真实编译
+    `config/sites/qb4/specs.yaml`。完整过程详见上面专门的"GPU(+cuda)软件真实编译
     验证与 CUDA 版本分流"章节,还没挪到 production。

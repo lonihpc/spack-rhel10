@@ -1,10 +1,10 @@
 # "tier2-test" Spack environment - REAL (not --fake) bulk-build validation
 # of the Tier 2 batch (fftw, hdf5, netcdf-c, netcdf-cxx4, netcdf-fortran,
 # parallel-netcdf, metis, parmetis, superlu-dist, hypre, petsc) added to
-# the target software list. Same idea as environments/tier1-test (already
+# the target software list. Same idea as environments/qb4/tier1-test (already
 # validated) but now exercising mid-sized libraries that depend on
 # intel-oneapi-mpi rather than Tier 1's plain-compiler-only packages,
-# still under this personal account - NOT environments/production
+# still under this personal account - NOT environments/qb4/production
 # (/usr/local/packages, install_tree naming not finalized yet). Once this
 # is proven out, Tier 2 moves to the real production install.
 #
@@ -12,30 +12,34 @@
 # dependency chains at a size closer to the real target list - real
 # compilers found and invoked, real network/download access, real
 # `spack module lmod refresh` against a real install - before committing
-# more of config/specs.yaml to a production run.
+# more of config/sites/qb4/specs.yaml to a production run.
 #
 # Usage (on the actual cluster, from a compute node via sbatch - see
-# scripts/tier2-test-install.sh, NOT on the login node):
-#   spack env activate -p environments/tier2-test
+# scripts/qb4/tier2-test-install.sh, NOT on the login node):
+#   spack env activate -p environments/qb4/tier2-test
 #   spack concretize
 #   spack install -j <cores>
 #   spack module lmod refresh -y
 #
 # Shares the exact same compiler/MPI/CUDA/target config as dev-local and
-# production (../../config/{packages,modules}.yaml - single source of
+# production (../../../config/{packages,modules}.yaml - single source of
 # truth, not copied here) so this test is actually representative of what
 # production would do. Only the specs list and the (temporary) install
 # location differ.
 spack:
   include:
-  - ../../config/packages.yaml
-  - ../../config/modules.yaml
-  - ../../config/repos.yaml
+  # Site-specific first (QB4 externals, target, cuda_arch, core_compilers),
+  # then the site-independent common policy (see CLAUDE.md, 站点拆分).
+  - ../../../config/sites/qb4/packages.yaml
+  - ../../../config/sites/qb4/modules.yaml
+  - ../../../config/common/packages.yaml
+  - ../../../config/common/modules.yaml
+  - ../../../config/common/repos.yaml
 
   # Temporary install location on the cluster, under this account, NOT
   # /usr/local/packages (that's reserved for the real production install -
-  # see environments/production/spack.yaml) and NOT environments/
-  # smoke-test's or environments/tier1-test's directories either (kept
+  # see environments/qb4/production/spack.yaml) and NOT environments/
+  # smoke-test's or environments/qb4/tier1-test's directories either (kept
   # separate so the tests can't interfere with each other). Safe to
   # `rm -rf` this whole tree once this test is done with it.
   config:
@@ -64,12 +68,12 @@ spack:
 
   view: false
 
-  # Deliberately NOT including config/specs.yaml - that file already has
+  # Deliberately NOT including config/sites/qb4/specs.yaml - that file already has
   # amber/cp2k/lammps/namd etc. which aren't ready for bulk-build
-  # validation yet. Only the Tier 2 batch (see config/specs.yaml's
+  # validation yet. Only the Tier 2 batch (see config/sites/qb4/specs.yaml's
   # "Tier 2" comment) is listed here. None of these need an explicit
   # %compiler pin - they pick up intel-oneapi-compilers/intel-oneapi-mpi
-  # from the default all.providers order in ../../config/packages.yaml.
+  # from the default all.providers order in config/{common,sites/qb4}/packages.yaml.
   specs:
   - fftw
   - hdf5

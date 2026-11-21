@@ -1,7 +1,14 @@
-# Shared module-generation config (naming/projections only) for ALL
-# "hpc-software" Spack environments (environments/dev-local and
-# environments/production). Referenced via `include:` from both spack.yaml
-# files - this is the single source of truth, never copy this file.
+# Site-INDEPENDENT module-generation config (naming/projections only),
+# shared by every site and every environment via `include:` - single
+# source of truth, never copy this file.
+#
+# The one site-specific piece, `core_compilers`, lives in
+# config/sites/<site>/modules.yaml: it must list each site's external
+# compilers with their EXACT installed versions (Lmod's core-compiler
+# match is exact - a version typo silently drops packages back into a
+# nested `<compiler>/<version>/` tier), and Spack concatenates lists
+# across included files, so keeping it per-site avoids one site's
+# compilers leaking into the other's list.
 #
 # Deliberately does NOT set `roots:` (where module files get written) -
 # that's the one thing that differs between dev-local and production, so
@@ -45,15 +52,7 @@ modules:
     lmod:
       hash_length: 0
       hide_implicits: true
-      # Every registered compiler is "core" so nothing needs a
-      # `module load <compiler>` unlock step first (see the big comment
-      # above) - this makes Lmod behave close to Tcl's flat style for our
-      # naming purposes while keeping Lmod's other features (spider,
-      # families, `ml`, etc.).
-      core_compilers:
-      - intel-oneapi-compilers@2026.1.0
-      - nvhpc@26.5
-      - gcc@14
+      # core_compilers: set per site, see config/sites/<site>/modules.yaml.
       # Spack's own linux default already sets hierarchy: [mpi] - a plain
       # `hierarchy: []` here would just get MERGED with that default
       # (list configs merge, not replace) and mpi would still show up, so

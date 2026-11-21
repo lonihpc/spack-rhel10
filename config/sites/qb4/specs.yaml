@@ -4,15 +4,15 @@
 # list (only config/packages/modules/concretizer/etc "sections" are
 # includable), so Spack itself never reads this file directly. Instead,
 # scripts/render-specs.py injects everything from the `specs:` line below
-# to the end of this file into BOTH environments/dev-local/spack.yaml and
-# environments/production/spack.yaml, between their
+# to the end of this file into BOTH environments/qb4/dev-local/spack.yaml and
+# environments/qb4/production/spack.yaml, between their
 # "BEGIN/END GENERATED SPECS" comment markers.
 #
 # To change the target software list:
 #   1. Edit the `specs:` list below (this file only).
 #   2. Run: python3 scripts/render-specs.py
 #   3. `git diff` to review both regenerated spack.yaml files.
-#   4. Commit config/specs.yaml and both spack.yaml files together.
+#   4. Commit config/sites/qb4/specs.yaml and both spack.yaml files together.
 #
 # Versions intentionally left unpinned ("latest wins") per the request -
 # we're not copying the old cluster's exact versions. Everything defaults
@@ -24,7 +24,7 @@
 #
 # %gcc, NOT %nvhpc and NOT %oneapi, for the host c/cxx compiler - this
 # was originally %nvhpc (an early "GPU packages use nvhpc" convention)
-# and was real-compile-tested twice more in environments/gpu-test before
+# and was real-compile-tested twice more in environments/qb4/gpu-test before
 # landing here:
 #   - %nvhpc: neither namd nor lammps actually needs nvhpc as host
 #     compiler (both handle CUDA via a mechanism fully decoupled from
@@ -46,7 +46,7 @@
 #     compiler bugs. Any other package that later grows a `+cuda` build
 #     should follow the same `+cuda %gcc` pattern here, not `%nvhpc`.
 #
-# cp2k's `^fftw`: real-compile-validated in environments/gpu-test (job
+# cp2k's `^fftw`: real-compile-validated in environments/qb4/gpu-test (job
 # 62) before landing here. Without it, the concretizer picks the
 # external intel-oneapi-mkl (registered as the default fftw-api
 # provider) to satisfy cp2k's fftw-api dependency, but cp2k's own
@@ -64,7 +64,7 @@
 # cufft.h).
 #
 # namd's `@3.0.3 ... ^charmpp build-target=charm++ ^cuda@12.9.0`:
-# real-compile-validated in environments/gpu-test (job 71, 2026-09-15)
+# real-compile-validated in environments/qb4/gpu-test (job 71, 2026-09-15)
 # after 5 escalating rounds of CUDA-13.3 incompatibilities (see
 # repos/spack_repo/rhel10_overrides/packages/namd/package.py for the
 # computeMode/CCCL-macro-rename/C++17 source fixes). The last round -
@@ -73,11 +73,11 @@
 # patchable at all: NAMD's own release notes cap official CUDA support
 # at "9.1-12.x", so no namd version was ever going to build clean
 # against CUDA 13.3. Resolved by researching that cap and setting up a
-# SECOND, parallel `cuda@12.9.0` external (config/packages.yaml,
+# SECOND, parallel `cuda@12.9.0` external (config/{common,sites/qb4}/packages.yaml,
 # installed standalone via --toolkit --toolkitpath, no driver, alongside
 # the existing cuda@13.3.0) specifically for namd - `^cuda@12.9.0`
 # pins namd to it while cp2k/lammps keep using the default cuda@13.3.0.
-# build-target=charm++ on charmpp: see environments/gpu-test/spack.yaml's
+# build-target=charm++ on charmpp: see environments/qb4/gpu-test/spack.yaml's
 # comment - without it, charmpp's default build-target=LIBS also builds
 # the AMPI/ROMIO sub-library namd never uses, and ROMIO's own
 # MPI-configure self-test fails outright under the netlrts backend.

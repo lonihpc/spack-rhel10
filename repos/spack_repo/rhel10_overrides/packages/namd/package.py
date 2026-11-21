@@ -109,7 +109,7 @@ class Namd(BuiltinNamd):
         # module docstring above). We now build namd@3.0.3 instead (its
         # GPU backend was rewritten to use texture objects instead of
         # the legacy texture-reference API that made 2.14 uncompilable
-        # under CUDA 13.3 - see environments/gpu-test/spack.yaml's
+        # under CUDA 13.3 - see environments/qb4/gpu-test/spack.yaml's
         # comment), so it's unknown/unverified whether 3.0.3's
         # DeviceCUDA.C (if it still exists under this path at all) still
         # has these exact `.computeMode` lines. ignore_absent=True makes

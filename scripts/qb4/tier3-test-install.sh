@@ -1,5 +1,5 @@
 #!/bin/bash
-# sbatch template for the environments/tier3-test Spack environment.
+# sbatch template for the environments/qb4/tier3-test Spack environment.
 #
 # Purpose: REAL (not --fake) `spack install` of the Tier 3 batch (bowtie2,
 # hisat2, star, spades, vcftools, revbayes - bioinformatics tools) to
@@ -23,7 +23,7 @@
 # stop at the first problem.
 #
 # Usage:
-#   sbatch scripts/tier3-test-install.sh
+#   sbatch scripts/qb4/tier3-test-install.sh
 #
 #SBATCH --job-name=spack-tier3-test
 #SBATCH --nodes=1
@@ -35,7 +35,7 @@
 #SBATCH --partition=gpu2
 #SBATCH --account=loni_loniadmin1
 set -euo pipefail
-REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)}"
+REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "$(readlink -f "$0")")/../.." && pwd)}"
 cd "$REPO_ROOT"
 
 # Auto-push this job's log to the `cluster-results` branch on exit - see
@@ -50,13 +50,13 @@ export SPACK_PYTHON=/usr/bin/python3
 export PKG_CONFIG_LIBDIR=/nonexistent
 export PKG_CONFIG_PATH=
 source /project/fchen14/spack-tool/share/spack/setup-env.sh
-spack env activate environments/tier3-test
+spack env activate environments/qb4/tier3-test
 
 JOBS="${SLURM_CPUS_PER_TASK:-8}"
 
 spack concretize -f
 
-# Keep this list in sync with environments/tier3-test/spack.yaml's specs:.
+# Keep this list in sync with environments/qb4/tier3-test/spack.yaml's specs:.
 # Deliberately unquoted in the loop below - "spades ~sra" needs to split
 # into two argv words ("spades" "~sra") for spack's own spec-string
 # parser to recombine into one spec, same as typing it on a real command

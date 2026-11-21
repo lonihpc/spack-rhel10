@@ -1,7 +1,8 @@
-# Shared compiler/MPI/CUDA/hardware configuration for ALL "hpc-software"
-# Spack environments (environments/dev-local, environments/production,
-# environments/smoke-test). Referenced via `include:` from every
-# spack.yaml - this is the single source of truth, never copy this file.
+# QB4 (LONI, host qbd5) SITE-SPECIFIC package config: toolchain externals
+# (real install prefixes/versions on this cluster) and hardware targets.
+# Site-independent policy (provider ordering, gettext~tar, python~tkinter)
+# lives in config/common/packages.yaml - every QB4 environment includes
+# this file first, then the common one.
 #
 # IMPORTANT: Spack v1.2.x removed compilers.yaml. Compilers are now declared
 # as packages right here in packages.yaml (with a `compiler` tag), see
@@ -22,7 +23,7 @@
 # two-phase install order, and even then Spack's reuse-driven
 # concretization would sometimes pick a genuinely-built nvhpc/oneAPI as the
 # compiler for unrelated low-level packages, overriding
-# `all.providers` below and occasionally breaking unrelated builds (e.g.
+# `all.providers` (config/common/packages.yaml) and occasionally breaking unrelated builds (e.g.
 # cmake, python) via their own recipe conflicts against %nvhpc. None of
 # that can happen when these packages are external + non-buildable, so
 # this is simpler and more robust. `gcc` (see below) is the one exception -
@@ -50,7 +51,7 @@ packages:
           fortran: /usr/local/packages/compilers/intel-oneapi-2026/compiler/2026.1/bin/ifx
     buildable: false
 
-  # Fallback only - not a default provider (see all.providers below), and
+  # Fallback only - not a default provider (see config/common/packages.yaml's all.providers), and
   # NOT one of the 4 vendor toolchains above: this is RHEL10's own base
   # system gcc, kept registered in case some package genuinely refuses to
   # build with icx/icpx/ifx.
@@ -69,7 +70,7 @@ packages:
 
   # GPU compiler - pin explicitly per package (`%nvhpc`) when +cuda is
   # needed, rather than relying on default provider ordering (see
-  # all.providers below - nvhpc is deliberately not a default provider).
+  # config/common/packages.yaml's all.providers - nvhpc is deliberately not a default provider).
   nvhpc:
     externals:
     - spec: nvhpc@26.5 languages:='c,c++,fortran'
@@ -99,7 +100,7 @@ packages:
   # namd@3.0.3's own kernel code (cub::LaneMaskLt/Min/Max) uses CUB/CCCL
   # symbols CUDA 13.3 has removed outright, which the user decided not
   # to hand-patch (see repos/spack_repo/rhel10_overrides/packages/namd/
-  # package.py and environments/gpu-test/spack.yaml for the full 5-round
+  # package.py and environments/qb4/gpu-test/spack.yaml for the full 5-round
   # investigation). Installed standalone (--toolkit --toolkitpath, no
   # driver) rather than via nvhpc's bundled cuda/12.9 subdirectory - the
   # user is this cluster's admin and preferred a direct, minimal
@@ -116,22 +117,6 @@ packages:
       prefix: /usr/local/packages/cuda/12.9
     buildable: false
 
-  # Global variant preference (not an external) - avoids pulling in tar as
-  # a dependency. tar@1.35 fails to build on AlmaLinux 10 (glibc 2.39):
-  # gnulib's ACL *_at function compatibility declarations conflict with
-  # the system headers ("conflicting types for 'acl_get_file_at'" etc).
-  # Turning off gettext's optional tar-based example-archive feature
-  # sidesteps that broken build path entirely - gettext's actual
-  # internationalization functionality (what git depends on it for) is
-  # unaffected.
-  gettext:
-    variants: ~tar
-
-  # Global variant preference (not an external) - disable python tkinter
-  # variant to avoid Tcl ABI mismatch build failure.
-  python:
-    variants: ~tkinter
-
   # Default BLAS/LAPACK provider - fixes cosma's "Invalid Host BLAS
   # backend" (cosma needs a real BLAS/LAPACK provider, not just a
   # compiler). Ships alongside the oneAPI compilers.
@@ -142,20 +127,6 @@ packages:
     buildable: false
 
   all:
-    providers:
-      # Spack's own default order is [gcc, llvm, intel-oneapi-compilers] -
-      # override it so Intel oneAPI is the mainstream default. gcc stays
-      # registered as a fallback (see above) but is deliberately last, not
-      # a co-equal default. nvhpc is intentionally NOT in this list - GPU
-      # packages should pin `%nvhpc` explicitly rather than relying on
-      # provider ordering to pick it up.
-      c: [intel-oneapi-compilers, gcc]
-      cxx: [intel-oneapi-compilers, gcc]
-      fortran: [intel-oneapi-compilers, gcc]
-      # intel-oneapi-mpi only - mvapich/mpich are no longer mainstream.
-      mpi: [intel-oneapi-mpi]
-      blas: [intel-oneapi-mkl]
-      lapack: [intel-oneapi-mkl]
     # Confirmed CPU microarch for the new RHEL10 node - one setting for the
     # whole environment, no per-node-type profile needed (GPU and CPU-only
     # nodes are identical here except for the presence of a GPU). Soft
@@ -164,7 +135,7 @@ packages:
     target: [icelake]
     # Confirmed GPU: Ampere-class (e.g. A100, compute capability 8.0).
     # Soft default so any `+cuda` package (namd/lammps today, see
-    # config/specs.yaml) picks up cuda_arch=80 without repeating it on
+    # config/sites/qb4/specs.yaml) picks up cuda_arch=80 without repeating it on
     # every spec line; per-package `cuda_arch=` on the spec still overrides
     # this if a future GPU package needs a different one.
     variants: cuda_arch=80

@@ -1,0 +1,79 @@
+# Deep Bayou (LSU HPC, login db1/db3) SITE-SPECIFIC package config:
+# toolchain externals and hardware targets. Site-independent policy
+# (provider ordering, gettext~tar, python~tkinter) lives in
+# config/common/packages.yaml - every deepbayou environment includes this
+# file first, then the common one.
+#
+# Hardware (confirmed on db009, 2026-11-21):
+#   - CPU: Intel Xeon Gold 6248R (Cascade Lake, has AVX512) -> cascadelake
+#   - GPU: 2x Tesla V100S-PCIE-32GB (Volta, compute capability 7.0)
+#   - OS: AlmaLinux 10.2, NVIDIA driver 580.196.07
+#
+# Version policy for this site (user decision): don't chase the newest
+# release - CUDA in particular is "the highest version the hardware and
+# driver allow". CUDA 13.x dropped Volta (sm_70) entirely and driver
+# branch 580 is the last one that supports Volta, so the ceiling is the
+# last CUDA 12 release, 12.9.1. A nice side effect vs QB4: QB4 needed a
+# second cuda@12.9 just for namd (NAMD only supports CUDA <= 12.x); here
+# 12.9 is the ONLY CUDA, so every GPU package uses the same one.
+#
+# nvhpc is deliberately NOT registered here (user decision 2026-11-21):
+# on QB4 every GPU package (cp2k/lammps/namd) ended up on %gcc anyway,
+# leaving only the smoke test's `bwa %nvhpc`; Deep Bayou builds bwa with
+# the default oneAPI instead. Register an nvhpc external here later only
+# if some package genuinely needs it (and add it to modules.yaml's
+# core_compilers at the same time).
+packages:
+  # Same oneAPI release as QB4, installed on Deep Bayou's own /project and
+  # symlinked to the same stable path, so these paths match QB4's exactly.
+  intel-oneapi-compilers:
+    externals:
+    - spec: intel-oneapi-compilers@2026.1.0 languages:='c,c++,fortran'
+      prefix: /usr/local/packages/compilers/intel-oneapi-2026
+      extra_attributes:
+        compilers:
+          c: /usr/local/packages/compilers/intel-oneapi-2026/compiler/2026.1/bin/icx
+          cxx: /usr/local/packages/compilers/intel-oneapi-2026/compiler/2026.1/bin/icpx
+          fortran: /usr/local/packages/compilers/intel-oneapi-2026/compiler/2026.1/bin/ifx
+    buildable: false
+
+  intel-oneapi-mpi:
+    externals:
+    - spec: intel-oneapi-mpi@2021.18.0
+      prefix: /usr/local/packages/compilers/intel-oneapi-2026
+    buildable: false
+
+  intel-oneapi-mkl:
+    externals:
+    - spec: intel-oneapi-mkl@2026.1.0
+      prefix: /usr/local/packages/compilers/intel-oneapi-2026
+    buildable: false
+
+  # Fallback compiler (and host compiler for nvcc - nvcc rejects icx, see
+  # CLAUDE.md "host 编译器:统一 %gcc").
+  # TODO(deepbayou): confirm with `gcc --version` / `which gfortran` on a
+  # db RHEL10 node - AlmaLinux 10 ships gcc 14, same as QB4.
+  gcc:
+    externals:
+    - spec: "gcc@14 languages='c,c++,fortran'"
+      prefix: /usr
+      extra_attributes:
+        compilers:
+          c: /usr/bin/gcc
+          cxx: /usr/bin/g++
+          fortran: /usr/bin/gfortran
+    buildable: true
+
+  # Standalone toolkit install (runfile --toolkit only, no driver, no
+  # kernel objects), named with the full version like the existing
+  # /usr/local/packages/cuda/12.1.1 on this cluster.
+  cuda:
+    externals:
+    - spec: cuda@12.9.1
+      prefix: /usr/local/packages/cuda/12.9.1
+    buildable: false
+
+  all:
+    target: [cascadelake]
+    # Volta V100S. Soft default; GPU specs still spell cuda_arch=70 out.
+    variants: cuda_arch=70

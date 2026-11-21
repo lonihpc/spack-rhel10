@@ -1,65 +1,72 @@
-# "dev-local" Spack environment - for drafting/validating config on
-# dellpro16 (WSL2) only. Same software list and toolchain as
-# environments/production, just a local install location for safe
-# `spack concretize`/`spack spec` testing (and, per this session, a
-# `spack install --fake` smoke test) that never touches the real cluster.
+# "production" Spack environment - the real RHEL10 cluster deployment.
+# Same software list and toolchain as environments/qb4/dev-local (see that
+# file's comments for the reasoning behind each choice) - only the install
+# location and module root differ.
 #
-# Usage (after sourcing spack/share/spack/setup-env.sh):
-#   spack env activate -p environments/dev-local
+# Usage (on the actual cluster, after sourcing spack/share/spack/
+# setup-env.sh):
+#   spack env activate -p environments/qb4/production
 #   spack concretize
-#   spack install --fake ...   # smoke-test module generation etc, never a
-#                               # real build - see CLAUDE.md for why real
-#                               # `spack install` must run on the cluster.
+#   spack install             # MUST run on a compute node (sbatch/qsub),
+#                              # never on the login node - see CLAUDE.md.
 #
-# Shared compiler/MPI/CUDA/target config lives in ../../config/{packages,
-# modules}.yaml (see those files - single source of truth, not copied
+# Shared compiler/MPI/CUDA/target config lives in ../../../config/{common,sites/qb4}/ (see those files - single source of truth, not copied
 # here). Only what's genuinely specific to this environment (install
 # location, module root) is inline below.
 spack:
   include:
-  - ../../config/packages.yaml
-  - ../../config/modules.yaml
-  - ../../config/repos.yaml
+  # Site-specific first (QB4 externals, target, cuda_arch, core_compilers),
+  # then the site-independent common policy (see CLAUDE.md, 站点拆分).
+  - ../../../config/sites/qb4/packages.yaml
+  - ../../../config/sites/qb4/modules.yaml
+  - ../../../config/common/packages.yaml
+  - ../../../config/common/modules.yaml
+  - ../../../config/common/repos.yaml
 
-  # LOCAL PLACEHOLDER paths for drafting/validating config on dellpro16
-  # (WSL2). Nothing here builds software for real - `spack concretize` and
-  # `spack spec` don't need these paths to exist. This is the dev-local
-  # counterpart of environments/production's config: - same keys, only the
-  # root path differs.
+  # PLACEHOLDER paths - /usr/local/packages/spack is a stand-in until the
+  # real shared-filesystem layout is decided (single point to edit once
+  # confirmed - everything else under it derives from this one root). This
+  # is the production counterpart of environments/qb4/dev-local's config: -
+  # same keys, only the root path differs.
   config:
     install_tree:
-      root: /project/fchen14/spack-rhel10/spack-install
+      root: /usr/local/packages/spack
       projections:
         all: "{architecture.platform}-{architecture.target}/{name}-{version}-{hash}"
-    source_cache: /project/fchen14/spack-rhel10/spack-install/cache/sources
-    misc_cache: /project/fchen14/spack-rhel10/spack-install/cache/misc
+    source_cache: /usr/local/packages/spack/cache/sources
+    misc_cache: /usr/local/packages/spack/cache/misc
+    # TODO(cluster): point this at fast local scratch on the compute node
+    # (e.g. /local/scratch or $SLURM_TMPDIR) instead once the compute node
+    # layout is confirmed - $tempdir/$user is a safe generic default until
+    # then.
     build_stage:
     - $tempdir/$user/spack-stage
-    license_dir: /project/fchen14/spack-rhel10/spack-install/licenses
+    license_dir: /usr/local/packages/spack/licenses
+    # TODO(cluster): tune once we know real compute node core counts.
     build_jobs: 16
 
+  # PLACEHOLDER - the exact modulefiles root/naming convention the cluster
+  # already uses for its old linux-rhel8-icelake modules; matching that
+  # convention for the new linux-rhel10-icelake tree per the user's
+  # confirmed path.
   modules:
     default:
       roots:
-        lmod: /project/fchen14/spack-rhel10/spack-install/modules
+        lmod: /usr/local/packages/Modules/default/modulefiles/linux-rhel10-icelake
 
   # Mainstream toolchain is Intel oneAPI + Intel MPI for everything (see
-  # ../../config/packages.yaml); nvhpc is only pinned per-package
+  # config/{common,sites/qb4}/packages.yaml); nvhpc is only pinned per-package
   # (`%nvhpc`) for GPU builds. `unify: false` still lets those GPU packages
   # diverge from the rest of the environment instead of forcing one
   # compiler everywhere.
   concretizer:
     unify: false
-    # Needed for the packages:all:target: [icelake] preference (see
-    # ../../config/packages.yaml) to actually take effect on this dev
-    # machine: by default Spack restricts targets to ones compatible with
-    # the CURRENT host's detected microarch (this WSL2 box reports
-    # "skylake", not the real cluster's icelake), so without this override
-    # `spack concretize` here silently ignores our icelake preference and
-    # just uses skylake - confirmed by testing. On the real RHEL10/icelake
-    # node this flag is harmless either way since host and target would
-    # already match (kept identical to environments/production for
-    # consistency).
+    # Not strictly required here since a real icelake compute node's
+    # detected host target already matches packages:all:target: [icelake]
+    # - kept for consistency with environments/qb4/dev-local (where it IS
+    # required, see that file's comment) so the two spack.yaml files stay
+    # as close to identical as possible outside of paths. Harmless either
+    # way.
     targets:
       host_compatible: false
 
@@ -67,13 +74,13 @@ spack:
   # delivery mechanism to end users, not an environment view.
   view: false
 
-  # Target software list - single source of truth is config/specs.yaml
+  # Target software list - single source of truth is config/sites/qb4/specs.yaml
   # (Spack's env schema has no way to `include:` a shared `specs:` list -
   # it's not one of the includable "section" files - so
   # scripts/render-specs.py splices it in here as plain text instead).
-  # DO NOT hand-edit between the markers below: edit config/specs.yaml,
+  # DO NOT hand-edit between the markers below: edit config/sites/qb4/specs.yaml,
   # then run `python3 scripts/render-specs.py`.
-  # >>> BEGIN GENERATED SPECS (from config/specs.yaml - do not edit by hand)
+  # >>> BEGIN GENERATED SPECS (from config/sites/qb4/specs.yaml - do not edit by hand)
   specs:
   # amber: Spack's `amber` package only has versions 18/20 (no 22, unlike
   # the old cluster's amber/22) - it's licensed software, so Spack can only

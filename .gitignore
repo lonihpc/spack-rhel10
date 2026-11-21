@@ -10,15 +10,19 @@
 /spack-install/
 
 # Spack environment build artifacts that don't belong in git.
-environments/*/.spack-env/
+environments/**/.spack-env/
 
 # The concretized lockfile IS meant to be tracked eventually (step 11 wants
 # reproducible state in git) - but not yet: right now it's been generated
 # against this WSL2 machine's placeholder externals/OS (ubuntu, not rhel10),
 # purely to validate the YAML. Un-ignore it (or `git add -f`) once we do a
 # real concretize against the actual RHEL10 cluster config.
-environments/*/spack.lock
+environments/**/spack.lock
 
 # Python bytecode cache generated when Spack imports package.py files from
 # our custom repos/ package repo.
 __pycache__/
+
+# sbatch --output logs written to the repo root (they are pushed to the
+# cluster-results branch by scripts/lib/push-results.sh, not committed here).
+/*.log

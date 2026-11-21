@@ -2,16 +2,16 @@
 # of the GPU family: cp2k, lammps, namd, all built with +cuda
 # cuda_arch=80. Unlike environments/tierN-test (which validated NEW
 # additions to the target software list), these three are already in
-# config/specs.yaml - lammps and namd already pin +cuda there, cp2k does
+# config/sites/qb4/specs.yaml - lammps and namd already pin +cuda there, cp2k does
 # not yet (still plain/CPU there). This environment exists to validate
 # the GPU-enabled builds for real, in bulk, before deciding whether to
-# flip cp2k's entry in config/specs.yaml to +cuda too and before moving
+# flip cp2k's entry in config/sites/qb4/specs.yaml to +cuda too and before moving
 # any of this to production (not urgent per user request - production's
 # install_tree naming isn't finalized yet anyway).
 #
 # Building +cuda doesn't require an actual GPU device on the build node -
 # only the external cuda toolchain (already registered in
-# ../../config/packages.yaml) - same rationale as environments/
+# config/{common,sites/qb4}/packages.yaml) - same rationale as environments/
 # smoke-test's `bwa %nvhpc` pin needing nvhpc findable/invokable but not
 # a GPU to run on.
 #
@@ -52,35 +52,39 @@
 # subject to the same host-compiler restriction).
 #
 # Usage (on the actual cluster, from a compute node via sbatch - see
-# scripts/gpu-test-install.sh, NOT on the login node):
-#   spack env activate -p environments/gpu-test
+# scripts/qb4/gpu-test-install.sh, NOT on the login node):
+#   spack env activate -p environments/qb4/gpu-test
 #   spack concretize
 #   spack install -j <cores>
 #   spack module lmod refresh -y
 #
 # Shares the exact same compiler/MPI/CUDA/target config as dev-local and
-# production (../../config/{packages,modules}.yaml - single source of
+# production (../../../config/{packages,modules}.yaml - single source of
 # truth, not copied here) so this test is actually representative of what
 # production would do. Only the specs list and the (temporary) install
 # location differ.
 spack:
   include:
-  - ../../config/packages.yaml
-  - ../../config/modules.yaml
-  - ../../config/repos.yaml
+  # Site-specific first (QB4 externals, target, cuda_arch, core_compilers),
+  # then the site-independent common policy (see CLAUDE.md, 站点拆分).
+  - ../../../config/sites/qb4/packages.yaml
+  - ../../../config/sites/qb4/modules.yaml
+  - ../../../config/common/packages.yaml
+  - ../../../config/common/modules.yaml
+  - ../../../config/common/repos.yaml
 
   # Temporary install location on the cluster, under this account, NOT
   # /usr/local/packages (that's reserved for the real production install -
-  # see environments/production/spack.yaml) and NOT any of the other
+  # see environments/qb4/production/spack.yaml) and NOT any of the other
   # environments/*-test directories either (kept separate so the tests
   # can't interfere with each other). Safe to `rm -rf` this whole tree
   # once this test is done with it.
   config:
     # install_tree lives on /project (a shared filesystem) - see
-    # environments/tier3-test/spack.yaml's comment for the full story:
+    # environments/qb4/tier3-test/spack.yaml's comment for the full story:
     # its fcntl advisory locks don't reliably release between processes,
     # which hung three straight `spack install` runs there regardless of
-    # concurrency. scripts/gpu-test-install.sh already installs serially
+    # concurrency. scripts/qb4/gpu-test-install.sh already installs serially
     # (one spec per `spack install` call), so disabling Spack's own
     # locking here from the start (rather than rediscovering the same
     # hang) is safe - no real concurrent-write risk it would protect
@@ -111,7 +115,7 @@ spack:
 
   view: false
 
-  # Deliberately NOT including config/specs.yaml - that file already has
+  # Deliberately NOT including config/sites/qb4/specs.yaml - that file already has
   # amber/ambertools/etc. not relevant here, and cp2k there is still
   # plain/CPU (not yet decided whether to flip it to +cuda). Only the 3
   # GPU packages being validated are listed here.
@@ -126,7 +130,7 @@ spack:
   # completely independent of this pin.
   # lammps' `^fftw`: without it, the concretizer picks the external
   # intel-oneapi-mkl (already registered as the default fftw-api
-  # provider in ../../config/packages.yaml) to satisfy lammps' fftw-api
+  # provider in config/{common,sites/qb4}/packages.yaml) to satisfy lammps' fftw-api
   # dependency instead of building a real fftw. Spack doesn't manage
   # pkgconfig metadata for external packages, and MKL's FFTW-compatible
   # layer doesn't register itself under the standard "fftw3" pkg-config
@@ -198,7 +202,7 @@ spack:
   # no driver install - the existing GPU driver already supports the
   # newer CUDA 13.3, so it trivially supports the older 12.9 runtime
   # too) specifically for namd, registered as `cuda@12.9.0` in
-  # ../../config/packages.yaml alongside the existing default
+  # config/{common,sites/qb4}/packages.yaml alongside the existing default
   # cuda@13.3.0 (used by cp2k/lammps, untouched). `^cuda@12.9.0` below
   # pins namd to the version NAMD upstream actually supports, instead
   # of whatever `cuda_arch=80`'s default-provider resolution would pick

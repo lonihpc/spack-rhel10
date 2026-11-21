@@ -1,0 +1,47 @@
+# Site-INDEPENDENT package policy, shared by every site (QB4, Deep Bayou)
+# and every environment. Included from each environment's spack.yaml
+# AFTER that site's own config/sites/<site>/packages.yaml.
+#
+# What belongs here: decisions that are true no matter which cluster we
+# build on - provider ordering (oneAPI mainstream, gcc fallback, Intel
+# MPI, MKL) and global variant workarounds for upstream build bugs.
+#
+# What must NOT go here (it lives in config/sites/<site>/packages.yaml):
+# externals (install prefixes and versions differ per cluster),
+# `all:target` and `all:variants: cuda_arch=...` (hardware differs). Note
+# that Spack MERGES lists across included files (verified: two included
+# files with `target: [icelake]` and `target: [cascadelake]` produce
+# `target: [icelake, cascadelake]`), so a key like `target` must be set in
+# exactly one place - the site file - or the sites would bleed into each
+# other.
+packages:
+  # Global variant preference (not an external) - avoids pulling in tar as
+  # a dependency. tar@1.35 fails to build on AlmaLinux 10 (glibc 2.39):
+  # gnulib's ACL *_at function compatibility declarations conflict with
+  # the system headers ("conflicting types for 'acl_get_file_at'" etc).
+  # Turning off gettext's optional tar-based example-archive feature
+  # sidesteps that broken build path entirely - gettext's actual
+  # internationalization functionality (what git depends on it for) is
+  # unaffected. Applies to every AlmaLinux 10 site.
+  gettext:
+    variants: ~tar
+
+  # Global variant preference (not an external) - disable python tkinter
+  # variant to avoid Tcl ABI mismatch build failure.
+  python:
+    variants: ~tkinter
+
+  all:
+    providers:
+      # Spack's own default order is [gcc, llvm, intel-oneapi-compilers] -
+      # override it so Intel oneAPI is the mainstream default. gcc stays
+      # registered as a fallback (see each site's packages.yaml) but is
+      # deliberately last, not a co-equal default. nvhpc is intentionally
+      # NOT in this list - packages that need it pin `%nvhpc` explicitly.
+      c: [intel-oneapi-compilers, gcc]
+      cxx: [intel-oneapi-compilers, gcc]
+      fortran: [intel-oneapi-compilers, gcc]
+      # intel-oneapi-mpi only - mvapich/mpich are no longer mainstream.
+      mpi: [intel-oneapi-mpi]
+      blas: [intel-oneapi-mkl]
+      lapack: [intel-oneapi-mkl]

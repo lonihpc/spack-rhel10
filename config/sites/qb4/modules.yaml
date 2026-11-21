@@ -1,0 +1,17 @@
+# QB4 (LONI, host qbd5) SITE-SPECIFIC module config: just core_compilers.
+# Everything else (projections, hierarchy, hash_length, ...) is in
+# config/common/modules.yaml.
+#
+# Every registered compiler is "core" so nothing needs a
+# `module load <compiler>` unlock step first (see the big comment in
+# config/common/modules.yaml). The versions here MUST match the external
+# declarations in config/sites/qb4/packages.yaml exactly - a mismatch
+# (e.g. the old 2026.0.0 / 24.1 typo) silently makes Lmod put those
+# packages under a nested <compiler>/<version>/ tier instead of Core/.
+modules:
+  default:
+    lmod:
+      core_compilers:
+      - intel-oneapi-compilers@2026.1.0
+      - nvhpc@26.5
+      - gcc@14

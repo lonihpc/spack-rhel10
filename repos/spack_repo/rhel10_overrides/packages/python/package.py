@@ -21,7 +21,7 @@
 # subclass, so this is the supported way to add a small site-specific
 # hook without forking the whole ~1400-line recipe. Only takes effect
 # because this repo is listed ahead of `builtin` in repos.yaml (see
-# config/repos.yaml) - Spack resolves the unqualified `python` package
+# config/common/repos.yaml) - Spack resolves the unqualified `python` package
 # name to whichever repo has priority.
 import os
 

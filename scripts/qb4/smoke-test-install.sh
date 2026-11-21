@@ -1,5 +1,5 @@
 #!/bin/bash
-# sbatch template for the environments/smoke-test Spack environment.
+# sbatch template for the environments/qb4/smoke-test Spack environment.
 #
 # Purpose: a small, fast, REAL (not --fake) `spack install` of 3
 # representative packages (cmake, cosma, bwa %nvhpc) to prove the whole
@@ -10,7 +10,7 @@
 # node via sbatch, never on the login node (see CLAUDE.md).
 #
 # Usage:
-#   sbatch scripts/smoke-test-install.sh
+#   sbatch scripts/qb4/smoke-test-install.sh
 #
 # Resource requests below are deliberately conservative defaults - bump
 # them if the real cluster's queue/partition needs something different.
@@ -24,7 +24,7 @@
 # standalone `cuda` package (confirmed via `spack concretize` - it doesn't
 # appear anywhere in this environment's dependency graph), and
 # intel-oneapi-compilers/intel-oneapi-mpi/nvhpc all stay external (not
-# spack-built - see config/packages.yaml and CLAUDE.md for why), so this
+# spack-built - see config/{common,sites/qb4}/packages.yaml and CLAUDE.md for why), so this
 # smoke test's actual download/build workload is unchanged from before.
 #
 #SBATCH --job-name=spack-smoke-test
@@ -48,7 +48,7 @@ set -euo pipefail
 # submit dir (this is what caused the "No such environment" failure).
 # Falls back to the old script-location-based resolution only when run
 # manually outside Slurm.
-REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)}"
+REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "$(readlink -f "$0")")/../.." && pwd)}"
 cd "$REPO_ROOT"
 
 # Auto-push this job's log to the `cluster-results` branch on exit
@@ -66,7 +66,7 @@ trap push_results EXIT
 unset SPACK_PYTHON
 export SPACK_PYTHON=/usr/bin/python3
 source /project/fchen14/spack-tool/share/spack/setup-env.sh
-spack env activate environments/smoke-test
+spack env activate environments/qb4/smoke-test
 
 JOBS="${SLURM_CPUS_PER_TASK:-4}"
 spack install -j "$JOBS"

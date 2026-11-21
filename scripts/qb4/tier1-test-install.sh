@@ -1,5 +1,5 @@
 #!/bin/bash
-# sbatch template for the environments/tier1-test Spack environment.
+# sbatch template for the environments/qb4/tier1-test Spack environment.
 #
 # Purpose: REAL (not --fake) `spack install` of the Tier 1 batch (boost,
 # eigen, git, gsl, hwloc, valgrind, cmake) added on top of the smoke-test
@@ -14,7 +14,7 @@
 # concretize output notes in the project doc for why.
 #
 # Usage:
-#   sbatch scripts/tier1-test-install.sh
+#   sbatch scripts/qb4/tier1-test-install.sh
 #
 #SBATCH --job-name=spack-tier1-test
 #SBATCH --nodes=1
@@ -26,7 +26,7 @@
 #SBATCH --partition=gpu2
 #SBATCH --account=loni_loniadmin1
 set -euo pipefail
-REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)}"
+REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "$(readlink -f "$0")")/../.." && pwd)}"
 cd "$REPO_ROOT"
 
 # Auto-push this job's log to the `cluster-results` branch on exit - see
@@ -39,7 +39,7 @@ trap push_results EXIT
 unset SPACK_PYTHON
 export SPACK_PYTHON=/usr/bin/python3
 source /project/fchen14/spack-tool/share/spack/setup-env.sh
-spack env activate environments/tier1-test
+spack env activate environments/qb4/tier1-test
 JOBS="${SLURM_CPUS_PER_TASK:-4}"
 spack install -j "$JOBS"
 spack module lmod refresh -y

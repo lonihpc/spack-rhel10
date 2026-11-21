@@ -1,5 +1,5 @@
 #!/bin/bash
-# sbatch template for the environments/gpu-test Spack environment.
+# sbatch template for the environments/qb4/gpu-test Spack environment.
 #
 # Purpose: REAL (not --fake) `spack install` of the GPU family - cp2k,
 # lammps, namd, all built +cuda cuda_arch=80 %gcc - to validate these
@@ -8,7 +8,7 @@
 # finalized yet anyway).
 #
 # Host compiler is %gcc, after TWO failed attempts - see
-# environments/gpu-test/spack.yaml's comment for the full story:
+# environments/qb4/gpu-test/spack.yaml's comment for the full story:
 #   - %nvhpc: none of these 3 need nvhpc as host compiler (CUDA is
 #     handled independently of host-compiler choice in all three), and it
 #     hit real nvhpc compiler bugs building namd's charmpp/zstd
@@ -26,11 +26,11 @@
 #     supported 6.x-16.x range) and free of nvhpc's compiler bugs.
 #
 # Installs SERIALLY (one spec per `spack install` call), same as
-# scripts/tier3-test-install.sh: this install_tree lives on /project (a
+# scripts/qb4/tier3-test-install.sh: this install_tree lives on /project (a
 # shared filesystem) whose fcntl advisory locks don't reliably release
 # between processes - three straight tier3-test runs hung on this
 # regardless of concurrency until switched to serial installs +
-# config:locks: false (see environments/tier3-test/spack.yaml's comment
+# config:locks: false (see environments/qb4/tier3-test/spack.yaml's comment
 # for the full story). Applying the same fix here from the start. A
 # failure in one spec does NOT stop the rest from being attempted -
 # failures are collected and reported at the end.
@@ -43,7 +43,7 @@
 # for precedent (8->64 cpus, 6h->24h after a real run undershot).
 #
 # Usage:
-#   sbatch scripts/gpu-test-install.sh
+#   sbatch scripts/qb4/gpu-test-install.sh
 #
 #SBATCH --job-name=spack-gpu-test
 #SBATCH --nodes=1
@@ -55,7 +55,7 @@
 #SBATCH --partition=gpu2
 #SBATCH --account=loni_loniadmin1
 set -euo pipefail
-REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)}"
+REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "$(readlink -f "$0")")/../.." && pwd)}"
 cd "$REPO_ROOT"
 
 # Auto-push this job's log to the `cluster-results` branch on exit - see
@@ -77,13 +77,13 @@ export SPACK_PYTHON=/usr/bin/python3
 # even though Spack's own build environment would have provided the
 # right PKG_CONFIG_PATH for it.
 source /project/fchen14/spack-tool/share/spack/setup-env.sh
-spack env activate environments/gpu-test
+spack env activate environments/qb4/gpu-test
 
 JOBS="${SLURM_CPUS_PER_TASK:-16}"
 
 spack concretize -f
 
-# Keep this list in sync with environments/gpu-test/spack.yaml's specs:.
+# Keep this list in sync with environments/qb4/gpu-test/spack.yaml's specs:.
 # lammps' `^fftw`: see that file's comment - without it, the concretizer
 # picks the external intel-oneapi-mkl for lammps' fftw-api dependency,
 # which doesn't register a pkg-config "fftw3" module, so lammps' CMake
@@ -98,10 +98,10 @@ spack concretize -f
 # Spack-built fftw for cp2k's fftw-api dependency (BLAS/LAPACK/ScaLAPACK
 # stay on MKL, unaffected).
 #
-# namd's `^cuda@12.9.0`: see environments/gpu-test/spack.yaml's comment
+# namd's `^cuda@12.9.0`: see environments/qb4/gpu-test/spack.yaml's comment
 # for the full 5-round CUDA-13.3 fix chain and why it was paused, then
 # resolved via a second, parallel `cuda@12.9.0` external (registered in
-# ../../config/packages.yaml) - NAMD's own release notes cap official
+# config/{common,sites/qb4}/packages.yaml) - NAMD's own release notes cap official
 # CUDA support at "9.1-12.x", so this pins namd to a CUDA version it
 # actually supports instead of the default cuda@13.3.0 that cp2k/lammps
 # use.

@@ -1,5 +1,5 @@
 #!/bin/bash
-# sbatch template for the environments/tier2-test Spack environment.
+# sbatch template for the environments/qb4/tier2-test Spack environment.
 #
 # Purpose: REAL (not --fake) `spack install` of the Tier 2 batch (fftw,
 # hdf5, netcdf-c, netcdf-cxx4, netcdf-fortran, parallel-netcdf, metis,
@@ -13,7 +13,7 @@
 # (cpus-per-task 8->64, walltime 6h->24h), not a sign anything is broken.
 #
 # Usage:
-#   sbatch scripts/tier2-test-install.sh
+#   sbatch scripts/qb4/tier2-test-install.sh
 #
 #SBATCH --job-name=spack-tier2-test
 #SBATCH --nodes=1
@@ -25,7 +25,7 @@
 #SBATCH --partition=gpu2
 #SBATCH --account=loni_loniadmin1
 set -euo pipefail
-REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)}"
+REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "$(readlink -f "$0")")/../.." && pwd)}"
 cd "$REPO_ROOT"
 
 # Auto-push this job's log to the `cluster-results` branch on exit - see
@@ -38,7 +38,7 @@ trap push_results EXIT
 unset SPACK_PYTHON
 export SPACK_PYTHON=/usr/bin/python3
 source /project/fchen14/spack-tool/share/spack/setup-env.sh
-spack env activate environments/tier2-test
+spack env activate environments/qb4/tier2-test
 JOBS="${SLURM_CPUS_PER_TASK:-8}"
 spack install -j "$JOBS"
 spack module lmod refresh -y

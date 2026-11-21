@@ -11,26 +11,30 @@
 # `spack module lmod refresh` against a real install.
 #
 # Usage (on the actual cluster, from a compute node via sbatch - see
-# scripts/smoke-test-install.sh, NOT on the login node):
-#   spack env activate -p environments/smoke-test
+# scripts/qb4/smoke-test-install.sh, NOT on the login node):
+#   spack env activate -p environments/qb4/smoke-test
 #   spack concretize
 #   spack install -j <cores>
 #   spack module lmod refresh -y
 #
 # Shares the exact same compiler/MPI/CUDA/target config as dev-local and
-# production (../../config/{packages,modules}.yaml - single source of
+# production (../../../config/{packages,modules}.yaml - single source of
 # truth, not copied here) so a successful smoke test is actually
 # representative of what production would do. Only the specs list and the
 # (temporary) install location differ.
 spack:
   include:
-  - ../../config/packages.yaml
-  - ../../config/modules.yaml
-  - ../../config/repos.yaml
+  # Site-specific first (QB4 externals, target, cuda_arch, core_compilers),
+  # then the site-independent common policy (see CLAUDE.md, 站点拆分).
+  - ../../../config/sites/qb4/packages.yaml
+  - ../../../config/sites/qb4/modules.yaml
+  - ../../../config/common/packages.yaml
+  - ../../../config/common/modules.yaml
+  - ../../../config/common/repos.yaml
 
   # Temporary install location on the cluster, under this account, NOT
   # /usr/local/packages (that's reserved for the real production install -
-  # see environments/production/spack.yaml). Safe to `rm -rf` this whole
+  # see environments/qb4/production/spack.yaml). Safe to `rm -rf` this whole
   # tree once the smoke test is done with it.
   config:
     install_tree:
@@ -57,7 +61,7 @@ spack:
 
   view: false
 
-  # Deliberately NOT going through config/specs.yaml/render-specs.py - this
+  # Deliberately NOT going through config/sites/qb4/specs.yaml/render-specs.py - this
   # is a throwaway 3-package smoke-test list, not the real target software
   # list, so it doesn't belong in the shared single-source-of-truth file.
   specs:

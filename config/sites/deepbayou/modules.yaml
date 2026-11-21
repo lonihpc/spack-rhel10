@@ -1,0 +1,13 @@
+# Deep Bayou SITE-SPECIFIC module config: just core_compilers. Everything
+# else is in config/common/modules.yaml.
+#
+# Versions MUST match the externals in config/sites/deepbayou/packages.yaml
+# exactly, or Lmod silently nests those packages under
+# <compiler>/<version>/ instead of Core/. No nvhpc on this site (see
+# packages.yaml).
+modules:
+  default:
+    lmod:
+      core_compilers:
+      - intel-oneapi-compilers@2026.1.0
+      - gcc@14

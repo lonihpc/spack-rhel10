@@ -1,0 +1,65 @@
+# Deep Bayou smoke test - the same role environments/qb4/smoke-test played
+# on QB4: a small, fast, REAL `spack install` proving the whole pipeline on
+# a Deep Bayou RHEL10 compute node (externals found and invoked, downloads
+# work, module files land flat under Core/ with the right names) before
+# moving on to the Tier 1/2/3 batches.
+#
+# Usage (on a db login node, from the repo root):
+#   sbatch -J db-smoke-test scripts/deepbayou/install-env.sh smoke-test
+#
+# Differences from the QB4 smoke test:
+#   - bwa has no %nvhpc pin: Deep Bayou has no nvhpc (see
+#     config/sites/deepbayou/packages.yaml), it builds with default oneAPI.
+#   - one small +cuda package (see specs below) so the CUDA 12.9.1 external
+#     + sm_70 + %gcc host compiler path gets exercised for real right away,
+#     instead of first surfacing in the much slower GPU tier.
+spack:
+  include:
+  # Site-specific first (Deep Bayou externals, target, cuda_arch,
+  # core_compilers), then the site-independent common policy.
+  - ../../../config/sites/deepbayou/packages.yaml
+  - ../../../config/sites/deepbayou/modules.yaml
+  - ../../../config/common/packages.yaml
+  - ../../../config/common/modules.yaml
+  - ../../../config/common/repos.yaml
+
+  config:
+    # Learned on QB4: Spack's fcntl-based DB lock deadlocked repeatedly on
+    # the shared /project filesystem (environments/qb4/tier3-test). Each
+    # job here runs a single `spack install` process, so there is no real
+    # concurrent writer and turning locks off is safe. Never run two jobs
+    # against the same install_tree at once with this setting.
+    locks: false
+    install_tree:
+      root: /project/fchen14/spack-rhel10-db-smoke-test/spack-install
+      projections:
+        all: "{architecture.platform}-{architecture.target}/{name}-{version}-{hash}"
+    source_cache: /project/fchen14/spack-rhel10-db-smoke-test/spack-install/cache/sources
+    misc_cache: /project/fchen14/spack-rhel10-db-smoke-test/spack-install/cache/misc
+    build_stage:
+    - $tempdir/$user/spack-stage
+    license_dir: /project/fchen14/spack-rhel10-db-smoke-test/spack-install/licenses
+    build_jobs: 16
+
+  modules:
+    default:
+      roots:
+        lmod: /project/fchen14/spack-rhel10-db-smoke-test/modulefiles
+
+  concretizer:
+    unify: false
+    targets:
+      # Needed so `spack concretize` in the dev sandbox (not a Cascade
+      # Lake host) still honors target=cascadelake. Harmless on db nodes.
+      host_compatible: false
+
+  view: false
+
+  specs:
+  - cmake                # plain CPU package, default intel-oneapi-compilers
+  - cosma                # exercises intel-oneapi-mpi + MKL
+  - bwa                  # was `bwa %nvhpc` on QB4; oneAPI here (no nvhpc)
+  # CUDA canary: compiles real device code with nvcc for sm_70 against the
+  # cuda@12.9.1 external, host compiler %gcc (nvcc rejects icx). Small
+  # enough for a smoke test; if this fails, the GPU tier would too.
+  - kokkos +cuda cuda_arch=70 %gcc

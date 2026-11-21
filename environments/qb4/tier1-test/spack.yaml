@@ -1,39 +1,43 @@
 # "tier1-test" Spack environment - REAL (not --fake) bulk-build validation
 # of the Tier 1 batch (boost, eigen, gsl, hwloc, valgrind, git, cmake)
-# added to the target software list. Same idea as environments/smoke-test
+# added to the target software list. Same idea as environments/qb4/smoke-test
 # (3-package pipeline smoke test, already validated) but now at Tier 1
-# scale, still under this personal account - NOT environments/production
+# scale, still under this personal account - NOT environments/qb4/production
 # (/usr/local/packages, install_tree naming not finalized yet). Once this
 # is proven out, Tier 1 moves to the real production install.
 #
 # Purpose: confirm the bulk-build pipeline holds up at a size closer to
 # the real target list - real compilers found and invoked, real
 # network/download access, real `spack module lmod refresh` against a
-# real install - before committing more of config/specs.yaml to a
+# real install - before committing more of config/sites/qb4/specs.yaml to a
 # production run.
 #
 # Usage (on the actual cluster, from a compute node via sbatch - see
-# scripts/tier1-test-install.sh, NOT on the login node):
-#   spack env activate -p environments/tier1-test
+# scripts/qb4/tier1-test-install.sh, NOT on the login node):
+#   spack env activate -p environments/qb4/tier1-test
 #   spack concretize
 #   spack install -j <cores>
 #   spack module lmod refresh -y
 #
 # Shares the exact same compiler/MPI/CUDA/target config as dev-local and
-# production (../../config/{packages,modules}.yaml - single source of
+# production (../../../config/{packages,modules}.yaml - single source of
 # truth, not copied here) so this test is actually representative of what
 # production would do. Only the specs list and the (temporary) install
 # location differ.
 spack:
   include:
-  - ../../config/packages.yaml
-  - ../../config/modules.yaml
-  - ../../config/repos.yaml
+  # Site-specific first (QB4 externals, target, cuda_arch, core_compilers),
+  # then the site-independent common policy (see CLAUDE.md, 站点拆分).
+  - ../../../config/sites/qb4/packages.yaml
+  - ../../../config/sites/qb4/modules.yaml
+  - ../../../config/common/packages.yaml
+  - ../../../config/common/modules.yaml
+  - ../../../config/common/repos.yaml
 
   # Temporary install location on the cluster, under this account, NOT
   # /usr/local/packages (that's reserved for the real production install -
-  # see environments/production/spack.yaml) and NOT
-  # environments/smoke-test's directory either (kept separate so the two
+  # see environments/qb4/production/spack.yaml) and NOT
+  # environments/qb4/smoke-test's directory either (kept separate so the two
   # tests can't interfere with each other). Safe to `rm -rf` this whole
   # tree once this test is done with it.
   config:
@@ -62,14 +66,14 @@ spack:
 
   view: false
 
-  # Deliberately NOT including config/specs.yaml - that file already has
+  # Deliberately NOT including config/sites/qb4/specs.yaml - that file already has
   # amber/cp2k/lammps/namd etc. which aren't ready for bulk-build
-  # validation yet. Only the Tier 1 batch (see config/specs.yaml's
+  # validation yet. Only the Tier 1 batch (see config/sites/qb4/specs.yaml's
   # "Tier 1" comment) is listed here, plus cmake (already in
-  # config/specs.yaml, and already proven in environments/smoke-test).
+  # config/sites/qb4/specs.yaml, and already proven in environments/qb4/smoke-test).
   # None of these need MPI/CUDA or an explicit %compiler pin - they pick
   # up intel-oneapi-compilers from the default all.providers order in
-  # ../../config/packages.yaml.
+  # config/{common,sites/qb4}/packages.yaml.
   specs:
   - boost
   - eigen
