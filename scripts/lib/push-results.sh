@@ -24,6 +24,11 @@
 # #SBATCH --output= pattern) before sourcing this file, then:
 #   trap push_results EXIT
 # RESULTS_WORKTREE is optional, defaults below.
+# RESULT_EXTRA_DIR is optional: if set and it exists when the trap fires,
+# its files are copied into a failed-builds/ subdirectory of the result
+# (used by scripts/deepbayou/install-env.sh for failed packages' build logs,
+# which otherwise live only in the compute node's /tmp and are gone once
+# the job ends). Unset = old behavior, nothing extra copied.
 
 RESULTS_WORKTREE="${RESULTS_WORKTREE:-/project/fchen14/spack-rhel10-results}"
 
@@ -58,6 +63,10 @@ push_results() {
   # Log only - never copy actual build output (module files, binaries)
   # here, that belongs in the real install_tree, not this repo.
   cp -f "$LOG_FILE" "$result_dir/" 2>/dev/null
+  if [ -n "${RESULT_EXTRA_DIR:-}" ] && [ -d "$RESULT_EXTRA_DIR" ]; then
+    mkdir -p "$result_dir/failed-builds"
+    cp -f "$RESULT_EXTRA_DIR"/* "$result_dir/failed-builds/" 2>/dev/null || true
+  fi
   echo "job ${SLURM_JOB_ID:-unknown} (${job_name}) exited with $job_rc" > "$result_dir/EXIT_CODE"
 
   git add "$result_dir"

@@ -138,6 +138,31 @@ wait "$install_pid" || install_rc=$?
 [ -n "${watchdog_pid:-}" ] && kill "$watchdog_pid" 2>/dev/null || true
 echo "=== spack install exited with $install_rc ==="
 
+# Save every failed package's build log before the job ends: Spack keeps
+# failed stages, but build_stage is the compute node's /tmp, which Slurm
+# wipes when the job finishes (revbayes' log from job 12 was already gone
+# when we went to read it). Spack prints one "[x] <hash> <pkg> failed:
+# <log path>" line per failure; copy each log (plus the CMake/configure
+# logs next to it, when present) into RESULT_EXTRA_DIR, which
+# push_results commits under failed-builds/.
+RESULT_EXTRA_DIR="${TMPDIR:-/tmp}/${USER}-failed-builds-${SLURM_JOB_ID:-manual}"
+export RESULT_EXTRA_DIR
+grep -oE '^\[x\] [a-z0-9]{7} [^ ]+ failed: [^ ]+\.log' "$LOG_FILE" 2>/dev/null | sort -u |
+while read -r _ hash pkg _ log; do
+  mkdir -p "$RESULT_EXTRA_DIR"
+  name="${pkg%%@*}-${hash}"
+  echo "--- saving failed build log for $pkg: $log"
+  cp -f "$log" "$RESULT_EXTRA_DIR/${name}.log" 2>/dev/null || echo "    (log no longer exists)"
+  stage="${log%.log}"
+  for extra in "$stage"/spack-build-out.txt "$stage"/spack-build-env.txt \
+               "$stage"/spack-build-*/CMakeFiles/CMakeConfigureLog.yaml \
+               "$stage"/spack-build-*/CMakeFiles/CMakeError.log \
+               "$stage"/spack-src/config.log; do
+    [ -f "$extra" ] && cp -f "$extra" "$RESULT_EXTRA_DIR/${name}.$(basename "$extra")"
+  done
+  echo "    last 40 lines:"; tail -40 "$log" 2>/dev/null | sed 's/^/    | /'
+done || true
+
 # Regenerate modules even if some packages failed - everything that DID
 # install should still get its module file.
 spack module lmod refresh -y --delete-tree || true

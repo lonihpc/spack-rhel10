@@ -113,7 +113,13 @@ scripts/
   strace 留证据,再杀掉它,照常跑 module refresh 和日志推送;② `trap
   'exit 143' TERM`——之前被 walltime 杀掉的 job 12 在 cluster-results 上
   被错记成 `exit=0`;③ install 失败也照样 `module lmod refresh`,最后以
-  install 的退出码结束。
+  install 的退出码结束;④ 失败包的构建日志自动保存——build_stage 在
+  计算节点 `/tmp`,作业一结束就被 Slurm 清掉(job 12 的 revbayes 日志
+  去看时已经没了),所以脚本从作业日志里找 `[x] ... failed: <log>` 行,
+  把每个失败包的 log(以及 spack-build-out.txt / CMakeConfigureLog.yaml /
+  config.log,如果有)拷到 `RESULT_EXTRA_DIR`,由
+  `scripts/lib/push-results.sh`(新增的可选参数,QB4 脚本不设就不变)
+  提交到 cluster-results 的 `failed-builds/` 下。
 - **沙盒验证的盲点**:`spack install --fake` 不执行 `cmake_args()` 等构建
   阶段代码,所以 recipe 在这些阶段里 `raise InstallError` 的检查(比如上面
   kokkos 这条)沙盒里发现不了,只有真编才会暴露。对新加的包,可以用
