@@ -1,0 +1,216 @@
+=== host db010, env environments/deepbayou/tiers-test, spack 1.2.2 (3e19345b6e12f5ff1b874f4059622fc6a1fd804a), repo d8f61d7 ===
+==> Starting concretization pool with 16 processes
+==> Concretized 24 specs:
+[+]  olmrcoy  boost@1.90.0~atomic~charconv~chrono~clanglibcpp~container~context~contract~conversion~date_time~debug~exception~fiber~filesystem~graph~graph_parallel~icu~iostreams~json~locale~log~math~mpi~mqtt5+multithreaded~nowide~numpy~openmethod~pic~program_options~python~random~regex~serialization+shared~signals2~singlethreaded~stacktrace~system~taggedlayout~test~thread~timer~type_erasure~url~versionedlayout~wave build_system=generic cxxstd=11 patches:=7845717,8e3faa2,a440f96 visibility=hidden platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  vrzte5o      ^compiler-wrapper@1.1.0 build_system=generic platform=linux os=almalinux10 target=cascadelake
+[e]  ufp3xj3      ^glibc@2.39 build_system=autotools platform=linux os=almalinux10 target=x86_64
+[e]  7p7nd2h      ^intel-oneapi-compilers@2026.2.0~amd+envmods~fix_rt_linkage~nvidia build_system=generic languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64
+[+]  mmksqdc      ^intel-oneapi-runtime@2026.2.0 build_system=generic platform=linux os=almalinux10 target=cascadelake
+[+]  7ybvtwe  bowtie2@2.5.4 build_system=makefile platform=linux os=almalinux10 target=cascadelake %cxx=oneapi@2026.2.0
+[+]  oxc3ij7      ^gmake@4.4.1~guile build_system=generic platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  iwfoa5q      ^intel-tbb@2023.0.0~ipo+shared+tm build_system=cmake build_type=Release cxxstd=default generator=make platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  zc5tgyn      ^perl@5.42.0+cpanm+opcode+open+shared+threads build_system=generic platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  7ca7xu5          ^berkeley-db@18.1.40+cxx~docs+stl build_system=autotools patches:=26090f4,b231fcc platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  5rrquco          ^gdbm@1.26 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  2ywpydy          ^less@692 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  jprhrje      ^python@3.14.5+bz2+ctypes+dbm~debug~freethreading+libxml2+lzma~optimizations+pic+pyexpat+pythoncmd+readline+shared+sqlite3+ssl~static~tests~tkinter+uuid+zlib+zstd build_system=generic platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  6hhlayy          ^expat@2.8.1+libbsd build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  ugwhno5              ^libbsd@0.12.2 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  tsgw43b                  ^libmd@1.1.0 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  pelyjc2          ^gettext@1.0+bzip2+curses+git~libunistring+libxml2+pic+shared~tar+xz build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  bn2ikee          ^libffi@3.5.2 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  j6qxvjo          ^openssl@3.6.1~docs+shared build_system=generic certs=mozilla platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  sufcjsu          ^sqlite@3.53.1+column_metadata+fts+rtree build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  qgaqami          ^util-linux-uuid@2.41 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  45qkvzu          ^xz@5.8.3~pic build_system=autotools libs:=shared,static platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  n7spikc      ^readline@8.3 build_system=autotools patches:=21f0a03,72dee13,e273643 platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  tdqj6ht      ^zlib-ng@2.3.3+compat+new_strategies+opt+pic+shared build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  ebh6euq  cmake@3.31.11~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  bo3vrd2      ^curl@8.20.0~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs:=shared,static tls:=openssl platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  4e5kxxi          ^nghttp2@1.67.1 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  zevzdqg      ^ncurses@6.6~symlinks+termlib abi=none build_system=autotools patches:=7a351bc platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  ejmj7hj  eigen@5.0.1~blas~ipo~lapack~nightly~rocm build_system=cmake build_type=Release generator=make platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  ux7rsv4  fftw@3.3.11+mpi~openmp~pfft_patches+shared build_system=autotools precision:=double,float platform=linux os=almalinux10 target=cascadelake %c,fortran=oneapi@2026.2.0
+[e]  bamabnc      ^intel-oneapi-mpi@2021.19.0~classic-names+envmods~external-libfabric~generic-names~ilp64 build_system=generic platform=linux os=almalinux10 target=x86_64
+[+]  vyoe565  git@2.53.0+man+nls+perl+subtree~tcltk build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  kzwbhvr      ^autoconf@2.72 build_system=autotools platform=linux os=almalinux10 target=cascadelake
+[+]  jnj4wob      ^automake@1.18.1 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  rgx46ze      ^curl@8.20.0~gssapi~ldap~libidn2~librtmp~libssh~libssh2+nghttp2 build_system=autotools libs:=shared,static tls:=openssl platform=linux os=almalinux10 target=cascadelake %c,cxx=gcc@14
+[+]  yufdoez          ^nghttp2@1.67.1 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,cxx=gcc@14
+[+]  mhd5rtt          ^pkgconf@2.5.1 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  tjmwpfu      ^diffutils@3.12 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  iylah7b      ^expat@2.8.1+libbsd build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,cxx=gcc@14
+[+]  wy7p3od          ^libbsd@0.12.2 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  wr5xwwf              ^libmd@1.1.0 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[e]  jzrbfde      ^gcc@14+binutils+bootstrap~graphite+libsanitizer~mold~nvptx~piclibs~profiled~strip build_system=autotools build_type=RelWithDebInfo languages:='c,c++,fortran' platform=linux os=almalinux10 target=x86_64
+[+]  aymjqwl      ^gcc-runtime@14 build_system=generic platform=linux os=almalinux10 target=cascadelake
+[+]  vv2mxkn      ^gettext@1.0+bzip2+curses+git~libunistring+libxml2+pic+shared~tar+xz build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,cxx=gcc@14
+[+]  zb4p5iy          ^bzip2@1.0.8~debug~pic+shared build_system=generic platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  pq2v3rq          ^libxml2@2.15.3+pic~python+shared build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  wtahree          ^ncurses@6.6~symlinks+termlib abi=none build_system=autotools patches:=7a351bc platform=linux os=almalinux10 target=cascadelake %c,cxx=gcc@14
+[+]  g4kqb7b          ^xz@5.8.3~pic build_system=autotools libs:=shared,static platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  jgndvdj      ^gmake@4.4.1~guile build_system=generic platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  o6fzqur      ^libiconv@1.18 build_system=autotools libs:=shared,static platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  vpb4yoq      ^libidn2@2.3.8 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  ejg5yfa          ^libunistring@1.4.2 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  yz4qjje      ^libtool@2.5.4 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  yffikq3          ^file@5.46+static build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  i3qkwbl              ^zstd@1.5.7~programs build_system=makefile libs:=shared,static platform=linux os=almalinux10 target=cascadelake %c,cxx=gcc@14
+[+]  47qtswq          ^findutils@4.10.0 build_system=autotools patches:=440b954 platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  o42y5gp      ^m4@1.4.21+sigsegv build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,cxx=gcc@14
+[+]  wbitffy          ^libsigsegv@2.15 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  kfipdv7      ^openssh@10.3p1+gssapi build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,cxx=gcc@14
+[+]  x3dluzz          ^krb5@1.22.2+shared build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,cxx=gcc@14
+[+]  qqhwh7w              ^bison@3.8.2~color build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,cxx=gcc@14
+[+]  onnc55u          ^libedit@3.1-20251016 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  jorelq3          ^libxcrypt@4.5.2~obsolete_api build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  hini5zw      ^openssl@3.6.1~docs+shared build_system=generic certs=mozilla platform=linux os=almalinux10 target=cascadelake %c,cxx=gcc@14
+[+]  73whxxo          ^ca-certificates-mozilla@2026-03-19 build_system=generic platform=linux os=almalinux10 target=cascadelake
+[+]  hnujszh      ^pcre2@10.44~jit+multibyte+pic build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  e3y3hxi      ^perl@5.42.0+cpanm+opcode+open+shared+threads build_system=generic platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  rs4ni5s          ^berkeley-db@18.1.40+cxx~docs+stl build_system=autotools patches:=26090f4,b231fcc platform=linux os=almalinux10 target=cascadelake %c,cxx=gcc@14
+[+]  fdqw4fs          ^gdbm@1.26 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  jyav7y4              ^readline@8.3 build_system=autotools patches:=21f0a03,72dee13,e273643 platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  64slua3          ^less@692 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=gcc@14
+[+]  vqabfjc      ^zlib-ng@2.3.3+compat+new_strategies+opt+pic+shared build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,cxx=gcc@14
+[+]  ppklb7m  gsl@2.8~external-cblas+pic+shared build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  rtvlg27  hdf5@1.14.6~cxx~fortran~hl~ipo~java~map+mpi+shared~subfiling~szip~threadsafe+tools api=default build_system=cmake build_type=Release generator=make platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  zzwb5tn      ^pkgconf@2.5.1 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  cec57oa  hisat2@2.2.1~sra build_system=makefile platform=linux os=almalinux10 target=cascadelake
+[+]  psbdycr  hwloc@2.13.0~cairo~cuda~gl~level_zero~libudev+libxml2~nvml~opencl+pci~rocm build_system=autotools libs:=shared,static patches:=b4db98b platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  7nknyfc      ^libpciaccess@0.17 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  q5uefpk          ^util-macros@1.20.2 build_system=autotools platform=linux os=almalinux10 target=cascadelake
+[+]  33pua2u      ^libxml2@2.15.3+pic~python+shared build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  e664nhm          ^libiconv@1.18 build_system=autotools libs:=shared,static platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  ilc3d5d  hypre@3.1.0~caliper~complex~cuda~debug~fortran~gptune~gpu-aware-mpi~gpu-profiling~int64~ipo+lapack~magma~mixedint+mpi~openmp~rocm+shared~superlu-dist~sycl~umpire~unified-memory build_system=cmake build_type=Release cxxstd=17 generator=make patches:=cd0b67e precision=double platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[e]  d73huag      ^intel-oneapi-mkl@2026.2.0~cluster+envmods~gfortran~ilp64+shared build_system=generic mpi_family=none threads=none platform=linux os=almalinux10 target=x86_64
+[+]  5vyss6k  metis@5.1.0~gdb~int64~ipo~no_warning~real64+shared build_system=cmake build_type=Release generator=make patches:=4991da9,93a7903 platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  f4wy3h7  netcdf-c@4.10.0+blosc~byterange~dap~fsync~hdf4~jna~logging+mpi~nczarr_zip+optimize~parallel-netcdf+pic+shared+szip+zstd build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  37a6p7b      ^bzip2@1.0.8~debug~pic+shared build_system=generic platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  ufiamih      ^c-blosc@1.21.6+avx2~ipo build_system=cmake build_type=Release generator=make platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  hxgrulb          ^lz4@1.10.0+pic build_system=makefile libs:=shared,static platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  tsojmr3          ^snappy@1.2.1~ipo+pic+shared build_system=cmake build_type=Release generator=make platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  y5qkvci      ^hdf5@1.14.6~cxx~fortran+hl~ipo~java~map+mpi+shared~subfiling~szip~threadsafe+tools api=default build_system=cmake build_type=Release generator=make platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  qizwfnf      ^libaec@1.1.4~ipo+shared build_system=cmake build_type=Release generator=make platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  rrupryc      ^zstd@1.5.7~programs build_system=makefile libs:=shared,static platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  a6egage  netcdf-cxx4@4.3.1~doc~ipo+pic+shared~tests build_system=cmake build_type=Release generator=make platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  arzo6vr      ^netcdf-c@4.10.0+blosc~byterange~dap~fsync~hdf4~ipo~jna~logging+mpi~nczarr_zip+optimize~parallel-netcdf+pic+shared+szip+zstd build_system=cmake build_type=Release generator=make platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  cijcpzj  netcdf-fortran@4.6.2~doc+pic+shared build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,fortran=oneapi@2026.2.0
+[+]  ynm6csr  parallel-netcdf@1.14.1~burstbuffer+cxx~examples+fortran+pic+shared build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,cxx,fortran=oneapi@2026.2.0
+[+]  rntrmrt      ^m4@1.4.21+sigsegv build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  pp3aedp          ^libsigsegv@2.15 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  xnury34  parmetis@4.0.3~gdb~int64~ipo+shared build_system=cmake build_type=Release generator=make patches:=4f89253,50ed208,704b84f platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  5ddqxrt  petsc@3.25.2~X~batch~cgns~complex~cuda~debug+double+examples~exodusii~fftw+fortran+fortran-bindings~giflib~hdf5~hpddm~hwloc~hypre~int64~jpeg~knl~kokkos~libpng~libyaml~memkind~metis~mkl-pardiso~ml~mmg~moab~mpfr+mpi~mumps~openmp~p4est~parmmg~ptscotch~random123~rocm~saws~scalapack+shared~strumpack~suite-sparse~superlu-dist~sycl~tetgen~valgrind~zoltan build_system=generic clanguage=C memalign=none platform=linux os=almalinux10 target=cascadelake %c,cxx,fortran=oneapi@2026.2.0
+[+]  svdi2wf      ^diffutils@3.12 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+ -   drr2f2n  revbayes@1.2.2~ipo+mpi build_system=cmake build_type=Release generator=make platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  64gt765      ^boost@1.90.0+atomic~charconv+chrono~clanglibcpp~container~context~contract~conversion+date_time~debug+exception~fiber+filesystem+graph~graph_parallel+icu+iostreams~json+locale+log+math~mpi~mqtt5+multithreaded~nowide~numpy~openmethod~pic+program_options~python+random+regex+serialization+shared~signals2~singlethreaded~stacktrace+system~taggedlayout+test+thread+timer~type_erasure~url~versionedlayout+wave build_system=generic cxxstd=11 patches:=7845717,8e3faa2,a440f96 visibility=hidden platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  bdxpipd          ^icu4c@74.2 build_system=autotools cxxstd=11 platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  ghzmexl              ^autoconf@2.72 build_system=autotools platform=linux os=almalinux10 target=cascadelake
+[+]  hulyyab              ^automake@1.18.1 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  2blmtq4              ^libtool@2.5.4 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  hfscmn5                  ^file@5.46+static build_system=autotools platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  d3nmb25                  ^findutils@4.10.0 build_system=autotools patches:=440b954 platform=linux os=almalinux10 target=cascadelake %c=oneapi@2026.2.0
+[+]  fc5oqi3  spades@4.0.0~ipo~sra~tools build_system=cmake build_type=Release generator=make platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  ditykj7  star@2.7.11b build_system=makefile platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  4q53qqa      ^xxd-standalone@8.2.1201 build_system=makefile platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  js4p64g      ^zlib@1.3.2+optimize+pic+shared build_system=makefile platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  6we6if7  superlu-dist@9.2.1~cuda~int64~ipo~openmp+parmetis~rocm+shared build_system=cmake build_type=Release generator=make platform=linux os=almalinux10 target=cascadelake %c,cxx,fortran=oneapi@2026.2.0
+ -   qpknpkc  valgrind@3.27.1+boost+mpi+only64bit~ubsan build_system=autotools libs:=shared,static platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+ -   7kzoqxy      ^boost@1.90.0+atomic~charconv+chrono~clanglibcpp~container~context~contract~conversion~date_time~debug+exception~fiber~filesystem~graph~graph_parallel~icu~iostreams~json~locale~log~math~mpi~mqtt5+multithreaded~nowide~numpy~openmethod~pic~program_options~python~random~regex~serialization+shared~signals2~singlethreaded~stacktrace+system~taggedlayout~test+thread~timer~type_erasure~url~versionedlayout~wave build_system=generic cxxstd=11 patches:=7845717,8e3faa2,a440f96 visibility=hidden platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+[+]  7cwfoo5  vcftools@0.1.17 build_system=autotools platform=linux os=almalinux10 target=cascadelake %c,cxx=oneapi@2026.2.0
+
+=== spack install -j 48 (watchdog: 2383s, 0 = none) ===
+[ ] 7kzoqxy boost@1.90.0 staging (1s)
+[ ] drr2f2n revbayes@1.2.2 staging (3s)
+[ ] drr2f2n revbayes@1.2.2 cmake (3s)
+[x] drr2f2n revbayes@1.2.2 failed: /tmp/fchen14/spack-stage/spack-stage-revbayes-1.2.2-drr2f2nnxozn526xcqp73z74lr4mt3vo-cweholvd.log (11s)
+[ ] 7kzoqxy boost@1.90.0 install (26s)
+[+] 7kzoqxy boost@1.90.0 /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/boost-1.90.0-7kzoqxyglh4tybandy36w6z3f7x36kqb (1m54s)
+[ ] qpknpkc valgrind@3.27.1 staging (2s)
+[ ] qpknpkc valgrind@3.27.1 autoreconf (6s)
+[ ] qpknpkc valgrind@3.27.1 configure (6s)
+[ ] qpknpkc valgrind@3.27.1 build (32s)
+[ ] qpknpkc valgrind@3.27.1 install (59s)
+[+] qpknpkc valgrind@3.27.1 /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/valgrind-3.27.1-qpknpkc5gj6d4pcmqv4vlzbhpsnq6gz4 (1m04s)
+-- lines 41 to 71 --
+  -- Found MPI_C: /project/fchen14/spack-rhel10-packages/compilers/intel/oneapi-2026.2/mpi/2021.19/lib/libmpifort.so (found version "4.1")
+  -- Found MPI_CXX: /project/fchen14/spack-rhel10-packages/compilers/intel/oneapi-2026.2/mpi/2021.19/lib/libmpicxx.so (found version "4.1")
+  -- Found MPI: TRUE (found version "4.1")
+  Boost location hints:
+    ENV{BOOST_ROOT}: /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/boost-1.90.0-64gt765p2hbncnfi6by5tkcbqwk572nt
+  Searching for BOOST:
+> CMake Warning (dev) at CMakeLists.txt:140 (find_package):
+    Policy CMP0167 is not set: The FindBoost module is removed.  Run "cmake
+    --help-policy CMP0167" for policy details.  Use the cmake_policy command to
+    set the policy and suppress this warning.
+  
+  This warning is for project developers.  Use -Wno-dev to suppress it.
+  
+> CMake Error at /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/boost-1.90.0-64gt765p2hbncnfi6by5tkcbqwk572nt/lib/cmake/Boost-1.90.0/BoostConfig.cmake:141 (find_package):
+    Could not find a configuration file for package "boost_system" that exactly
+    matches requested version "1.90.0".
+  
+    The following configuration files were considered but not accepted:
+  
+      /usr/lib64/cmake/boost_system-1.83.0/boost_system-config.cmake, version: 1.83.0
+      /lib64/cmake/boost_system-1.83.0/boost_system-config.cmake, version: 1.83.0
+  
+  Call Stack (most recent call first):
+    /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/boost-1.90.0-64gt765p2hbncnfi6by5tkcbqwk572nt/lib/cmake/Boost-1.90.0/BoostConfig.cmake:262 (boost_find_component)
+    /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/cmake-3.31.11-ebh6euqmiijwzvp4z4lzxbr5nke2j3xq/share/cmake-3.31/Modules/FindBoost.cmake:610 (find_package)
+    CMakeLists.txt:140 (find_package)
+  
+  
+  -- Configuring incomplete, errors occurred!
+  Command exited with status 1:
+      /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/cmake-3.31.11-ebh6euqmiijwzvp4z4lzxbr5nke2j3xq/bin/cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX:STRING=/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/revbayes-1.2.2-drr2f2nnxozn526xcqp73z74lr4mt3vo -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON '-DCMAKE_INSTALL_RPATH:STRING=/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/revbayes-1.2.2-drr2f2nnxozn526xcqp73z74lr4mt3vo/lib;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/revbayes-1.2.2-drr2f2nnxozn526xcqp73z74lr4mt3vo/lib64' '-DCMAKE_PREFIX_PATH:STRING=/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/boost-1.90.0-64gt765p2hbncnfi6by5tkcbqwk572nt;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/cmake-3.31.11-ebh6euqmiijwzvp4z4lzxbr5nke2j3xq;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/compiler-wrapper-1.1.0-vrzte5o56776wzgjhxxfv4odhpvlkjj5;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/gmake-4.4.1-oxc3ij7ngllh7h2tkg2jlm2hfozp5mis;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/bzip2-1.0.8-37a6p7buocf4kwap4my5t4zbqlnka7ne;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/icu4c-74.2-bdxpipdvbsufja4etwddzyembvmtza5f;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/xz-5.8.3-45qkvzubmbkmnjcogfk72nxypbgdfl3k;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/zlib-ng-2.3.3-tdqj6htypiilq5ujwagifkmsvnkrdujo;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/zstd-1.5.7-rruprycea7owfmlywnv2uypl3citrfuk;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/intel-oneapi-runtime-2026.2.0-mmksqdcsfummjfpjcr2wmieezn5ugl2v;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/gcc-runtime-14-aymjqwl7jcx7hiccwuvtqiunhk2owwo6;/usr/local/packages/compilers/intel-oneapi-2026.2;/usr/local/packages/compilers/intel-oneapi-2026.2' -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_INTERPROCEDURAL_OPTIMIZATION:BOOL=OFF -DCMAKE_POLICY_DEFAULT_CMP0090:STRING=NEW -DCMAKE_FIND_USE_PACKAGE_REGISTRY:BOOL=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -DMPI:STRING=ON -DRB_EXEC_NAME:STRING=rb-mpi /tmp/fchen14/spack-stage/spack-stage-revbayes-1.2.2-drr2f2nnxozn526xcqp73z74lr4mt3vo/spack-src/src
+==> Error: The following packages failed to install:
+revbayes@1.2.2/drr2f2nnxozn526xcqp73z74lr4mt3vo: /tmp/fchen14/spack-stage/spack-stage-revbayes-1.2.2-drr2f2nnxozn526xcqp73z74lr4mt3vo-cweholvd.log
+=== spack install exited with 1 ===
+--- saving failed build log for revbayes@1.2.2: /tmp/fchen14/spack-stage/spack-stage-revbayes-1.2.2-drr2f2nnxozn526xcqp73z74lr4mt3vo-cweholvd.log
+    last 40 lines:
+    | -- Detecting C compiler ABI info - done
+    | -- Check for working C compiler: /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/compiler-wrapper-1.1.0-vrzte5o56776wzgjhxxfv4odhpvlkjj5/libexec/spack/oneapi/icx - skipped
+    | -- Detecting C compile features
+    | -- Detecting C compile features - done
+    | -- Detecting CXX compiler ABI info
+    | -- Detecting CXX compiler ABI info - done
+    | -- Check for working CXX compiler: /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/compiler-wrapper-1.1.0-vrzte5o56776wzgjhxxfv4odhpvlkjj5/libexec/spack/oneapi/icpx - skipped
+    | -- Detecting CXX compile features
+    | -- Detecting CXX compile features - done
+    | -- Found MPI_C: /project/fchen14/spack-rhel10-packages/compilers/intel/oneapi-2026.2/mpi/2021.19/lib/libmpifort.so (found version "4.1")
+    | -- Found MPI_CXX: /project/fchen14/spack-rhel10-packages/compilers/intel/oneapi-2026.2/mpi/2021.19/lib/libmpicxx.so (found version "4.1")
+    | -- Found MPI: TRUE (found version "4.1")
+    | Boost location hints:
+    |   ENV{BOOST_ROOT}: /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/boost-1.90.0-64gt765p2hbncnfi6by5tkcbqwk572nt
+    | Searching for BOOST:
+    | CMake Warning (dev) at CMakeLists.txt:140 (find_package):
+    |   Policy CMP0167 is not set: The FindBoost module is removed.  Run "cmake
+    |   --help-policy CMP0167" for policy details.  Use the cmake_policy command to
+    |   set the policy and suppress this warning.
+    | 
+    | This warning is for project developers.  Use -Wno-dev to suppress it.
+    | 
+    | CMake Error at /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/boost-1.90.0-64gt765p2hbncnfi6by5tkcbqwk572nt/lib/cmake/Boost-1.90.0/BoostConfig.cmake:141 (find_package):
+    |   Could not find a configuration file for package "boost_system" that exactly
+    |   matches requested version "1.90.0".
+    | 
+    |   The following configuration files were considered but not accepted:
+    | 
+    |     /usr/lib64/cmake/boost_system-1.83.0/boost_system-config.cmake, version: 1.83.0
+    |     /lib64/cmake/boost_system-1.83.0/boost_system-config.cmake, version: 1.83.0
+    | 
+    | Call Stack (most recent call first):
+    |   /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/boost-1.90.0-64gt765p2hbncnfi6by5tkcbqwk572nt/lib/cmake/Boost-1.90.0/BoostConfig.cmake:262 (boost_find_component)
+    |   /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/cmake-3.31.11-ebh6euqmiijwzvp4z4lzxbr5nke2j3xq/share/cmake-3.31/Modules/FindBoost.cmake:610 (find_package)
+    |   CMakeLists.txt:140 (find_package)
+    | 
+    | 
+    | -- Configuring incomplete, errors occurred!
+    | Command exited with status 1:
+    |     /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/cmake-3.31.11-ebh6euqmiijwzvp4z4lzxbr5nke2j3xq/bin/cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX:STRING=/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/revbayes-1.2.2-drr2f2nnxozn526xcqp73z74lr4mt3vo -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON '-DCMAKE_INSTALL_RPATH:STRING=/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/revbayes-1.2.2-drr2f2nnxozn526xcqp73z74lr4mt3vo/lib;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/revbayes-1.2.2-drr2f2nnxozn526xcqp73z74lr4mt3vo/lib64' '-DCMAKE_PREFIX_PATH:STRING=/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/boost-1.90.0-64gt765p2hbncnfi6by5tkcbqwk572nt;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/cmake-3.31.11-ebh6euqmiijwzvp4z4lzxbr5nke2j3xq;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/compiler-wrapper-1.1.0-vrzte5o56776wzgjhxxfv4odhpvlkjj5;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/gmake-4.4.1-oxc3ij7ngllh7h2tkg2jlm2hfozp5mis;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/bzip2-1.0.8-37a6p7buocf4kwap4my5t4zbqlnka7ne;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/icu4c-74.2-bdxpipdvbsufja4etwddzyembvmtza5f;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/xz-5.8.3-45qkvzubmbkmnjcogfk72nxypbgdfl3k;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/zlib-ng-2.3.3-tdqj6htypiilq5ujwagifkmsvnkrdujo;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/zstd-1.5.7-rruprycea7owfmlywnv2uypl3citrfuk;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/intel-oneapi-runtime-2026.2.0-mmksqdcsfummjfpjcr2wmieezn5ugl2v;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/gcc-runtime-14-aymjqwl7jcx7hiccwuvtqiunhk2owwo6;/usr/local/packages/compilers/intel-oneapi-2026.2;/usr/local/packages/compilers/intel-oneapi-2026.2' -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_INTERPROCEDURAL_OPTIMIZATION:BOOL=OFF -DCMAKE_POLICY_DEFAULT_CMP0090:STRING=NEW -DCMAKE_FIND_USE_PACKAGE_REGISTRY:BOOL=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -DMPI:STRING=ON -DRB_EXEC_NAME:STRING=rb-mpi /tmp/fchen14/spack-stage/spack-stage-revbayes-1.2.2-drr2f2nnxozn526xcqp73z74lr4mt3vo/spack-src/src
+==> Regenerating lmod module files
+=== done: environments/deepbayou/tiers-test (install rc=1) ===
+From https://github.com/lonihpc/spack-rhel10
+ * branch            cluster-results -> FETCH_HEAD
+HEAD is now at d916154 job 12 (db-tiers-test) results, exit=0

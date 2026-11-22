@@ -1,0 +1,71 @@
+==> Using cached archive: /project/fchen14/spack-rhel10-db-tiers-test/spack-install/cache/sources/_source-cache/archive/33/339f89169cc9320212c3c64d0557b66f416ec9ae25d45e21a4e9a1cafef6e423.tar.gz
+==> No patches needed for revbayes
+==> revbayes: Executing phase: 'cmake'
+==> [2026-11-22-11:25:53.939693] ./generate_version_number.sh
+Generating version numbers in GitVersion.cpp
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+==> [2026-11-22-11:25:53.951077] Installing GitVersion.cpp to ../../src/revlanguage/utils
+==> [2026-11-22-11:25:53.951530] ./regenerate.sh
+Making build directory 'build'
+Generating src/generated_include_dirs.cmake
+Generating src/libs/CMakeLists.txt
+Generating src/core/CMakeLists.txt
+Generating src/revlanguage/CMakeLists.txt
+Generating src/help2yml/CMakeLists.txt
+Generating src/cmd/CMakeLists.txt
+==> [2026-11-22-11:25:53.973687] /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/cmake-3.31.11-ebh6euqmiijwzvp4z4lzxbr5nke2j3xq/bin/cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX:STRING=/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/revbayes-1.2.2-drr2f2nnxozn526xcqp73z74lr4mt3vo -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON '-DCMAKE_INSTALL_RPATH:STRING=/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/revbayes-1.2.2-drr2f2nnxozn526xcqp73z74lr4mt3vo/lib;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/revbayes-1.2.2-drr2f2nnxozn526xcqp73z74lr4mt3vo/lib64' '-DCMAKE_PREFIX_PATH:STRING=/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/boost-1.90.0-64gt765p2hbncnfi6by5tkcbqwk572nt;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/cmake-3.31.11-ebh6euqmiijwzvp4z4lzxbr5nke2j3xq;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/compiler-wrapper-1.1.0-vrzte5o56776wzgjhxxfv4odhpvlkjj5;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/gmake-4.4.1-oxc3ij7ngllh7h2tkg2jlm2hfozp5mis;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/bzip2-1.0.8-37a6p7buocf4kwap4my5t4zbqlnka7ne;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/icu4c-74.2-bdxpipdvbsufja4etwddzyembvmtza5f;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/xz-5.8.3-45qkvzubmbkmnjcogfk72nxypbgdfl3k;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/zlib-ng-2.3.3-tdqj6htypiilq5ujwagifkmsvnkrdujo;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/zstd-1.5.7-rruprycea7owfmlywnv2uypl3citrfuk;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/intel-oneapi-runtime-2026.2.0-mmksqdcsfummjfpjcr2wmieezn5ugl2v;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/gcc-runtime-14-aymjqwl7jcx7hiccwuvtqiunhk2owwo6;/usr/local/packages/compilers/intel-oneapi-2026.2;/usr/local/packages/compilers/intel-oneapi-2026.2' -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_INTERPROCEDURAL_OPTIMIZATION:BOOL=OFF -DCMAKE_POLICY_DEFAULT_CMP0090:STRING=NEW -DCMAKE_FIND_USE_PACKAGE_REGISTRY:BOOL=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -DMPI:STRING=ON -DRB_EXEC_NAME:STRING=rb-mpi /tmp/fchen14/spack-stage/spack-stage-revbayes-1.2.2-drr2f2nnxozn526xcqp73z74lr4mt3vo/spack-src/src
+CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- The C compiler identification is IntelLLVM 2026.2.0
+-- The CXX compiler identification is IntelLLVM 2026.2.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/compiler-wrapper-1.1.0-vrzte5o56776wzgjhxxfv4odhpvlkjj5/libexec/spack/oneapi/icx - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/compiler-wrapper-1.1.0-vrzte5o56776wzgjhxxfv4odhpvlkjj5/libexec/spack/oneapi/icpx - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found MPI_C: /project/fchen14/spack-rhel10-packages/compilers/intel/oneapi-2026.2/mpi/2021.19/lib/libmpifort.so (found version "4.1")
+-- Found MPI_CXX: /project/fchen14/spack-rhel10-packages/compilers/intel/oneapi-2026.2/mpi/2021.19/lib/libmpicxx.so (found version "4.1")
+-- Found MPI: TRUE (found version "4.1")
+Boost location hints:
+  ENV{BOOST_ROOT}: /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/boost-1.90.0-64gt765p2hbncnfi6by5tkcbqwk572nt
+Searching for BOOST:
+CMake Warning (dev) at CMakeLists.txt:140 (find_package):
+  Policy CMP0167 is not set: The FindBoost module is removed.  Run "cmake
+  --help-policy CMP0167" for policy details.  Use the cmake_policy command to
+  set the policy and suppress this warning.
+
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Error at /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/boost-1.90.0-64gt765p2hbncnfi6by5tkcbqwk572nt/lib/cmake/Boost-1.90.0/BoostConfig.cmake:141 (find_package):
+  Could not find a configuration file for package "boost_system" that exactly
+  matches requested version "1.90.0".
+
+  The following configuration files were considered but not accepted:
+
+    /usr/lib64/cmake/boost_system-1.83.0/boost_system-config.cmake, version: 1.83.0
+    /lib64/cmake/boost_system-1.83.0/boost_system-config.cmake, version: 1.83.0
+
+Call Stack (most recent call first):
+  /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/boost-1.90.0-64gt765p2hbncnfi6by5tkcbqwk572nt/lib/cmake/Boost-1.90.0/BoostConfig.cmake:262 (boost_find_component)
+  /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/cmake-3.31.11-ebh6euqmiijwzvp4z4lzxbr5nke2j3xq/share/cmake-3.31/Modules/FindBoost.cmake:610 (find_package)
+  CMakeLists.txt:140 (find_package)
+
+
+-- Configuring incomplete, errors occurred!
+Command exited with status 1:
+    /project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/cmake-3.31.11-ebh6euqmiijwzvp4z4lzxbr5nke2j3xq/bin/cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX:STRING=/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/revbayes-1.2.2-drr2f2nnxozn526xcqp73z74lr4mt3vo -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON '-DCMAKE_INSTALL_RPATH:STRING=/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/revbayes-1.2.2-drr2f2nnxozn526xcqp73z74lr4mt3vo/lib;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/revbayes-1.2.2-drr2f2nnxozn526xcqp73z74lr4mt3vo/lib64' '-DCMAKE_PREFIX_PATH:STRING=/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/boost-1.90.0-64gt765p2hbncnfi6by5tkcbqwk572nt;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/cmake-3.31.11-ebh6euqmiijwzvp4z4lzxbr5nke2j3xq;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/compiler-wrapper-1.1.0-vrzte5o56776wzgjhxxfv4odhpvlkjj5;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/gmake-4.4.1-oxc3ij7ngllh7h2tkg2jlm2hfozp5mis;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/bzip2-1.0.8-37a6p7buocf4kwap4my5t4zbqlnka7ne;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/icu4c-74.2-bdxpipdvbsufja4etwddzyembvmtza5f;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/xz-5.8.3-45qkvzubmbkmnjcogfk72nxypbgdfl3k;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/zlib-ng-2.3.3-tdqj6htypiilq5ujwagifkmsvnkrdujo;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/zstd-1.5.7-rruprycea7owfmlywnv2uypl3citrfuk;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/intel-oneapi-runtime-2026.2.0-mmksqdcsfummjfpjcr2wmieezn5ugl2v;/project/fchen14/spack-rhel10-db-tiers-test/spack-install/linux-cascadelake/gcc-runtime-14-aymjqwl7jcx7hiccwuvtqiunhk2owwo6;/usr/local/packages/compilers/intel-oneapi-2026.2;/usr/local/packages/compilers/intel-oneapi-2026.2' -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_INTERPROCEDURAL_OPTIMIZATION:BOOL=OFF -DCMAKE_POLICY_DEFAULT_CMP0090:STRING=NEW -DCMAKE_FIND_USE_PACKAGE_REGISTRY:BOOL=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -DMPI:STRING=ON -DRB_EXEC_NAME:STRING=rb-mpi /tmp/fchen14/spack-stage/spack-stage-revbayes-1.2.2-drr2f2nnxozn526xcqp73z74lr4mt3vo/spack-src/src
