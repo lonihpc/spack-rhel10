@@ -1,0 +1,71 @@
+# Deep Bayou GPU tier: cp2k / lammps / namd with +cuda for the V100S
+# (sm_70), all against the single cuda@12.9.1 external. Same three
+# packages and the same fixes as environments/qb4/gpu-test (read its
+# comments and repos/spack_repo/rhel10_overrides/packages/{cp2k,namd,
+# charmpp}/package.py for the full story); differences here:
+#   - cuda_arch=70 instead of 80.
+#   - no `^cuda@12.9.0` pin on namd: 12.9.1 is this site's only CUDA, and
+#     it is exactly the CUDA 12.x line NAMD 3.0.3 officially supports.
+#   - The overrides written for CUDA 13.3 still apply and are harmless on
+#     12.9: cp2k's probe-placeholder fix just substitutes 70 for the
+#     hard-coded 60; the cufft/computeMode edits only remove code paths;
+#     namd's C++17 + CCCL macro change is what QB4's namd already built
+#     with against 12.9.0.
+#   - Host compiler stays %gcc (nvcc rejects icx); gcc 14 is inside
+#     nvcc 12.9's supported range.
+#
+# namd is manual-download (license-gated tarball). Before submitting, put
+# NAMD_3.0.3_Source.tar.gz into this environment's source cache once -
+# see CLAUDE.md "Deep Bayou GPU tier" for the exact command.
+#
+# Usage (on a db login node, from the repo root):
+#   sbatch -J db-gpu-test -t 08:00:00 scripts/deepbayou/install-env.sh gpu-test
+spack:
+  include:
+  # Site-specific first (Deep Bayou externals, target, cuda_arch,
+  # core_compilers), then the site-independent common policy.
+  - ../../../config/sites/deepbayou/packages.yaml
+  - ../../../config/sites/deepbayou/modules.yaml
+  - ../../../config/common/packages.yaml
+  - ../../../config/common/modules.yaml
+  - ../../../config/common/repos.yaml
+
+  config:
+    # Learned on QB4: Spack's fcntl-based DB lock deadlocked repeatedly on
+    # the shared /project filesystem (environments/qb4/tier3-test). Each
+    # job here runs a single `spack install` process, so there is no real
+    # concurrent writer and turning locks off is safe. Never run two jobs
+    # against the same install_tree at once with this setting.
+    locks: false
+    install_tree:
+      root: /project/fchen14/spack-rhel10-db-gpu-test/spack-install
+      projections:
+        all: "{architecture.platform}-{architecture.target}/{name}-{version}-{hash}"
+    source_cache: /project/fchen14/spack-rhel10-db-gpu-test/spack-install/cache/sources
+    misc_cache: /project/fchen14/spack-rhel10-db-gpu-test/spack-install/cache/misc
+    build_stage:
+    - $tempdir/$user/spack-stage
+    license_dir: /project/fchen14/spack-rhel10-db-gpu-test/spack-install/licenses
+    build_jobs: 16
+
+  modules:
+    default:
+      roots:
+        lmod: /project/fchen14/spack-rhel10-db-gpu-test/modulefiles
+
+  concretizer:
+    unify: false
+    targets:
+      # Needed so `spack concretize` in the dev sandbox (not a Cascade
+      # Lake host) still honors target=cascadelake. Harmless on db nodes.
+      host_compatible: false
+
+  view: false
+
+  specs:
+  # ^fftw: cp2k's/lammps' FindFftw can't use MKL's FFTW3 interface (QB4).
+  - cp2k +cuda cuda_arch=70 %gcc ^fftw
+  - lammps +cuda cuda_arch=70 %gcc ^fftw
+  # ^charmpp build-target=charm++: skip AMPI/ROMIO, which fail to configure
+  # under the netlrts backend namd uses (QB4 job 61).
+  - namd@3.0.3 +cuda cuda_arch=70 %gcc ^charmpp build-target=charm++

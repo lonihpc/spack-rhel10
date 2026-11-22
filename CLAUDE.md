@@ -26,7 +26,7 @@ config/
       modules.yaml        #   cuda_arch=70;没有 nvhpc
 environments/
   qb4/{dev-local,production,smoke-test,tier1-test,tier2-test,tier3-test,gpu-test}
-  deepbayou/{smoke-test,tiers-test}  # tiers-test = QB4 Tier 1+2+3 合成一个环境/作业
+  deepbayou/{smoke-test,tiers-test,gpu-test}  # tiers-test = QB4 Tier 1+2+3 合成一个环境/作业
 scripts/
   qb4/*-install.sh        # QB4 原有的每环境一份 sbatch 脚本(只改了路径)
   deepbayou/install-env.sh  # Deep Bayou 通用 sbatch 脚本,参数是环境名
@@ -136,6 +136,27 @@ scripts/
 - **tiers-test 全部通过(job 14,2026-11-22)**:revbayes 用 override 后
   2m18s 编译成功,`spack install` 退出码 0。Deep Bayou 上 Tier 1/2/3 全部
   24 个 root 真实编译完成。
+- **Deep Bayou GPU tier(`environments/deepbayou/gpu-test`,2026-11-22)**:
+  cp2k / lammps / namd@3.0.3,`+cuda cuda_arch=70 %gcc`,全部用唯一的
+  cuda@12.9.1(namd 不再需要单独 pin CUDA)。QB4 为 CUDA 13.3 写的
+  cp2k/namd/charmpp override 在 12.9 下照样适用且无害(cp2k 的探测占位符
+  替换成 70;cufft/computeMode 只是删代码路径;namd 的 C++17+CCCL 宏改动
+  QB4 上就是配 12.9.0 编通的)。沙盒 concretize 后用 Python 遍历依赖图确认
+  三个 root 的 cuda 都是 12.9.1、cuda_arch 都是 70、host 编译器都是 gcc;
+  fake install 时 cp2k 链上的 py-pip 照旧因为沙盒没有真 python 而失败
+  (--fake 已知限制),namd/lammps 的 module 名:
+  `namd/3.0.3/gcc-14-cuda-12.9.1-intel-oneapi-mpi-2021.19.0`、
+  `lammps/20250722.3/gcc-14-cuda-12.9.1-intel-oneapi-mpi-2021.19.0`。
+  **namd 源码是手动下载的**(`manual_download`,builtin recipe 的 url 是
+  `file://<当前工作目录>/NAMD_<ver>_Source.tar.gz`,在 Spack 进程启动时取
+  `os.getcwd()`)。所以在 db 上先在放 tarball 的目录里做一次 fetch,把它
+  存进这个环境的 source cache,之后作业就不需要 tarball 在 repo 里:
+  ```
+  cd /project/fchen14/spack-rhel10-packages     # NAMD_3.0.3_Source.tar.gz 放这里
+  spack -e /project/fchen14/spack-rhel10/environments/deepbayou/gpu-test fetch namd@3.0.3
+  ```
+  (sha256 必须和 namd override 里 `version("3.0.3", sha256=...)` 一致,即
+  QB4 用的同一个文件。)
 - **沙盒验证的盲点**:`spack install --fake` 不执行 `cmake_args()` 等构建
   阶段代码,所以 recipe 在这些阶段里 `raise InstallError` 的检查(比如上面
   kokkos 这条)沙盒里发现不了,只有真编才会暴露。对新加的包,可以用
