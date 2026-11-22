@@ -1,0 +1,89 @@
+# Deep Bayou Tier 1 + 2 + 3 in ONE environment / ONE job (user decision,
+# 2026-11-21): on QB4 these were three separate environments and jobs
+# (environments/qb4/tier{1,2,3}-test); here the whole 48-core node is ours,
+# and every QB4 fix those tiers needed is already shared (config/common/
+# packages.yaml: gettext~tar, python~tkinter; repos/.../rhel10_overrides:
+# spades, python), so one combined run is expected to be mostly clean.
+# Spec strings are copied verbatim from the QB4 tier environments - see the
+# comments there for the reasoning behind each variant.
+#
+# Usage (on a db login node, from the repo root):
+#   sbatch -J db-tiers-test -t 12:00:00 scripts/deepbayou/install-env.sh tiers-test
+#
+# If one package fails, `spack install` still builds everything else it can
+# and lists the failures at the end; just fix and resubmit - installed
+# packages are skipped.
+spack:
+  include:
+  # Site-specific first (Deep Bayou externals, target, cuda_arch,
+  # core_compilers), then the site-independent common policy.
+  - ../../../config/sites/deepbayou/packages.yaml
+  - ../../../config/sites/deepbayou/modules.yaml
+  - ../../../config/common/packages.yaml
+  - ../../../config/common/modules.yaml
+  - ../../../config/common/repos.yaml
+
+  config:
+    # Learned on QB4: Spack's fcntl-based DB lock deadlocked repeatedly on
+    # the shared /project filesystem (environments/qb4/tier3-test). Each
+    # job here runs a single `spack install` process, so there is no real
+    # concurrent writer and turning locks off is safe. Never run two jobs
+    # against the same install_tree at once with this setting.
+    locks: false
+    install_tree:
+      root: /project/fchen14/spack-rhel10-db-tiers-test/spack-install
+      projections:
+        all: "{architecture.platform}-{architecture.target}/{name}-{version}-{hash}"
+    source_cache: /project/fchen14/spack-rhel10-db-tiers-test/spack-install/cache/sources
+    misc_cache: /project/fchen14/spack-rhel10-db-tiers-test/spack-install/cache/misc
+    build_stage:
+    - $tempdir/$user/spack-stage
+    license_dir: /project/fchen14/spack-rhel10-db-tiers-test/spack-install/licenses
+    build_jobs: 16
+
+  modules:
+    default:
+      roots:
+        lmod: /project/fchen14/spack-rhel10-db-tiers-test/modulefiles
+
+  concretizer:
+    unify: false
+    targets:
+      # Needed so `spack concretize` in the dev sandbox (not a Cascade
+      # Lake host) still honors target=cascadelake. Harmless on db nodes.
+      host_compatible: false
+
+  view: false
+
+  specs:
+  # --- Tier 1: plain compilers, no MPI/CUDA ---
+  - boost
+  - eigen
+  - gsl
+  - hwloc
+  - valgrind
+  - git
+  - cmake
+  # --- Tier 2: intel-oneapi-mpi ---
+  - fftw
+  - hdf5
+  - netcdf-c
+  - netcdf-cxx4          # current C++ interface (not legacy netcdf-cxx)
+  - netcdf-fortran
+  - parallel-netcdf
+  - metis
+  - parmetis
+  - superlu-dist
+  - hypre
+  - petsc
+  # --- Tier 3: bioinformatics ---
+  - bowtie2
+  - hisat2
+  - star
+  # ~sra ~tools: bundled ncbi-vdb and pathracer sub-tool fail to build; both
+  # are off by default upstream (see environments/qb4/tier3-test). Real
+  # source typos are fixed in repos/.../rhel10_overrides/packages/spades.
+  # Cascade Lake has AVX512 too, so that override's -mno-avx512f applies.
+  - spades ~sra ~tools
+  - vcftools
+  - revbayes

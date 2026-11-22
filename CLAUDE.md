@@ -26,7 +26,7 @@ config/
       modules.yaml        #   cuda_arch=70;没有 nvhpc
 environments/
   qb4/{dev-local,production,smoke-test,tier1-test,tier2-test,tier3-test,gpu-test}
-  deepbayou/smoke-test    # 后续 tier 按同样方式加在这里
+  deepbayou/{smoke-test,tiers-test}  # tiers-test = QB4 Tier 1+2+3 合成一个环境/作业
 scripts/
   qb4/*-install.sh        # QB4 原有的每环境一份 sbatch 脚本(只改了路径)
   deepbayou/install-env.sh  # Deep Bayou 通用 sbatch 脚本,参数是环境名
@@ -95,6 +95,13 @@ scripts/
   用 nvcc 12.9.1 + gcc 14 为 sm_70 真实编译成功(34 秒),`spack install`
   退出码 0,`module lmod refresh` 正常完成。Deep Bayou 的"沙盒配置 →
   db 真编 → 结果自动回传"整条链路端到端验证通过。
+- **tiers-test(2026-11-21)**:按用户决定把 QB4 的 Tier 1/2/3(24 个 root)
+  合成一个 `environments/deepbayou/tiers-test`,一个作业跑完:
+  `sbatch -J db-tiers-test -t 12:00:00 scripts/deepbayou/install-env.sh tiers-test`。
+  沙盒 concretize(111 个节点)+ fake install + module 生成通过。
+  `install-env.sh` 同时带上了 QB4 tier3 脚本里的
+  `PKG_CONFIG_LIBDIR=/nonexistent`/`PKG_CONFIG_PATH=`(屏蔽宿主机
+  /usr/lib64/pkgconfig,只让构建看到 Spack 给的依赖)。
 - **沙盒验证的盲点**:`spack install --fake` 不执行 `cmake_args()` 等构建
   阶段代码,所以 recipe 在这些阶段里 `raise InstallError` 的检查(比如上面
   kokkos 这条)沙盒里发现不了,只有真编才会暴露。对新加的包,可以用

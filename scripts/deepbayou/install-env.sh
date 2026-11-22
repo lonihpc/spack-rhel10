@@ -55,6 +55,13 @@ trap push_results EXIT
 # QB4 lesson: a conda (base) shell leaks its own python into Spack.
 unset SPACK_PYTHON
 export SPACK_PYTHON=/usr/bin/python3
+# Carried over from scripts/qb4/tier3-test-install.sh (the only QB4 script
+# that had it, and Tier 3 is part of tiers-test here): empty the default
+# pkg-config search path so builds only see the .pc files Spack itself puts
+# on PKG_CONFIG_PATH for their declared dependencies, never the host's
+# /usr/lib64/pkgconfig.
+export PKG_CONFIG_LIBDIR=/nonexistent
+export PKG_CONFIG_PATH=
 SPACK_ROOT_DIR="${SPACK_ROOT_DIR:-/project/fchen14/spack-tool}"
 source "$SPACK_ROOT_DIR/share/spack/setup-env.sh"
 
