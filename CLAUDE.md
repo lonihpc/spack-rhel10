@@ -120,6 +120,19 @@ scripts/
   config.log,如果有)拷到 `RESULT_EXTRA_DIR`,由
   `scripts/lib/push-results.sh`(新增的可选参数,QB4 脚本不设就不变)
   提交到 cluster-results 的 `failed-builds/` 下。
+- **tiers-test 第二次(job 13,2026-11-22,1 小时)**:**这次没有挂住**——
+  revbayes 照样 cmake 失败,但 `spack install` 正常继续,valgrind 装好,
+  整个作业按时退出(rc=1,只有 revbayes 失败),failed-builds/ 自动回传
+  也第一次生效。revbayes 根因:boost@1.90 —— Boost.System 从 1.69 起就是
+  header-only,但到 1.88 都还附带一个 stub 库和 `boost_system-config.cmake`,
+  **1.89 起彻底删掉了**;revbayes@1.2.2 的 `find_package(Boost ... COMPONENTS
+  ... system ...)` 于是找不到,退到宿主机 `/usr/lib64/cmake/boost_system-1.83.0`
+  又版本不匹配。QB4 九月编 tier3 时 builtin 选的 boost 还是旧版所以没事。
+  修法:新增 `repos/spack_repo/rhel10_overrides/packages/revbayes/package.py`,
+  在 cmake 前把 `src/CMakeLists.txt` 里单独一行的 `system` 删掉(仅当
+  `^boost@1.89:`);revbayes 只通过头文件用 Boost.System,不需要链接。
+  沙盒里验证过 override 被选中、钩子挂在 builder 的 cmake 前、对 v1.2.2
+  真实源码改出来的结果正确。挂住问题这次没复现,watchdog 保留。
 - **沙盒验证的盲点**:`spack install --fake` 不执行 `cmake_args()` 等构建
   阶段代码,所以 recipe 在这些阶段里 `raise InstallError` 的检查(比如上面
   kokkos 这条)沙盒里发现不了,只有真编才会暴露。对新加的包,可以用
