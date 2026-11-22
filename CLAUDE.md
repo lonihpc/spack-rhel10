@@ -133,6 +133,9 @@ scripts/
   `^boost@1.89:`);revbayes 只通过头文件用 Boost.System,不需要链接。
   沙盒里验证过 override 被选中、钩子挂在 builder 的 cmake 前、对 v1.2.2
   真实源码改出来的结果正确。挂住问题这次没复现,watchdog 保留。
+- **tiers-test 全部通过(job 14,2026-11-22)**:revbayes 用 override 后
+  2m18s 编译成功,`spack install` 退出码 0。Deep Bayou 上 Tier 1/2/3 全部
+  24 个 root 真实编译完成。
 - **沙盒验证的盲点**:`spack install --fake` 不执行 `cmake_args()` 等构建
   阶段代码,所以 recipe 在这些阶段里 `raise InstallError` 的检查(比如上面
   kokkos 这条)沙盒里发现不了,只有真编才会暴露。对新加的包,可以用
