@@ -102,6 +102,18 @@ scripts/
   `install-env.sh` 同时带上了 QB4 tier3 脚本里的
   `PKG_CONFIG_LIBDIR=/nonexistent`/`PKG_CONFIG_PATH=`(屏蔽宿主机
   /usr/lib64/pkgconfig,只让构建看到 Spack 给的依赖)。
+- **tiers-test 第一次真编(job 12,2026-11-21~22)**:24 个 root 里 22 个
+  成功(boost/petsc/hdf5/netcdf 全家/spades/star 等都过了),revbayes 在
+  cmake 阶段 5 秒失败;**之后 `spack install` 一直挂着、什么都不做,直到
+  12 小时 walltime 被杀**——valgrind 的依赖早就装完了却始终没有开始编。
+  QB4 tier3 当年也是在 revbayes 之后挂住,当时归因于 `/project` 的 DB 锁,
+  但 tiers-test 一开始就是 `locks: false`,所以那个解释至少不完整,真正
+  原因待查。对策(`scripts/deepbayou/install-env.sh`):① watchdog——
+  walltime 前 20 分钟如果 `spack install` 还在,先 dump 进程树/wchan/
+  strace 留证据,再杀掉它,照常跑 module refresh 和日志推送;② `trap
+  'exit 143' TERM`——之前被 walltime 杀掉的 job 12 在 cluster-results 上
+  被错记成 `exit=0`;③ install 失败也照样 `module lmod refresh`,最后以
+  install 的退出码结束。
 - **沙盒验证的盲点**:`spack install --fake` 不执行 `cmake_args()` 等构建
   阶段代码,所以 recipe 在这些阶段里 `raise InstallError` 的检查(比如上面
   kokkos 这条)沙盒里发现不了,只有真编才会暴露。对新加的包,可以用

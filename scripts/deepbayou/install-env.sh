@@ -51,6 +51,11 @@ fi
 LOG_FILE="$REPO_ROOT/${SLURM_JOB_NAME:-db-spack}-${SLURM_JOB_ID:-manual}.log"
 source "$REPO_ROOT/scripts/lib/push-results.sh"
 trap push_results EXIT
+# Slurm's walltime kill sends SIGTERM first (SIGKILL only ~30 s later).
+# Without this, bash ran the EXIT trap with $? == 0, so job 12 - killed at
+# its time limit - was recorded on cluster-results as "exit=0". 143 =
+# 128 + SIGTERM.
+trap 'exit 143' TERM
 
 # QB4 lesson: a conda (base) shell leaks its own python into Spack.
 unset SPACK_PYTHON
@@ -75,7 +80,66 @@ spack env activate "$ENV_DIR"
 spack concretize -f --fresh
 
 JOBS="${SLURM_CPUS_PER_TASK:-8}"
-spack install -j "$JOBS"
 
-spack module lmod refresh -y --delete-tree
-echo "=== done: $ENV_DIR ==="
+# Watchdog for the "spack install hangs after a failed build" problem:
+# db job 12 (tiers-test) finished all real build work within the first
+# hour or so, then hung right after revbayes failed until the 12 h walltime
+# killed it - valgrind, whose dependencies were all already installed, was
+# never even started. QB4's tier3 hung at the same spot (after revbayes)
+# three times; that was blamed on the /project fcntl DB lock, but
+# tiers-test already runs with `locks: false`, so that explanation was at
+# best incomplete. Until the real cause is known: stop `spack install` 20
+# minutes before the walltime, dump the process tree (the evidence we need
+# for the next diagnosis), and still run the module refresh and the log
+# push instead of losing everything to the Slurm kill.
+remaining_seconds() {
+  # squeue %L: [days-]hours:minutes:seconds, or minutes:seconds
+  local left d=0 h=0 m=0 sec=0
+  left=$(squeue -h -j "$SLURM_JOB_ID" -o %L 2>/dev/null) || return 1
+  [[ "$left" == *-* ]] && { d=${left%%-*}; left=${left#*-}; }
+  IFS=: read -r -a parts <<< "$left"
+  case ${#parts[@]} in
+    3) h=${parts[0]}; m=${parts[1]}; sec=${parts[2]} ;;
+    2) m=${parts[0]}; sec=${parts[1]} ;;
+    *) return 1 ;;
+  esac
+  echo $(( 10#$d*86400 + 10#$h*3600 + 10#$m*60 + 10#$sec ))
+}
+INSTALL_TIMEOUT=0   # 0 = no limit (manual runs outside Slurm)
+if [ -n "${SLURM_JOB_ID:-}" ] && left=$(remaining_seconds) && [ "$left" -gt 1800 ]; then
+  INSTALL_TIMEOUT=$(( left - 1200 ))
+fi
+echo "=== spack install -j $JOBS (watchdog: ${INSTALL_TIMEOUT}s, 0 = none) ==="
+
+# Run spack install in the background so the watchdog can inspect it while
+# it is still alive (GNU timeout would kill it before we could look).
+spack install -j "$JOBS" &
+install_pid=$!
+install_rc=0
+if [ "$INSTALL_TIMEOUT" -gt 0 ]; then
+  ( sleep "$INSTALL_TIMEOUT"
+    if kill -0 "$install_pid" 2>/dev/null; then
+      echo "!!! WATCHDOG: spack install still running after ${INSTALL_TIMEOUT}s - dumping state, then killing it"
+      ps -u "$USER" -o pid,ppid,etime,pcpu,stat,wchan:20,cmd --forest
+      for pid in $(pgrep -u "$USER" -f 'spack.*install'); do
+        echo "--- /proc/$pid/stack and open files ($pid)"
+        cat "/proc/$pid/wchan" 2>/dev/null; echo
+        ls -l "/proc/$pid/fd" 2>/dev/null | tail -20
+        timeout 10 strace -f -p "$pid" 2>&1 | tail -20 || true
+      done
+      pkill -TERM -P "$install_pid" 2>/dev/null || true
+      kill -TERM "$install_pid" 2>/dev/null || true
+      sleep 60
+      kill -KILL "$install_pid" 2>/dev/null || true
+    fi ) &
+  watchdog_pid=$!
+fi
+wait "$install_pid" || install_rc=$?
+[ -n "${watchdog_pid:-}" ] && kill "$watchdog_pid" 2>/dev/null || true
+echo "=== spack install exited with $install_rc ==="
+
+# Regenerate modules even if some packages failed - everything that DID
+# install should still get its module file.
+spack module lmod refresh -y --delete-tree || true
+echo "=== done: $ENV_DIR (install rc=$install_rc) ==="
+exit "$install_rc"
