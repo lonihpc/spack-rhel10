@@ -1,0 +1,61 @@
+=== host db010, repo 5092183, work /project/fchen14/spack-rhel10-db-gpu-validate/18 ===
+Sun Nov 22 20:25:48 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.196.07             Driver Version: 580.196.07     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla V100S-PCIE-32GB          On  |   00000000:3B:00.0 Off |                    0 |
+| N/A   31C    P0             25W /  250W |       0MiB /  32768MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  Tesla V100S-PCIE-32GB          On  |   00000000:D8:00.0 Off |                    0 |
+| N/A   31C    P0             26W /  250W |       0MiB /  32768MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+index, name, driver_version, memory.total [MiB], compute_cap
+0, Tesla V100S-PCIE-32GB, 580.196.07, 32768 MiB, 7.0
+1, Tesla V100S-PCIE-32GB, 580.196.07, 32768 MiB, 7.0
+
+===================== namd =====================
+Pe 34 physical rank 34 will use CUDA device of pe 22
+Pe 25 physical rank 25 will use CUDA device of pe 22
+Pe 38 physical rank 38 will use CUDA device of pe 22
+Pe 36 physical rank 36 will use CUDA device of pe 22
+Pe 33 physical rank 33 will use CUDA device of pe 22
+Pe 3 physical rank 3 will use CUDA device of pe 16
+Pe 42 physical rank 42 will use CUDA device of pe 22
+Pe 12 physical rank 12 will use CUDA device of pe 16
+Pe 35 physical rank 35 will use CUDA device of pe 22
+Pe 7 physical rank 7 will use CUDA device of pe 16
+Pe 41 physical rank 41 will use CUDA device of pe 22
+Pe 29 physical rank 29 will use CUDA device of pe 22
+Pe 4 physical rank 4 will use CUDA device of pe 16
+Pe 37 physical rank 37 will use CUDA device of pe 22
+Pe 18 physical rank 18 will use CUDA device of pe 16
+Pe 30 physical rank 30 will use CUDA device of pe 22
+Pe 5 physical rank 5 will use CUDA device of pe 16
+Pe 31 physical rank 31 will use CUDA device of pe 22
+Pe 39 physical rank 39 will use CUDA device of pe 22
+Pe 27 physical rank 27 will use CUDA device of pe 22
+--- namd: PASS (Benchmark time: 44 CPUs 0.00325594 s/step 0.0376845 days/ns 4.52759e+07 MB memory) (6s)
+
+===================== GPU processes seen by nvidia-smi =====================
+  namd3                max 444 MiB, on 2 GPU(s)
+
+===================== SUMMARY =====================
+  namd: PASS (Benchmark time: 44 CPUs 0.00325594 s/step 0.0376845 days/ns 4.52759e+07 MB memory)
+  outputs: /project/fchen14/spack-rhel10-db-gpu-validate/18
+From https://github.com/lonihpc/spack-rhel10
+ * branch            cluster-results -> FETCH_HEAD
+HEAD is now at 072ae39 job 17 (db-gpu-validate) results, exit=1
