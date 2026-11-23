@@ -1,0 +1,113 @@
+=== host db010, repo a910cc4, work /project/fchen14/spack-rhel10-db-gpu-validate/17 ===
+Sun Nov 22 20:03:47 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.196.07             Driver Version: 580.196.07     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla V100S-PCIE-32GB          On  |   00000000:3B:00.0 Off |                    0 |
+| N/A   31C    P0             25W /  250W |       0MiB /  32768MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  Tesla V100S-PCIE-32GB          On  |   00000000:D8:00.0 Off |                    0 |
+| N/A   31C    P0             26W /  250W |       0MiB /  32768MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+index, name, driver_version, memory.total [MiB], compute_cap
+0, Tesla V100S-PCIE-32GB, 580.196.07, 32768 MiB, 7.0
+1, Tesla V100S-PCIE-32GB, 580.196.07, 32768 MiB, 7.0
+
+===================== lammps =====================
+- GPU package (short-range, long-range and three-body potentials): doi:10.1016/j.cpc.2010.12.021, doi:10.1016/j.cpc.2011.10.012, doi:10.1016/j.cpc.2013.08.002, doi:10.1016/j.commatsci.2014.10.068, doi:10.1016/j.cpc.2016.10.020, doi:10.3233/APC200086
+Device 0: Tesla V100S-PCIE-32GB, 80 CUs, 31/32 GB, 1.6 GHZ (Mixed Precision)
+Device 1: Tesla V100S-PCIE-32GB, 80 CUs, 1.6 GHZ (Mixed Precision)
+Loop time of 3.12194 on 2 procs for 1000 steps with 256000 atoms
+Performance: 138375.524 tau/day, 320.314 timesteps/s, 82.000 Matom-step/s
+--- lammps: PASS (Performance: 138375.524 tau/day, 320.314 timesteps/s, 82.000 Matom-step/s) (11s)
+
+===================== cp2k =====================
+ DBCSR| ACC: GPU backend is enabled                                            T (D)
+  **** **  *******  **  PROGRAM STARTED IN /project/fchen14/spack-rhel10-db-gpu-
+ CP2K| Data directory path    /project/fchen14/spack-rhel10-db-gpu-test/spack-in
+  *** SCF run converged in    11 steps ***
+ ENERGY| Total FORCE_EVAL ( QS ) energy [hartree]            -17.219537743910621
+ 2     collocate ortho    GPU                                   1128      27.34%
+ 2     integrate ortho    GPU                                   1034      25.06%
+ 3     collocate ortho    GPU                                    720      17.45%
+ 3     integrate ortho    GPU                                    660      16.00%
+ 4     collocate ortho    GPU                                    300       7.27%
+ 4     integrate ortho    GPU                                    275       6.67%
+ -                          OFFLOAD MEMPOOL STATISTICS                         -
+ GPU-Accelerated Sparse Matrix-Matrix Multiplication for Linear Scaling Density 
+ pw_gpu_r3dc1d_3d_ps                 93 11.8    0.415    0.415    1.746    1.755
+ pw_gpu_c1dr3d_3d_ps                100 12.6    0.512    0.514    1.393    1.396
+ pw_gpu_cff                          93 12.8    0.694    0.699    0.694    0.699
+ pw_gpu_sf                          100 13.6    0.346    0.346    0.346    0.346
+  **** **  *******  **  PROGRAM STOPPED IN /project/fchen14/spack-rhel10-db-gpu-
+--- cp2k: PASS (-17.219537743910621 Ha) (69s)
+
+===================== namd =====================
+  [0:4] namd3 0x145ca83 CcdRaiseCondition
+  [1:2] namd3 0xa2b489 NAMD_die(char const*)
+  [3:2] namd3 0xa2b489 NAMD_die(char const*)
+  [5:2] namd3 0xa2b489 NAMD_die(char const*)
+  [2:3] namd3 0xdaf4a3 DeviceCUDA::initialize()
+  [4:3] namd3 0xdaf4a3 DeviceCUDA::initialize()
+  [6:3] namd3 0xdaf4a3 DeviceCUDA::initialize()
+  [7:3] namd3 0xdaf4a3 DeviceCUDA::initialize()
+  [1:3] namd3 0xdaf4a3 DeviceCUDA::initialize()
+  [3:3] namd3 0xdaf4a3 DeviceCUDA::initialize()
+  [5:3] namd3 0xdaf4a3 DeviceCUDA::initialize()
+  [0:5] namd3 0x1478f62 LrtsInitCpuTopo
+  [2:4] namd3 0x145ca83 CcdRaiseCondition
+  [4:4] namd3 0x145ca83 CcdRaiseCondition
+  [6:4] namd3 0x145ca83 CcdRaiseCondition
+  [7:4] namd3 0x145ca83 CcdRaiseCondition
+  [1:4] namd3 0x145ca83 CcdRaiseCondition
+  [3:4] namd3 0x145ca83 CcdRaiseCondition
+  [5:4] namd3 0x145ca83 CcdRaiseCondition
+  [0:6] namd3 0x144211e _initCharm(int, char**)
+  [2:5] namd3 0x1478f62 LrtsInitCpuTopo
+  [4:5] namd3 0x1478f62 LrtsInitCpuTopo
+  [0:7] namd3 0xa41432 master_init(int, char**)
+  [6:5] namd3 0x1478f62 LrtsInitCpuTopo
+  [7:5] namd3 0x1478f62 LrtsInitCpuTopo
+  [1:5] namd3 0x1478f62 LrtsInitCpuTopo
+  [3:5] namd3 0x1478f62 LrtsInitCpuTopo
+  [5:5] namd3 0x1478f62 LrtsInitCpuTopo
+  [0:8] namd3 0x6b648c main
+  [0:9] libc.so.6 0x1555549735c8 
+  [0:10] libc.so.6 0x15555497368b __libc_start_main
+  [2:6] namd3 0x144211e _initCharm(int, char**)
+  [4:6] namd3 0x144211e _initCharm(int, char**)
+  [6:6] namd3 0x144211e _initCharm(int, char**)
+  [3:6] namd3 0x144211e _initCharm(int, char**)
+  [7:6] namd3 0x144211e _initCharm(int, char**)
+  [1:6] namd3 0x144211e _initCharm(int, char**)
+  [5:6] namd3 0x144211e _initCharm(int, char**)
+  [0:11] namd3 0x9c0195 _start
+Fatal error on PE 0> segmentation violation
+--- namd: FAIL (rc=1) (4s)
+
+===================== GPU processes seen by nvidia-smi =====================
+  lmp                  max 418 MiB, on 2 GPU(s)
+  cp2k.psmp            max 574 MiB, on 2 GPU(s)
+
+===================== SUMMARY =====================
+  lammps: PASS (Performance: 138375.524 tau/day, 320.314 timesteps/s, 82.000 Matom-step/s)
+  cp2k: PASS (-17.219537743910621 Ha)
+  namd: FAIL (rc=1)
+  outputs: /project/fchen14/spack-rhel10-db-gpu-validate/17
+From https://github.com/lonihpc/spack-rhel10
+ * branch            cluster-results -> FETCH_HEAD
+HEAD is now at b973f2c job 16 (db-gpu-validate) results, exit=1
