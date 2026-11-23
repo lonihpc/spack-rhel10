@@ -13,7 +13,7 @@
 #   cp2k    a tiny H2O PBE single point (DZVP-MOLOPT-SR-GTH),
 #           2 MPI ranks; checks the energy converged and the
 #           OFFLOAD/DBM GPU report lines.
-#   namd    apoa1 (92k atoms) on 2 GPUs - only if
+#   namd    apoa1 (92k atoms) on 2 GPUs, 2 SMP processes x 22 PEs - only if
 #           $NAMD_APOA1_DIR (default /project/fchen14/spack-rhel10-packages/apoa1)
 #           exists; otherwise SKIP. Get it once on the login node:
 #             cd /project/fchen14/spack-rhel10-packages
@@ -204,7 +204,13 @@ run_namd() {
   # apoa1.namd writes to /usr/tmp by default; keep output here.
   sed -i 's#^outputname.*#outputname ./apoa1-out#' apoa1.namd
   ( load_pkg namd || exit 99
-    charmrun ++local +p8 "$(command -v namd3)" +setcpuaffinity +devices 0,1 apoa1.namd ) > out.txt 2>&1
+    # charmpp here is an SMP build: every charmrun process = ++ppn worker
+    # PEs + 1 comm thread. Job 17 used `+p8` (no ++ppn) -> 8 processes with
+    # 1 PE each, and NAMD 3 refuses to share 2 GPUs among 8 processes
+    # ("Number of devices (2) is not a multiple of number of processes (8)").
+    # One process per GPU instead: 2 processes x 22 PEs (+2 comm threads =
+    # 46 of the 48 cores).
+    charmrun ++local +p44 ++ppn 22 "$(command -v namd3)" +setcpuaffinity +devices 0,1 apoa1.namd ) > out.txt 2>&1
   local rc=$?
   grep -E "Pe [0-9]+ .*CUDA device|CUDA device|Benchmark time|WallClock" out.txt | head -20
   if [ $rc -eq 0 ] && grep -q "WallClock" out.txt && grep -q "CUDA device" out.txt; then
