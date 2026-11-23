@@ -174,6 +174,17 @@ scripts/
   否则 SKIP)。后台 `nvidia-smi --query-compute-apps` 每秒采样,独立证明
   每个程序真的上了 GPU;输出放 `/project/fchen14/spack-rhel10-db-gpu-validate/<jobid>/`
   (不放 /tmp),关键行和 SUMMARY 进作业日志,照常推到 cluster-results。
+- **GPU 功能验证全部通过(job 17/18,2026-11-22,db010)**:lammps LJ
+  256k 原子 1000 步 3.1 s(82 Matom-step/s);cp2k H2O PBE SCF 11 步收敛
+  (-17.2195 Ha),DBCSR/grid/pw 都走 GPU;namd apoa1 0.00326 s/step
+  (≈26.5 ns/day,2 进程 ×22 PE)。nvidia-smi 采样确认 lmp/cp2k.psmp/namd3
+  都在 2 块 V100S 上。踩过的两个脚本坑:① `spack -e <env> load` 不经过
+  shell 函数(只有 `load` 在第一个参数才拦截)→ 用
+  `eval "$(spack -e <env> load --sh <pkg>)"`;② charmpp 是 SMP 版,`+p8`
+  不带 `++ppn` 会起 8 个进程,NAMD 3 拒绝 8 进程共享 2 GPU("Number of
+  devices (2) is not a multiple of number of processes (8)")→ 每 GPU 一个
+  进程:`charmrun ++local +p44 ++ppn 22 namd3 +setcpuaffinity +devices 0,1`。
+  用户文档里给 NAMD 的推荐启动方式也应该是这个形式。
 - **沙盒验证的盲点**:`spack install --fake` 不执行 `cmake_args()` 等构建
   阶段代码,所以 recipe 在这些阶段里 `raise InstallError` 的检查(比如上面
   kokkos 这条)沙盒里发现不了,只有真编才会暴露。对新加的包,可以用
