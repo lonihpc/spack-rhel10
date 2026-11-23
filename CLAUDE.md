@@ -157,6 +157,12 @@ scripts/
   ```
   (sha256 必须和 namd override 里 `version("3.0.3", sha256=...)` 一致,即
   QB4 用的同一个文件。)
+- **GPU tier 一次通过(job 15,2026-11-22,db010)**:cp2k(6m19s)、
+  lammps、namd@3.0.3(+charmpp)全部真实编译成功,`spack install` 退出码
+  0,共 67 个包。QB4 上为 CUDA 13.3 挖出来的那一长串问题在 12.9.1 + sm_70
+  下一个都没再出现,override 也没有反作用。至此 Deep Bayou 的 smoke-test、
+  Tier 1/2/3、GPU tier 全部编译完成;下一步是在 V100S 上跑真实算例做功能
+  验证(部署流程第 9 步),以及把 `site-split-deepbayou` 合并回 main。
 - **沙盒验证的盲点**:`spack install --fake` 不执行 `cmake_args()` 等构建
   阶段代码,所以 recipe 在这些阶段里 `raise InstallError` 的检查(比如上面
   kokkos 这条)沙盒里发现不了,只有真编才会暴露。对新加的包,可以用
