@@ -210,7 +210,11 @@ run_namd() {
   if [ $rc -eq 0 ] && grep -q "WallClock" out.txt && grep -q "CUDA device" out.txt; then
     RESULT[namd]="PASS ($(grep -m1 'Benchmark time' out.txt | sed 's/^Info: //'))"
   else
-    RESULT[namd]="FAIL (rc=$rc)"; tail -40 out.txt
+    RESULT[namd]="FAIL (rc=$rc)"
+    # The NAMD_die message sits above the per-PE backtraces, so a plain
+    # tail (job 17) only showed stack frames. Print the reason first.
+    echo "--- first error lines:"; grep -m10 -nE "FATAL ERROR|ERROR:|CUDA error|Charm\+\+ fatal" out.txt
+    echo "--- head:"; head -60 out.txt
   fi
   cd "$REPO_ROOT"
 }
