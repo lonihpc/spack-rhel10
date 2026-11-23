@@ -83,6 +83,22 @@ declare -A RESULT
 
 pkg_prefix() { spack -e "$ENV_DIR" location -i "$1" 2>/dev/null; }
 
+# `spack -e <env> load` bypasses the shell function (it only intercepts when
+# `load` is the first argument - job 16 failed on exactly that), so use the
+# --sh form and eval it. Then make sure Intel MPI's mpirun is on PATH: the
+# external's prefix is the oneAPI root, so source its own vars.sh if the
+# load did not already put mpirun there.
+load_pkg() {
+  eval "$(spack -e "$REPO_ROOT/$ENV_DIR" load --sh "$1")" || return 1
+  if ! command -v mpirun >/dev/null; then
+    local mp vars
+    mp=$(pkg_prefix intel-oneapi-mpi)
+    vars=$(ls -d "$mp"/mpi/*/env/vars.sh 2>/dev/null | sort -V | tail -1)
+    [ -n "$vars" ] && source "$vars"
+  fi
+  echo "load $1: mpirun=$(command -v mpirun || echo MISSING)"
+}
+
 run_lammps() {
   local p; p=$(pkg_prefix lammps) || { RESULT[lammps]="FAIL (not installed)"; return; }
   local d="$WORK/lammps"; mkdir -p "$d"; cd "$d"
@@ -103,7 +119,7 @@ fix             1 all nve
 thermo          100
 run             1000
 EOF
-  ( spack -e "$REPO_ROOT/$ENV_DIR" load lammps
+  ( load_pkg lammps || exit 99
     export OMP_NUM_THREADS=1
     mpirun -n $NP lmp -sf gpu -pk gpu $NP -in in.lj -log log.lammps ) > out.txt 2>&1
   local rc=$?
@@ -166,7 +182,7 @@ run_cp2k() {
   &END SUBSYS
 &END FORCE_EVAL
 EOF
-  ( spack -e "$REPO_ROOT/$ENV_DIR" load cp2k
+  ( load_pkg cp2k || exit 99
     export CP2K_DATA_DIR="$data" OMP_NUM_THREADS=4
     mpirun -n $NP "$exe" -i h2o.inp ) > out.txt 2>&1
   local rc=$?
@@ -187,7 +203,7 @@ run_namd() {
   local d="$WORK/namd"; mkdir -p "$d"; cp "$NAMD_APOA1_DIR"/* "$d"/; cd "$d"
   # apoa1.namd writes to /usr/tmp by default; keep output here.
   sed -i 's#^outputname.*#outputname ./apoa1-out#' apoa1.namd
-  ( spack -e "$REPO_ROOT/$ENV_DIR" load namd
+  ( load_pkg namd || exit 99
     charmrun ++local +p8 "$(command -v namd3)" +setcpuaffinity +devices 0,1 apoa1.namd ) > out.txt 2>&1
   local rc=$?
   grep -E "Pe [0-9]+ .*CUDA device|CUDA device|Benchmark time|WallClock" out.txt | head -20
