@@ -1,0 +1,144 @@
+=== host db010, repo 83bb777, work /project/fchen14/spack-rhel10-db-gpu-validate/16 ===
+Sun Nov 22 19:52:20 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.196.07             Driver Version: 580.196.07     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla V100S-PCIE-32GB          On  |   00000000:3B:00.0 Off |                    0 |
+| N/A   31C    P0             25W /  250W |       0MiB /  32768MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  Tesla V100S-PCIE-32GB          On  |   00000000:D8:00.0 Off |                    0 |
+| N/A   31C    P0             26W /  250W |       0MiB /  32768MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+index, name, driver_version, memory.total [MiB], compute_cap
+0, Tesla V100S-PCIE-32GB, 580.196.07, 32768 MiB, 7.0
+1, Tesla V100S-PCIE-32GB, 580.196.07, 32768 MiB, 7.0
+
+===================== lammps =====================
+==> Error: `spack load` requires Spack's shell support.
+  
+  To set up shell support, run the command below for your shell.
+  
+  For bash/zsh/sh:
+    . /project/fchen14/spack-tool/share/spack/setup-env.sh
+  
+  For csh/tcsh:
+    source /project/fchen14/spack-tool/share/spack/setup-env.csh
+  
+  For fish:
+    source /project/fchen14/spack-tool/share/spack/setup-env.fish
+  
+  For Windows batch:
+    /project/fchen14/spack-tool/bin\spack_cmd.bat
+  
+  For PowerShell:
+    /project/fchen14/spack-tool/share/spack\setup-env.ps1
+  
+  Or, if you do not want to use shell support, run one of these instead:
+  
+      eval `spack load --sh   lammps`  # bash/zsh/sh
+      eval `spack load --csh  lammps`  # csh/tcsh
+      eval `spack load --fish lammps`  # fish
+      eval `spack load --bat  lammps`  # batch
+      eval `spack load --pwsh lammps`  # powershell
+  
+  If you have already set up Spack's shell support but still receive
+  this message, please make sure to call Spack via the `spack` command
+  without any path components (such as `bin/spack`).
+  
+/var/spool/slurmd/job00016/slurm_script: line 108: mpirun: command not found
+--- lammps: FAIL (rc=127) (1s)
+
+===================== cp2k =====================
+==> Error: `spack load` requires Spack's shell support.
+  
+  To set up shell support, run the command below for your shell.
+  
+  For bash/zsh/sh:
+    . /project/fchen14/spack-tool/share/spack/setup-env.sh
+  
+  For csh/tcsh:
+    source /project/fchen14/spack-tool/share/spack/setup-env.csh
+  
+  For fish:
+    source /project/fchen14/spack-tool/share/spack/setup-env.fish
+  
+  For Windows batch:
+    /project/fchen14/spack-tool/bin\spack_cmd.bat
+  
+  For PowerShell:
+    /project/fchen14/spack-tool/share/spack\setup-env.ps1
+  
+  Or, if you do not want to use shell support, run one of these instead:
+  
+      eval `spack load --sh   cp2k`  # bash/zsh/sh
+      eval `spack load --csh  cp2k`  # csh/tcsh
+      eval `spack load --fish cp2k`  # fish
+      eval `spack load --bat  cp2k`  # batch
+      eval `spack load --pwsh cp2k`  # powershell
+  
+  If you have already set up Spack's shell support but still receive
+  this message, please make sure to call Spack via the `spack` command
+  without any path components (such as `bin/spack`).
+  
+/var/spool/slurmd/job00016/slurm_script: line 171: mpirun: command not found
+--- cp2k: FAIL (rc=127) (1s)
+
+===================== namd =====================
+==> Error: `spack load` requires Spack's shell support.
+  
+  To set up shell support, run the command below for your shell.
+  
+  For bash/zsh/sh:
+    . /project/fchen14/spack-tool/share/spack/setup-env.sh
+  
+  For csh/tcsh:
+    source /project/fchen14/spack-tool/share/spack/setup-env.csh
+  
+  For fish:
+    source /project/fchen14/spack-tool/share/spack/setup-env.fish
+  
+  For Windows batch:
+    /project/fchen14/spack-tool/bin\spack_cmd.bat
+  
+  For PowerShell:
+    /project/fchen14/spack-tool/share/spack\setup-env.ps1
+  
+  Or, if you do not want to use shell support, run one of these instead:
+  
+      eval `spack load --sh   namd`  # bash/zsh/sh
+      eval `spack load --csh  namd`  # csh/tcsh
+      eval `spack load --fish namd`  # fish
+      eval `spack load --bat  namd`  # batch
+      eval `spack load --pwsh namd`  # powershell
+  
+  If you have already set up Spack's shell support but still receive
+  this message, please make sure to call Spack via the `spack` command
+  without any path components (such as `bin/spack`).
+  
+/var/spool/slurmd/job00016/slurm_script: line 191: charmrun: command not found
+--- namd: FAIL (rc=127) (1s)
+
+===================== GPU processes seen by nvidia-smi =====================
+
+===================== SUMMARY =====================
+  lammps: FAIL (rc=127)
+  cp2k: FAIL (rc=127)
+  namd: FAIL (rc=127)
+  outputs: /project/fchen14/spack-rhel10-db-gpu-validate/16
+From https://github.com/lonihpc/spack-rhel10
+ * branch            cluster-results -> FETCH_HEAD
+HEAD is now at c6028fd job 15 (db-gpu-test) results, exit=0
