@@ -57,6 +57,8 @@ scripts/
   db009/db010;分区 single(7 天)/gpu、gpu2(3 天)节点相同。
 - 版本原则(用户决定):不追最新,CUDA 取"驱动/硬件允许的最高版本"。
   CUDA 13.x 不支持 Volta、580 是最后支持 Volta 的驱动分支 → **cuda@12.9.1**。
+  **驱动不会再升级(用户确认,2026-11-22)**,所以 12.9.1 就是 Deep Bayou
+  的最终 CUDA 版本,不用再评估 12.x 之后的版本。
   QB4 上 namd 专门分流的 12.9 在这里成为唯一 CUDA。
 - **不装 nvhpc**(用户决定):QB4 上 GPU 包最终全部是 `%gcc`,只剩
   smoke-test 的 `bwa %nvhpc`;Deep Bayou 的 bwa 用默认 oneAPI。
@@ -163,6 +165,15 @@ scripts/
   下一个都没再出现,override 也没有反作用。至此 Deep Bayou 的 smoke-test、
   Tier 1/2/3、GPU tier 全部编译完成;下一步是在 V100S 上跑真实算例做功能
   验证(部署流程第 9 步),以及把 `site-split-deepbayou` 合并回 main。
+- **GPU 功能验证脚本 `scripts/deepbayou/gpu-validate.sh`(2026-11-22)**:
+  `sbatch -J db-gpu-validate scripts/deepbayou/gpu-validate.sh [lammps cp2k namd]`,
+  gpu2、`--gres=gpu:2`、1 小时。每个程序 2 个 MPI rank(每 GPU 一个),
+  `I_MPI_HYDRA_BOOTSTRAP=fork`:lammps 内嵌 LJ(256k 原子,`-sf gpu -pk gpu 2`)、
+  cp2k 单个 H2O PBE 单点能、namd apoa1(只有
+  `/project/fchen14/spack-rhel10-packages/apoa1/apoa1.namd` 存在时才跑,
+  否则 SKIP)。后台 `nvidia-smi --query-compute-apps` 每秒采样,独立证明
+  每个程序真的上了 GPU;输出放 `/project/fchen14/spack-rhel10-db-gpu-validate/<jobid>/`
+  (不放 /tmp),关键行和 SUMMARY 进作业日志,照常推到 cluster-results。
 - **沙盒验证的盲点**:`spack install --fake` 不执行 `cmake_args()` 等构建
   阶段代码,所以 recipe 在这些阶段里 `raise InstallError` 的检查(比如上面
   kokkos 这条)沙盒里发现不了,只有真编才会暴露。对新加的包,可以用
